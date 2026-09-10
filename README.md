@@ -4,6 +4,7 @@ Ein ruhiges Logikspiel als Browser-Prototyp und Android-Testprojekt. Kacheln dre
 
 ## Enthalten
 
+- Freies Spiel: Schwierigkeit und Rastergröße wählen, geprüftes Rätsel im Worker erzeugen, abbrechen und getrennt von der Kampagne fortsetzen.
 - Startseite mit Fortsetzen eines offenen Rätsels, separater Rätselkatalog und eigene Anleitung.
 - Kompakter Spielbildschirm mit an die Bildschirmhöhe angepasstem Raster und drei direkt erreichbaren Aktionen.
 - Neustart erst nach Bestätigung; Android-Zurück schließt Dialoge oder kehrt zur vorherigen Ansicht zurück.
@@ -63,6 +64,14 @@ Noch keine iOS-App, keine Werbung und keine Käufe. Die neue Schwierigkeitseinst
 
 Eine opt-in WebMCP-Leseschnittstelle wird in unterstützten Browsern registriert. Ihre Laufzeitprüfung war in dieser Entwicklungsumgebung nicht verfügbar. Ein manueller Test auf echten Mobilgeräten steht aus.
 
-Die erste APK wurde vom Nutzer auf dem Samsung S22 erfolgreich auf Bedienung, Drehungen, Ton, Sperren und Sichtbarkeit getestet. Der Nutzer hat anschließend alle 30 Rätsel problemlos durchgespielt und Spaß daran gemeldet. Die Erweiterung auf 60 Rätsel in Version 1.3-test (versionCode 4) benötigt einen erneuten Spieltest. Paketname und Debug-Signatur bleiben für ein Update mit erhaltenen Spielständen gleich. Browser und APK speichern getrennt.
+Die erste APK wurde vom Nutzer auf dem Samsung S22 erfolgreich auf Bedienung, Drehungen, Ton, Sperren und Sichtbarkeit getestet. Der Nutzer hat anschließend alle 30 Rätsel problemlos durchgespielt und Spaß daran gemeldet. Auch alle 60 Kampagnenrätsel wurden vom Nutzer problemlos durchgespielt. Version 1.4-test (versionCode 5) ergänzt freie Rätsel; deren S22-Laufzeit und Bedienung sind noch manuell zu prüfen. Paketname und Debug-Signatur bleiben für ein Update mit erhaltenen Spielständen gleich. Browser und APK speichern getrennt.
 
 Der Abhängigkeitsstand des Sites-Starters enthält npm-Audit-Meldungen. Vor einem öffentlichen Release sollten die Abhängigkeiten aktualisiert werden. Das Spiel wird als statische Dateien ohne Server- oder Bildverarbeitung ausgeliefert.
+
+## Freie Rätsel
+
+`lib/random-game.mjs` erzeugt aus einem Seed neue Netze, prüft eindeutige Lösung und die gewünschte Denkstufe und schließt die Kampagne sowie bis zu 100 zuletzt erzeugte freie Netze aus (auch gedreht/gespiegelt). Die Sucharbeit liegt in `lib/random.worker.ts`; nach spätestens acht Sekunden beendet die Oberfläche den Worker. Abbrechen, Navigation und neue Aufträge verwerfen alte Ergebnisse. Die offene Partie wird erst bei erfolgreicher Erzeugung ersetzt.
+
+Speicherung unter `leuchtwege-free-v1` enthält das tatsächliche Brett, Seed, Generatorversion, Drehungen, Sperren, Undo-Verlauf, Auswahl und jüngste Netzschlüssel. Die Kampagne bleibt unter ihrem bestehenden Schlüssel. Die Schwierigkeitsauswahl ist eine heuristische Schätzung, keine garantierte subjektive Einstufung. Automatisch wählt eine unterstützte Größe; Leicht bietet 3–5, Mittel/Schwer 4–6.
+
+`node test-random.mjs --report` prüft 144 neue Rätsel und schreibt Rechnerlaufzeiten nach `docs/randomizer-benchmark.json`. Diese sind keine Smartphone-Messwerte. Thinkheims Hitori- und Binär-Generatoren dienten als Referenz für Seed, Prüfung und begrenzte Versuche; es wurde kein Thinkheim-Code verändert.

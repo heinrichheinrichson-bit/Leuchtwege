@@ -1,6 +1,6 @@
 # Nächster Schritt: freie Rätsel
 
-Nach der 60er-Testversion vorgesehen, noch nicht Teil der Oberfläche.
+In Version 1.4-test umgesetzt. Geräteprüfung auf dem S22 steht noch aus. Die folgende Liste dokumentiert den Entwurf.
 
 - Schwierigkeit Leicht/Mittel/Schwer wählen; Rastergröße zunächst Automatisch, optional eine unterstützte Größe. Nicht jede Kombination muss angeboten werden (etwa Schwer auf 3×3).
 - Vorhandene makeLevel- und Prüfmodule wiederverwenden: erst erzeugen, dann eindeutige Lösung und passende Schwierigkeit prüfen. Keine bloß zufälligen Drehungen eines festen Katalogrätsels.

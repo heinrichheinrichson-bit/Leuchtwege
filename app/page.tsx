@@ -15,6 +15,15 @@ import {
   AlertDialogCancel,
   AlertDialogAction,
 } from '@/components/ui/alert-dialog';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import {
+  emptyFree,
+  restoreFree,
+  acceptRandom,
+  sizes,
+} from '@/lib/random-game.mjs';
+import { topologyKey } from '@/lib/level-design.mjs';
+import RandomWorker from '../lib/random.worker?worker';
 import { App } from '@capacitor/app';
 import { Capacitor } from '@capacitor/core';
 import {
@@ -27,6 +36,18 @@ import levels from '@/lib/levels.json';
 import { evaluate, neighbor } from '@/lib/game.mjs';
 import { fresh, boardOf, act, restore } from '@/lib/session.mjs';
 export default function Home() {
+  const [free, setFree] = useState<any>(emptyFree);
+  const [isFree, setIsFree] = useState(false);
+  const [generating, setGenerating] = useState(false);
+  const [generationError, setGenerationError] = useState('');
+  const [freeStorageError, setFreeStorageError] = useState(false);
+  const [replaceFree, setReplaceFree] = useState(false);
+  const workerJob = useRef<{
+    worker: Worker;
+    timer: ReturnType<typeof setTimeout>;
+  } | null>(null);
+  const freeRef = useRef(free);
+  freeRef.current = free;
   const [view, setView] = useState('home');
   const [victory, setVictory] = useState(false);
   const [restart, setRestart] = useState(false);
@@ -39,8 +60,9 @@ export default function Home() {
   const [sound, setSound] = useState(false);
   const [lockMode, setLockMode] = useState(false);
   const [storageError, setStorageError] = useState(false);
-  const l = levels[level],
-    session = sessions[level] || fresh(l);
+  const l = isFree && free.puzzle ? free.puzzle : levels[level],
+    session =
+      isFree && free.puzzle ? free.session : sessions[level] || fresh(l);
   const board: number[] = boardOf(l, session),
     moves = session.moves,
     status = evaluate(board, l.n, l.source);
@@ -58,6 +80,15 @@ export default function Home() {
     } catch {
       setStorageError(true);
     }
+    try {
+      setFree(
+        restoreFree(
+          JSON.parse(localStorage.getItem('leuchtwege-free-v1') || 'null'),
+        ),
+      );
+    } catch {
+      setFreeStorageError(true);
+    }
     setReady(true);
   }, []);
   useEffect(() => {
@@ -73,22 +104,53 @@ export default function Home() {
     }
   }, [ready, level, sessions, done, sound]);
   useEffect(() => {
-    if (ready && status.solved)
+    if (ready && !isFree && status.solved)
       setDone((v) => (v.includes(level) ? v : [...v, level]));
-  }, [ready, status.solved, level]);
+  }, [ready, status.solved, level, isFree]);
+  useEffect(() => {
+    if (!ready) return;
+    try {
+      localStorage.setItem('leuchtwege-free-v1', JSON.stringify(free));
+      setFreeStorageError(false);
+    } catch {
+      setFreeStorageError(true);
+    }
+  }, [free, ready]);
+  useEffect(
+    () => () => {
+      workerJob.current?.worker.terminate();
+      if (workerJob.current) clearTimeout(workerJob.current.timer);
+    },
+    [],
+  );
   const target = continueTarget(levels, sessions, level, done);
   const next = nextPuzzle(levels, level, [...done, level]);
-  function navigate(to: string, puzzle = level) {
+  function navigate(
+    to: string,
+    puzzle = level,
+    freeMode = isFree,
+    freeId = free.puzzle?.id,
+  ) {
+    cancelGeneration();
     setVictory(false);
     setRestart(false);
     setLockMode(false);
-    const state = { leuchtwege: to, puzzle };
+    const state = { leuchtwege: to, puzzle, freeMode, freeId };
+    setIsFree(freeMode);
     if (to === 'game' && view === 'game')
       history.replaceState(state, '', '#game');
     else history.pushState(state, '', '#' + to);
     setView(to);
   }
   backAction.current = () => {
+    if (generating) {
+      cancelGeneration();
+      return;
+    }
+    if (replaceFree) {
+      setReplaceFree(false);
+      return;
+    }
     if (restart) {
       setRestart(false);
       return;
@@ -103,11 +165,23 @@ export default function Home() {
   useEffect(() => {
     history.replaceState({ leuchtwege: 'home' }, '', '#home');
     const pop = () => {
-      const v = history.state?.leuchtwege;
+      cancelGeneration();
+      setReplaceFree(false);
+      let v = history.state?.leuchtwege;
+      const freeMode = history.state?.freeMode === true;
+      if (
+        v === 'game' &&
+        freeMode &&
+        history.state?.freeId !== freeRef.current.puzzle?.id
+      )
+        v = 'random';
+      setIsFree(freeMode);
       const p = history.state?.puzzle;
       if (v === 'game' && Number.isInteger(p) && p >= 0 && p < levels.length)
         setLevel(p);
-      setView(['home', 'catalog', 'game', 'rules'].includes(v) ? v : 'home');
+      setView(
+        ['home', 'catalog', 'game', 'rules', 'random'].includes(v) ? v : 'home',
+      );
       setVictory(false);
       setRestart(false);
       setLockMode(false);
@@ -149,18 +223,19 @@ export default function Home() {
   }, [sound]);
   function start(i: number) {
     setLevel(i);
-    navigate('game', i);
+    navigate('game', i, false);
   }
   function dispatch(action: { type: string; index?: number }) {
     const nextState = act(l, session, action);
-    setSessions((all) => ({ ...all, [level]: nextState }));
+    if (isFree) setFree((all: any) => ({ ...all, session: nextState }));
+    else setSessions((all) => ({ ...all, [level]: nextState }));
     if (action.type === 'reset' || action.type === 'undo') setVictory(false);
     if (
       action.type === 'turn' &&
       !status.solved &&
       evaluate(boardOf(l, nextState), l.n, l.source).solved
     ) {
-      setDone((v) => (v.includes(level) ? v : [...v, level]));
+      if (!isFree) setDone((v) => (v.includes(level) ? v : [...v, level]));
       setVictory(true);
       setLockMode(false);
       if (sound && successAudio.current) {
@@ -172,6 +247,72 @@ export default function Home() {
     return false;
   }
 
+  function cancelGeneration() {
+    const job = workerJob.current;
+    if (job) {
+      job.worker.terminate();
+      clearTimeout(job.timer);
+      workerJob.current = null;
+    }
+    setGenerating(false);
+  }
+  function generate() {
+    cancelGeneration();
+    setReplaceFree(false);
+    setGenerationError('');
+    setGenerating(true);
+    try {
+      const worker = new RandomWorker();
+      const fail = () => {
+        if (workerJob.current?.worker !== worker) return;
+        cancelGeneration();
+        setGenerationError(
+          'Es wurde gerade kein passendes Rätsel gefunden. Bitte versuche es erneut oder wähle eine andere Rastergröße.',
+        );
+      };
+      workerJob.current = { worker, timer: setTimeout(fail, 8000) };
+      worker.onerror = fail;
+      worker.onmessage = ({ data }) => {
+        if (workerJob.current?.worker !== worker) return;
+        if (!data.puzzle) {
+          fail();
+          return;
+        }
+        cancelGeneration();
+        setFree((saved: any) => acceptRandom(saved, data.puzzle));
+        navigate('game', level, true, data.puzzle.id);
+      };
+      worker.postMessage({
+        tier: free.tier,
+        size: free.size,
+        seed: crypto.getRandomValues(new Uint32Array(1))[0],
+        recent: free.recent,
+        excluded: levels.map(topologyKey),
+      });
+    } catch {
+      cancelGeneration();
+      setGenerationError(
+        'Das Erzeugen konnte nicht gestartet werden. Bitte versuche es erneut.',
+      );
+    }
+  }
+  function requestRandom() {
+    if (
+      free.puzzle &&
+      !evaluate(
+        boardOf(free.puzzle, free.session),
+        free.puzzle.n,
+        free.puzzle.source,
+      ).solved
+    )
+      setReplaceFree(true);
+    else generate();
+  }
+  function nextGame() {
+    if (isFree) navigate('random');
+    else if (next !== null) start(next);
+    else navigate('catalog');
+  }
   function turn(i: number) {
     if (!ready || status.solved) return;
     if (lockMode) {
@@ -215,7 +356,8 @@ export default function Home() {
             },
             annotations: { readOnlyHint: true },
             execute: () => ({
-              level: level + 1,
+              mode: isFree ? 'free' : 'campaign',
+              level: isFree ? null : level + 1,
               size: l.n,
               source: l.source,
               board,
@@ -227,7 +369,7 @@ export default function Home() {
       ).catch(() => {});
     } catch {}
     return () => ac.abort();
-  }, [level, board, l.n, l.source, status.solved]);
+  }, [level, board, l.n, l.source, status.solved, isFree]);
 
   return (
     <main className={'app-shell ' + (view === 'game' ? 'playing' : '')}>
@@ -314,7 +456,120 @@ export default function Home() {
           >
             So funktioniert’s <span>→</span>
           </Button>
+          <Button
+            variant="outline"
+            className="home-option"
+            disabled={!ready}
+            onClick={() => navigate('random')}
+          >
+            Freies Spiel <span>✳</span>
+          </Button>
           <p className="home-foot">Kein Zeitdruck. In deinem Tempo.</p>
+        </section>
+      )}
+      {view === 'random' && (
+        <section className="random-screen">
+          <h1>Freies Spiel</h1>
+          <p className="section-intro">
+            Ein neues Netz, jedes Mal. Wähle, wie du knobeln möchtest.
+          </p>
+          {free.puzzle && (
+            <Button
+              className="home-option"
+              disabled={generating}
+              onClick={() => navigate('game', level, true)}
+            >
+              {evaluate(
+                boardOf(free.puzzle, free.session),
+                free.puzzle.n,
+                free.puzzle.source,
+              ).solved
+                ? 'Letztes Netz ansehen'
+                : 'Freie Partie fortsetzen'}{' '}
+              <span>→</span>
+            </Button>
+          )}
+          {free.puzzle && (
+            <p className="continue-detail">
+              {free.puzzle.difficulty.tier} · {free.puzzle.n} × {free.puzzle.n}{' '}
+              · {free.session.moves} Drehungen
+            </p>
+          )}
+          <fieldset disabled={generating}>
+            <legend>Schwierigkeit</legend>
+            <RadioGroup
+              value={free.tier}
+              onValueChange={(value) =>
+                setFree((f: any) => ({
+                  ...f,
+                  tier: value,
+                  size: sizes[value as keyof typeof sizes].includes(f.size)
+                    ? f.size
+                    : 0,
+                }))
+              }
+              className="random-choices"
+            >
+              {['Leicht', 'Mittel', 'Schwer'].map((t) => (
+                <label key={t}>
+                  <RadioGroupItem value={t} />
+                  {t}
+                </label>
+              ))}
+            </RadioGroup>
+          </fieldset>
+          <fieldset disabled={generating}>
+            <legend>Rastergröße</legend>
+            <RadioGroup
+              value={String(free.size)}
+              onValueChange={(value) =>
+                setFree((f: any) => ({ ...f, size: Number(value) }))
+              }
+              className="random-choices"
+            >
+              {[0, ...sizes[free.tier as keyof typeof sizes]].map((n) => (
+                <label key={n}>
+                  <RadioGroupItem value={String(n)} />
+                  {n ? n + ' × ' + n : 'Automatisch'}
+                </label>
+              ))}
+            </RadioGroup>
+          </fieldset>
+          <p className="section-intro">
+            Die Größe bestimmt den Umfang. Die Schwierigkeit richtet sich nach
+            den nötigen Denkschritten.
+          </p>
+          <Button
+            className="continue-button"
+            disabled={generating || !ready}
+            onClick={requestRandom}
+          >
+            {generating ? 'Rätsel wird geprüft …' : 'Neues Rätsel erzeugen'}{' '}
+            <span>✳</span>
+          </Button>
+          {generating && (
+            <>
+              <p role="status" className="mode-help">
+                Einen Moment. Dein neues Netz entsteht.
+              </p>
+              <Button
+                variant="outline"
+                className="home-option"
+                onClick={cancelGeneration}
+              >
+                Abbrechen
+              </Button>
+            </>
+          )}
+          {generationError && (
+            <p role="alert" className="mode-help">
+              {generationError}
+            </p>
+          )}
+          <p className="home-foot">
+            Deine Kampagne bleibt bei {done.length} von {levels.length} gelösten
+            Rätseln.
+          </p>
         </section>
       )}
       {view === 'catalog' && (
@@ -432,8 +687,10 @@ export default function Home() {
           <div className="play-heading">
             <div>
               <p className="level-label">
-                Rätsel {String(level + 1).padStart(2, '0')} ·{' '}
-                {l.difficulty.tier}
+                {isFree
+                  ? 'Freies Spiel'
+                  : 'Rätsel ' + String(level + 1).padStart(2, '0')}{' '}
+                · {l.difficulty.tier}
               </p>
               <h1>{l.name}</h1>
             </div>
@@ -455,7 +712,7 @@ export default function Home() {
           >
             {board.map((mask, i) => (
               <button
-                key={level + '-' + i}
+                key={l.id + '-' + i}
                 className={
                   'tile ' +
                   (status.lit.has(i) ? 'lit ' : '') +
@@ -572,18 +829,17 @@ export default function Home() {
             </Button>
           </div>
           {status.solved && (
-            <Button
-              className="next-inline"
-              onClick={() =>
-                next !== null ? start(next) : navigate('catalog')
-              }
-            >
-              {next !== null ? 'Nächstes Rätsel →' : 'Zur Rätselauswahl →'}
+            <Button className="next-inline" onClick={nextGame}>
+              {isFree
+                ? 'Neues freies Rätsel →'
+                : next !== null
+                  ? 'Nächstes Rätsel →'
+                  : 'Zur Rätselauswahl →'}
             </Button>
           )}
         </section>
       )}
-      {storageError && (
+      {(storageError || freeStorageError) && (
         <p role="status" className="mode-help">
           Der Fortschritt kann gerade nicht gespeichert werden. Lass die App
           geöffnet.
@@ -598,7 +854,7 @@ export default function Home() {
             ✳
           </div>
           <DialogTitle className="dialog-heading">
-            {done.length === levels.length
+            {!isFree && done.length === levels.length
               ? 'Alle Wege leuchten!'
               : 'Dein Netz leuchtet!'}
           </DialogTitle>
@@ -606,14 +862,16 @@ export default function Home() {
             {l.name} gelöst · {moves} Drehungen
           </DialogDescription>
           <p className="success-copy">
-            {done.length === levels.length
+            {!isFree && done.length === levels.length
               ? 'Du hast alle ' + levels.length + ' Rätsel gelöst.'
               : 'Ein Lichtblick mehr. Bereit für den nächsten?'}
           </p>
-          <Button
-            onClick={() => (next !== null ? start(next) : navigate('catalog'))}
-          >
-            {next !== null ? 'Nächstes Rätsel →' : 'Rätsel auswählen'}
+          <Button onClick={nextGame}>
+            {isFree
+              ? 'Neues freies Rätsel →'
+              : next !== null
+                ? 'Nächstes Rätsel →'
+                : 'Rätsel auswählen'}
           </Button>
           <Button variant="outline" onClick={() => setVictory(false)}>
             Brett ansehen
@@ -623,6 +881,21 @@ export default function Home() {
           </Button>
         </DialogContent>
       </Dialog>
+      <AlertDialog open={replaceFree} onOpenChange={setReplaceFree}>
+        <AlertDialogContent className="game-dialog">
+          <AlertDialogTitle className="dialog-heading">
+            Neue freie Partie?
+          </AlertDialogTitle>
+          <AlertDialogDescription>
+            Deine angefangene freie Partie wird ersetzt, sobald das neue Rätsel
+            bereit ist. Deine Kampagne bleibt erhalten.
+          </AlertDialogDescription>
+          <AlertDialogCancel>Weiter behalten</AlertDialogCancel>
+          <AlertDialogAction onClick={generate}>
+            Neues Rätsel erzeugen
+          </AlertDialogAction>
+        </AlertDialogContent>
+      </AlertDialog>
       <AlertDialog open={restart} onOpenChange={setRestart}>
         <AlertDialogContent className="game-dialog">
           <AlertDialogTitle className="dialog-heading">

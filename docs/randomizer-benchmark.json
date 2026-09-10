@@ -1,0 +1,89 @@
+{
+  "environment": "Windows development machine; not an S22 measurement",
+  "stats": [
+    {
+      "tier": "Leicht",
+      "size": "Auto",
+      "count": 12,
+      "maxMs": 2,
+      "meanMs": 0
+    },
+    {
+      "tier": "Leicht",
+      "size": 3,
+      "count": 12,
+      "maxMs": 0,
+      "meanMs": 0
+    },
+    {
+      "tier": "Leicht",
+      "size": 4,
+      "count": 12,
+      "maxMs": 0,
+      "meanMs": 0
+    },
+    {
+      "tier": "Leicht",
+      "size": 5,
+      "count": 12,
+      "maxMs": 2,
+      "meanMs": 1
+    },
+    {
+      "tier": "Mittel",
+      "size": "Auto",
+      "count": 12,
+      "maxMs": 3,
+      "meanMs": 1
+    },
+    {
+      "tier": "Mittel",
+      "size": 4,
+      "count": 12,
+      "maxMs": 2,
+      "meanMs": 1
+    },
+    {
+      "tier": "Mittel",
+      "size": 5,
+      "count": 12,
+      "maxMs": 2,
+      "meanMs": 0
+    },
+    {
+      "tier": "Mittel",
+      "size": 6,
+      "count": 12,
+      "maxMs": 1,
+      "meanMs": 0
+    },
+    {
+      "tier": "Schwer",
+      "size": "Auto",
+      "count": 12,
+      "maxMs": 3,
+      "meanMs": 1
+    },
+    {
+      "tier": "Schwer",
+      "size": 4,
+      "count": 12,
+      "maxMs": 3,
+      "meanMs": 1
+    },
+    {
+      "tier": "Schwer",
+      "size": 5,
+      "count": 12,
+      "maxMs": 5,
+      "meanMs": 2
+    },
+    {
+      "tier": "Schwer",
+      "size": 6,
+      "count": 12,
+      "maxMs": 4,
+      "meanMs": 2
+    }
+  ]
+}
