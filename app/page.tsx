@@ -2,76 +2,77 @@
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import levels from '@/lib/levels.json';
-import { rotate, evaluate, neighbor } from '@/lib/game.mjs';
+import { evaluate, neighbor } from '@/lib/game.mjs';
+import { fresh, boardOf, act, restore } from '@/lib/session.mjs';
 export default function Home() {
-  const [level, setLevel] = useState(0),
-    [board, setBoard] = useState<number[]>(levels[0].initial),
-    [done, setDone] = useState<number[]>([]),
-    [ready, setReady] = useState(false),
-    [sound, setSound] = useState(false),
-    [moves, setMoves] = useState(0);
+  const [level, setLevel] = useState(0);
+  const [sessions, setSessions] = useState<Record<number, any>>({});
+  const [done, setDone] = useState<number[]>([]);
+  const [ready, setReady] = useState(false);
+  const [sound, setSound] = useState(false);
+  const [lockMode, setLockMode] = useState(false);
+  const [storageError, setStorageError] = useState(false);
   const l = levels[level],
+    session = sessions[level] || fresh(l);
+  const board: number[] = boardOf(l, session),
+    moves = session.moves,
     status = evaluate(board, l.n, l.source);
   useEffect(() => {
     try {
-      const s = JSON.parse(localStorage.getItem('leuchtwege-v1') || 'null');
-      if (s && Number.isInteger(s.level) && s.level >= 0 && s.level < 12) {
-        const lv = levels[s.level];
-        if (
-          Array.isArray(s.board) &&
-          s.board.length === lv.initial.length &&
-          s.board.every((m: number, i: number) =>
-            [
-              lv.initial[i],
-              rotate(lv.initial[i]),
-              rotate(rotate(lv.initial[i])),
-              rotate(rotate(rotate(lv.initial[i]))),
-            ].includes(m),
-          )
-        ) {
-          setLevel(s.level);
-          setBoard(s.board);
-          setMoves(Number.isInteger(s.moves) && s.moves >= 0 ? s.moves : 0);
-        }
-        if (Array.isArray(s.done))
-          setDone(
-            s.done.filter(
-              (v: number) => Number.isInteger(v) && v >= 0 && v < 12,
-            ),
-          );
-      }
-    } catch {}
+      const saved = restore(
+        levels,
+        JSON.parse(localStorage.getItem('leuchtwege-v2') || 'null'),
+        JSON.parse(localStorage.getItem('leuchtwege-v1') || 'null'),
+      );
+      setLevel(saved.level);
+      setSessions(saved.sessions);
+      setDone(saved.done);
+      setSound(saved.sound);
+    } catch {
+      setStorageError(true);
+    }
     setReady(true);
   }, []);
   useEffect(() => {
-    if (ready)
-      try {
-        localStorage.setItem(
-          'leuchtwege-v1',
-          JSON.stringify({ level, board, done, moves }),
-        );
-      } catch {}
-  }, [ready, level, board, done, moves]);
+    if (!ready) return;
+    try {
+      localStorage.setItem(
+        'leuchtwege-v2',
+        JSON.stringify({ version: 2, level, sessions, done, sound }),
+      );
+      setStorageError(false);
+    } catch {
+      setStorageError(true);
+    }
+  }, [ready, level, sessions, done, sound]);
   useEffect(() => {
     if (ready && status.solved)
       setDone((v) => (v.includes(level) ? v : [...v, level]));
   }, [ready, status.solved, level]);
   function start(i: number) {
     setLevel(i);
-    setBoard([...levels[i].initial]);
-    setMoves(0);
+    setLockMode(false);
+  }
+  function dispatch(action: { type: string; index?: number }) {
+    setSessions((all) => ({
+      ...all,
+      [level]: act(l, all[level] || fresh(l), action),
+    }));
   }
   function turn(i: number) {
-    if (status.solved) return;
-    setBoard((b) => b.map((m, j) => (i === j ? rotate(m) : m)));
-    setMoves((v) => v + 1);
-    if (sound) {
+    if (!ready || status.solved) return;
+    if (lockMode) {
+      dispatch({ type: 'lock', index: i });
+      return;
+    }
+    if (session.locks[i]) return;
+    dispatch({ type: 'turn', index: i });
+    if (sound)
       try {
-        const ctx = new AudioContext();
-        const o = ctx.createOscillator(),
+        const ctx = new AudioContext(),
+          o = ctx.createOscillator(),
           g = ctx.createGain();
-        o.type = 'sine';
-        o.frequency.setValueAtTime(520, ctx.currentTime);
+        o.frequency.value = 520;
         g.gain.setValueAtTime(0.035, ctx.currentTime);
         g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
         o.connect(g);
@@ -82,7 +83,6 @@ export default function Home() {
           void ctx.close();
         };
       } catch {}
-    }
   }
   useEffect(() => {
     const context = (document as any).modelContext;
@@ -135,7 +135,7 @@ export default function Home() {
         <div className="title-row">
           <div>
             <p className="level-label">
-              Rätsel {String(level + 1).padStart(2, '0')} / 12
+              Rätsel {String(level + 1).padStart(2, '0')} / {levels.length}
             </p>
             <h1>{l.name}</h1>
           </div>
@@ -144,6 +144,11 @@ export default function Home() {
           </span>
         </div>
         <p className="intro">Drehe die Wege. Lass das ganze Netz leuchten.</p>
+        <p className="difficulty-label">
+          {level < 12
+            ? 'Ursprüngliche Testrätsel'
+            : l.difficulty.tier + ' · neue Proberätsel'}
+        </p>
         <div className="meter">
           <span>
             <i /> {status.lit.size} von {board.length} verbunden
@@ -157,7 +162,11 @@ export default function Home() {
           {board.map((mask, i) => (
             <button
               key={level + '-' + i}
-              className={'tile ' + (status.lit.has(i) ? 'lit' : '')}
+              className={
+                'tile ' +
+                (status.lit.has(i) ? 'lit ' : '') +
+                (session.locks[i] ? 'locked' : '')
+              }
               disabled={status.solved || !ready}
               onClick={() => turn(i)}
               aria-label={
@@ -172,30 +181,40 @@ export default function Home() {
                   .join(', ') +
                 '. ' +
                 (status.lit.has(i) ? 'Verbunden. ' : '') +
-                'Im Uhrzeigersinn drehen.'
+                (session.locks[i] ? 'Gesperrt. ' : '') +
+                (lockMode ? 'Sperre umschalten.' : 'Im Uhrzeigersinn drehen.')
               }
             >
               <svg viewBox="0 0 100 100" aria-hidden="true">
-                {[0, 1, 2, 3]
-                  .filter((d) => mask & (1 << d))
-                  .map((d) => (
-                    <path
-                      key={d}
-                      d={
-                        ['M50 50V0', 'M50 50H100', 'M50 50V100', 'M50 50H0'][d]
-                      }
-                      className="wire"
-                    />
-                  ))}
-                <circle
-                  cx="50"
-                  cy="50"
-                  r={i === l.source ? 13 : 5}
-                  className={i === l.source ? 'source' : 'joint'}
-                />
-                {i === l.source && (
-                  <circle cx="50" cy="50" r="5" fill="#142235" />
-                )}
+                <g
+                  className="rotor"
+                  style={{
+                    transform: 'rotate(' + session.turns[i] * 90 + 'deg)',
+                  }}
+                >
+                  {[0, 1, 2, 3]
+                    .filter((d) => l.initial[i] & (1 << d))
+                    .map((d) => (
+                      <path
+                        key={d}
+                        d={
+                          ['M50 50V0', 'M50 50H100', 'M50 50V100', 'M50 50H0'][
+                            d
+                          ]
+                        }
+                        className="wire"
+                      />
+                    ))}
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r={i === l.source ? 13 : 5}
+                    className={i === l.source ? 'source' : 'joint'}
+                  />
+                  {i === l.source && (
+                    <circle cx="50" cy="50" r="5" fill="#142235" />
+                  )}
+                </g>
                 {[0, 1, 2, 3]
                   .filter((d) => {
                     const j = neighbor(i, d, l.n);
@@ -214,6 +233,11 @@ export default function Home() {
                     />
                   ))}
               </svg>
+              {session.locks[i] && (
+                <span className="lock-badge" aria-hidden="true">
+                  ◆
+                </span>
+              )}
             </button>
           ))}
         </div>
@@ -222,8 +246,8 @@ export default function Home() {
             <>
               <strong>Alles verbunden. Schön gelöst.</strong>
               <span>
-                {done.length === 12
-                  ? 'Du hast alle zwölf Rätsel gelöst.'
+                {done.length === levels.length
+                  ? 'Du hast alle Rätsel gelöst.'
                   : 'Nimm den nächsten Funken mit.'}
               </span>
             </>
@@ -235,13 +259,44 @@ export default function Home() {
           )}
         </div>
         <div className="actions">
-          <Button variant="outline" onClick={() => start(level)}>
+          <Button
+            variant="outline"
+            disabled={!ready || !session.history.length}
+            onClick={() => dispatch({ type: 'undo' })}
+          >
+            ↶ Rückgängig
+          </Button>
+          <Button
+            variant={lockMode ? 'default' : 'outline'}
+            disabled={!ready || status.solved}
+            aria-pressed={lockMode}
+            onClick={() => setLockMode((v) => !v)}
+          >
+            ◆ {lockMode ? 'Sperren aktiv' : 'Kacheln sperren'}
+          </Button>
+          <Button
+            variant="outline"
+            disabled={!ready}
+            onClick={() => dispatch({ type: 'reset' })}
+          >
             ↻ Neu starten
           </Button>
-          {status.solved && level < 11 && (
+          {status.solved && level < levels.length - 1 && (
             <Button onClick={() => start(level + 1)}>Nächstes Rätsel →</Button>
           )}
         </div>
+        {lockMode && (
+          <p className="mode-help" role="status">
+            Tippe eine Kachel an, um sie zu sperren oder zu entsperren. Danach
+            „Sperren aktiv“ ausschalten, um weiterzudrehen.
+          </p>
+        )}
+        {storageError && (
+          <p role="status" className="mode-help">
+            Dein Browser kann den Fortschritt gerade nicht speichern. Lass diese
+            Seite geöffnet.
+          </p>
+        )}
         <nav className="levels" aria-label="Rätsel auswählen">
           {levels.map((_, i) => (
             <button
@@ -254,6 +309,7 @@ export default function Home() {
                 (i === level ? 'selected ' : '') +
                 (done.includes(i) ? 'finished' : '')
               }
+              disabled={!ready}
               onClick={() => start(i)}
             >
               {done.includes(i) ? '✓' : i + 1}
@@ -263,6 +319,12 @@ export default function Home() {
         <details>
           <summary>So funktioniert’s</summary>
           <p>
+            Rätsel 1–12 sind die bisherigen Testrätsel. Danach folgen jeweils
+            drei leichte, mittlere und schwere Proberätsel. Die Einstufung ist
+            vorläufig: längere Schlussfolgerungsketten und mehr offene
+            Möglichkeiten erhöhen die Schwierigkeit.
+          </p>
+          <p>
             Antippen dreht eine Kachel um 90°. Der helle Kreis ist die Quelle.
             Verbinde alle Kacheln mit ihr, ohne offene Enden oder Anschlüsse am
             Spielfeldrand. Die kleinen Punkte markieren offene Anschlüsse.
@@ -270,7 +332,10 @@ export default function Home() {
           <p>
             Licht bedeutet „mit der Quelle verbunden“, nicht automatisch
             „richtig gedreht“. Du darfst beliebig ausprobieren. Beim Wechsel zu
-            einem anderen Rätsel beginnt dessen Anordnung von vorn.
+            einem anderen Rätsel bleibt dein Zwischenstand erhalten. „Kacheln
+            sperren“ schützt deine eigenen Markierungen vor versehentlichem
+            Drehen. Eine Sperre bestätigt nicht, dass die Kachel richtig liegt.
+            „Rückgängig“ nimmt die letzte Drehung oder Sperränderung zurück.
           </p>
         </details>
         <footer>Kein Zeitdruck. Nur du und der nächste Lichtblick.</footer>
