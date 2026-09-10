@@ -7,7 +7,8 @@
   },
   "scripts": {
     "dev": "vinext dev",
-    "test": "node test-game.mjs",
+    "test": "node test-game.mjs && node test-design.mjs",
+    "levels:review": "node curate-levels.mjs",
     "android:sync": "npm run build && cap sync android",
     "build": "vinext build",
     "start": "wrangler dev --config dist/server/wrangler.json",

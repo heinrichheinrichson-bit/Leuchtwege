@@ -541,6 +541,12 @@ body {
   margin: 12px 0 5px;
   line-height: 1.5;
 }
+.lesson {
+  font-size: 14px;
+  line-height: 1.45;
+  color: #bdcede;
+  margin: 0 0 12px;
+}
 .play-actions {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));

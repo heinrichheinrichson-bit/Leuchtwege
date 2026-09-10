@@ -1,5 +1,8 @@
 import { rotate, neighbor, evaluate, solutions } from './lib/game.mjs';
-import { writeFileSync } from 'node:fs';
+import { writeFileSync,existsSync,readFileSync } from 'node:fs';
+if(existsSync('lib/levels.json')&&JSON.parse(readFileSync('lib/levels.json','utf8')).length>12){
+ throw Error('Published catalog detected. Use node curate-levels.mjs; existing puzzles must not be overwritten.');
+}
 import assert from 'node:assert/strict';
 const levels = [];
 const names = [

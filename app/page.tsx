@@ -17,7 +17,12 @@ import {
 } from '@/components/ui/alert-dialog';
 import { App } from '@capacitor/app';
 import { Capacitor } from '@capacitor/core';
-import { continueTarget, nextPuzzle, isInProgress } from '@/lib/catalog.mjs';
+import {
+  continueTarget,
+  nextPuzzle,
+  isInProgress,
+  recommendedOrder,
+} from '@/lib/catalog.mjs';
 import levels from '@/lib/levels.json';
 import { evaluate, neighbor } from '@/lib/game.mjs';
 import { fresh, boardOf, act, restore } from '@/lib/session.mjs';
@@ -333,8 +338,8 @@ export default function Home() {
                 </span>
               </h2>
               <div className="puzzle-cards">
-                {levels.map((item, i) =>
-                  item.difficulty.tier !== tier ? null : (
+                {recommendedOrder(levels).map((i: number) =>
+                  levels[i].difficulty.tier !== tier ? null : (
                     <button
                       key={i}
                       onClick={() => start(i)}
@@ -346,10 +351,10 @@ export default function Home() {
                         {String(i + 1).padStart(2, '0')}
                       </span>
                       <span className="puzzle-copy">
-                        <strong>{item.name}</strong>
+                        <strong>{levels[i].name}</strong>
                         <small>
-                          {item.n} × {item.n} ·{' '}
-                          {isInProgress(item, sessions[i])
+                          {levels[i].n} × {levels[i].n} ·{' '}
+                          {isInProgress(levels[i], sessions[i])
                             ? 'Begonnen'
                             : done.includes(i)
                               ? 'Gelöst'
@@ -436,6 +441,7 @@ export default function Home() {
               {l.n} × {l.n}
             </span>
           </div>
+          {l.lesson && <p className="lesson">{l.lesson}</p>}
           <div className="meter">
             <span>
               <i />
@@ -601,7 +607,7 @@ export default function Home() {
           </DialogDescription>
           <p className="success-copy">
             {done.length === levels.length
-              ? 'Du hast alle 21 Rätsel gelöst.'
+              ? 'Du hast alle ' + levels.length + ' Rätsel gelöst.'
               : 'Ein Lichtblick mehr. Bereit für den nächsten?'}
           </p>
           <Button

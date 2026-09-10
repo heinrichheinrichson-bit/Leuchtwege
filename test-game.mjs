@@ -1,9 +1,16 @@
 import assert from 'node:assert/strict';
-import { continueTarget, nextPuzzle, isInProgress } from './lib/catalog.mjs';
+import {
+  continueTarget,
+  nextPuzzle,
+  isInProgress,
+  recommendedOrder,
+} from './lib/catalog.mjs';
 import { readFileSync } from 'node:fs';
 import { fresh, boardOf, act, restore } from './lib/session.mjs';
 import { evaluate, solutions } from './lib/game.mjs';
 import { difficulty } from './lib/difficulty.mjs';
+import { applyOverride } from './lib/level-design.mjs';
+const overrides = JSON.parse(readFileSync('difficulty-overrides.json', 'utf8'));
 const levels = JSON.parse(readFileSync('lib/levels.json', 'utf8')),
   l = levels[0];
 let s = fresh(l),
@@ -45,7 +52,7 @@ for (const l of levels) {
   assert(evaluate(l.solution, l.n, l.source).solved);
   assert(!evaluate(l.initial, l.n, l.source).solved);
   assert.equal(solutions(l.initial, l.n, l.source).length, 1);
-  assert.deepEqual(difficulty(l), l.difficulty);
+  assert.deepEqual(applyOverride(l, difficulty(l), overrides), l.difficulty);
 }
 assert(levels.slice(12).some((l) => l.difficulty.unresolved > 0));
 // Reject disconnected closed components, even though no ends are open.
@@ -56,7 +63,7 @@ console.log(
     ' unique puzzles; difficulty metadata; undo; lock protection; reset; migration; independent saved games; invalid data; disconnected network.',
 );
 assert.deepEqual(continueTarget(levels, {}, 0, []), {
-  index: 0,
+  index: recommendedOrder(levels)[0],
   resume: false,
 });
 assert.deepEqual(continueTarget(levels, { 0: turned }, 0, []), {
@@ -69,8 +76,8 @@ assert.deepEqual(continueTarget(levels, { 0: turned }, 1, []), {
 });
 assert.equal(isInProgress(l, locked), true);
 assert.equal(isInProgress(l, fresh(l)), false);
-assert.equal(nextPuzzle(levels, 0, [0, 1, 2]), 3);
-assert.equal(nextPuzzle(levels, levels.length - 1, []), 0);
+assert.equal(nextPuzzle([{}, {}, {}, {}], 0, [0, 1, 2]), 3);
+assert.equal(nextPuzzle([{}, {}, {}, {}], 3, []), 0);
 assert.equal(
   nextPuzzle(
     levels,
@@ -85,7 +92,10 @@ const replayDone = continueTarget(
   0,
   levels.map((_, i) => i),
 );
-assert.deepEqual(replayDone, { index: 0, resume: false });
+assert.deepEqual(replayDone, {
+  index: recommendedOrder(levels)[0],
+  resume: false,
+});
 console.log(
   'PASS: resume active game; skip completed puzzles; completed catalog; lock-only progress.',
 );
