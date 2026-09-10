@@ -4,6 +4,11 @@ Ein ruhiges Logikspiel als Browser-Prototyp und Android-Testprojekt. Kacheln dre
 
 ## Enthalten
 
+- Startseite mit Fortsetzen eines offenen Rätsels, separater Rätselkatalog und eigene Anleitung.
+- Kompakter Spielbildschirm mit an die Bildschirmhöhe angepasstem Raster und drei direkt erreichbaren Aktionen.
+- Neustart erst nach Bestätigung; Android-Zurück schließt Dialoge oder kehrt zur vorherigen Ansicht zurück.
+- Abschlussdialog mit „Brett ansehen“, nächstem offenen Rätsel und Thinkheims selbst erzeugtem Erfolgssound (0,38 Lautstärke). Ton aus unterbindet auch diesen Sound; Laden einer gelösten Partie spielt ihn nicht erneut ab.
+
 - 21 reproduzierbar erzeugte Rätsel: die bisherigen zwölf plus je drei leichte, mittlere und schwere Proberätsel.
 - Automatisch geprüfte, eindeutige Lösungen.
 - Touch- und Tastaturbedienung, Lichtfluss, offene Anschlüsse, optionaler synthetischer Klickton.
@@ -52,5 +57,7 @@ Unter Windows `gradlew.bat assembleDebug` verwenden. Ausgabe: `android/app/build
 Noch keine iOS-App, keine Werbung und keine Käufe. Die neue Schwierigkeitseinstufung ist noch nicht mit Spielern validiert. Automatische Tests prüfen eindeutige Lösungen, Netzwerkregeln, Rückgängig, Sperren, Reset, Migration und getrennte Spielstände.
 
 Eine opt-in WebMCP-Leseschnittstelle wird in unterstützten Browsern registriert. Ihre Laufzeitprüfung war in dieser Entwicklungsumgebung nicht verfügbar. Ein manueller Test auf echten Mobilgeräten steht aus.
+
+Die erste APK wurde vom Nutzer auf dem Samsung S22 erfolgreich auf Bedienung, Drehungen, Ton, Sperren und Sichtbarkeit getestet. Die neue Oberfläche (Android-Version 1.1-test, versionCode 2) benötigt erneut einen Gerätetest. Paketname und Debug-Signatur bleiben für ein Update mit erhaltenen Spielständen gleich. Browser und APK speichern getrennt.
 
 Der Abhängigkeitsstand des Sites-Starters enthält npm-Audit-Meldungen. Vor einem öffentlichen Release sollten die Abhängigkeiten aktualisiert werden. Das Spiel wird als statische Dateien ohne Server- oder Bildverarbeitung ausgeliefert.

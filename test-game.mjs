@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import { continueTarget, nextPuzzle, isInProgress } from './lib/catalog.mjs';
 import { readFileSync } from 'node:fs';
 import { fresh, boardOf, act, restore } from './lib/session.mjs';
 import { evaluate, solutions } from './lib/game.mjs';
@@ -53,4 +54,38 @@ console.log(
   'PASS: ' +
     levels.length +
     ' unique puzzles; difficulty metadata; undo; lock protection; reset; migration; independent saved games; invalid data; disconnected network.',
+);
+assert.deepEqual(continueTarget(levels, {}, 0, []), {
+  index: 0,
+  resume: false,
+});
+assert.deepEqual(continueTarget(levels, { 0: turned }, 0, []), {
+  index: 0,
+  resume: true,
+});
+assert.deepEqual(continueTarget(levels, { 0: turned }, 1, []), {
+  index: 0,
+  resume: true,
+});
+assert.equal(isInProgress(l, locked), true);
+assert.equal(isInProgress(l, fresh(l)), false);
+assert.equal(nextPuzzle(levels, 0, [0, 1, 2]), 3);
+assert.equal(nextPuzzle(levels, levels.length - 1, []), 0);
+assert.equal(
+  nextPuzzle(
+    levels,
+    0,
+    levels.map((_, i) => i),
+  ),
+  null,
+);
+const replayDone = continueTarget(
+  levels,
+  {},
+  0,
+  levels.map((_, i) => i),
+);
+assert.deepEqual(replayDone, { index: 0, resume: false });
+console.log(
+  'PASS: resume active game; skip completed puzzles; completed catalog; lock-only progress.',
 );

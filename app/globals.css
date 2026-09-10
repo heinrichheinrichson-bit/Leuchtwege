@@ -2,6 +2,8 @@
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
 @theme inline {
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--foreground);
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-primary: var(--primary);
@@ -21,6 +23,7 @@
   --muted-foreground: #aab9cd;
   --border: #344458;
   --radius: 0.7rem;
+  --popover: #162638;
   color-scheme: dark;
 }
 * {
@@ -326,4 +329,333 @@ footer {
 body {
   padding-top: env(safe-area-inset-top);
   padding-bottom: env(safe-area-inset-bottom);
+}
+.app-shell {
+  max-width: 100%;
+  min-height: 100dvh;
+}
+.app-header {
+  padding: 16px 20px;
+  max-width: 900px;
+  min-height: 64px;
+  gap: 8px;
+}
+.header-actions {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+}
+.app-header button {
+  min-height: 42px;
+  font-size: 14px;
+}
+.home-screen,
+.catalog-screen,
+.rules-screen {
+  width: min(100% - 40px, 520px);
+  margin: 24px auto 40px;
+}
+.home-screen {
+  text-align: center;
+  padding-top: clamp(10px, 5vh, 48px);
+}
+.home-symbol {
+  font-size: 76px;
+  line-height: 1.2;
+  color: #ffdc91;
+  text-shadow: 0 0 35px #ffd88c45;
+  margin-bottom: 24px;
+}
+.home-screen h1 {
+  font-size: clamp(28px, 6vw, 36px);
+  line-height: 1.15;
+}
+.home-intro,
+.section-intro {
+  color: #aab9cd;
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 14px 0 24px;
+}
+.home-progress {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: baseline;
+  margin: 28px 0;
+  color: #aab9cd;
+  font-size: 14px;
+}
+.home-progress strong {
+  font-size: 22px;
+  font-weight: 500;
+  color: #ffdc91;
+}
+.continue-button,
+.home-option {
+  width: 100%;
+  min-height: 54px !important;
+  justify-content: space-between !important;
+  padding: 0 20px !important;
+  font-size: 16px !important;
+  border-radius: 14px !important;
+}
+.continue-detail {
+  font-size: 14px;
+  color: #aab9cd;
+  margin: 12px 0 28px;
+  min-height: 20px;
+}
+.home-option {
+  margin-bottom: 12px;
+}
+.home-foot {
+  font-size: 14px;
+  color: #aab9cd;
+  margin: 35px 0 0;
+}
+.catalog-group {
+  margin: 30px 0;
+}
+.catalog-group h2 {
+  font-size: 19px;
+  font-weight: 500;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 0 12px;
+}
+.catalog-group h2 span {
+  font-size: 14px;
+  color: #aab9cd;
+  font-weight: 400;
+}
+.puzzle-cards {
+  display: grid;
+  gap: 9px;
+}
+.puzzle-card {
+  display: flex;
+  align-items: center;
+  text-align: left;
+  gap: 14px;
+  border: 1px solid #304258;
+  background: #142235;
+  border-radius: 14px;
+  padding: 16px;
+  color: #d6e3f1;
+  min-height: 76px;
+  width: 100%;
+}
+.puzzle-card:hover {
+  background: #20334a;
+}
+.puzzle-number {
+  font-size: 18px;
+  color: #aab9cd;
+  width: 28px;
+}
+.puzzle-copy {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 5px;
+}
+.puzzle-copy strong {
+  font-size: 16px;
+  font-weight: 500;
+}
+.puzzle-copy small {
+  font-size: 14px;
+  color: #aab9cd;
+}
+.puzzle-card.finished {
+  border-color: #ffdc9140;
+}
+.puzzle-card.finished > span:last-child {
+  color: #ffdc91;
+  font-size: 20px;
+}
+.rules-screen {
+  font-size: 16px;
+  line-height: 1.7;
+}
+.rules-screen h1 {
+  line-height: 1.2;
+}
+.rules-screen ol {
+  padding-left: 25px;
+}
+.rules-screen li {
+  padding-left: 8px;
+  margin-bottom: 24px;
+}
+.rules-screen p {
+  color: #b9c9dc;
+  margin-top: 7px;
+}
+.rules-screen h2 {
+  font-size: 22px;
+  margin-top: 32px;
+}
+.rules-back {
+  min-height: 46px;
+  margin-top: 15px;
+  width: 100%;
+}
+.play-screen {
+  width: min(100% - 28px, 480px);
+  margin: 4px auto 20px;
+}
+.play-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+.play-heading h1 {
+  font-size: clamp(21px, 5vw, 29px);
+  letter-spacing: -0.6px;
+}
+.play-heading .level-label {
+  font-size: 14px;
+}
+.play-heading .size {
+  padding: 6px 10px;
+  white-space: nowrap;
+}
+.play-screen .meter {
+  font-size: 14px;
+  margin-bottom: 10px;
+}
+.play-screen .board {
+  width: min(100%, max(280px, calc(100dvh - 310px)));
+  margin: 0 auto;
+  box-shadow: 0 15px 45px #0003;
+}
+.play-status {
+  text-align: center;
+  font-size: 14px;
+  color: #ffdc91;
+  min-height: 42px;
+  margin: 12px 0 5px;
+  line-height: 1.5;
+}
+.play-actions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 7px;
+}
+.play-actions button {
+  height: 58px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 6px 2px;
+  font-size: 13px;
+  border-radius: 10px;
+}
+.play-actions button span {
+  font-size: 19px;
+  line-height: 1;
+}
+.next-inline {
+  width: 100%;
+  min-height: 44px;
+  margin-top: 14px;
+}
+.play-screen .tile {
+  min-width: 0;
+}
+.playing .app-header {
+  max-width: 540px;
+}
+.game-dialog {
+  background: #162638 !important;
+  color: #eef4fa !important;
+  border: 1px solid #435568;
+  padding: 26px !important;
+  border-radius: 22px !important;
+  max-width: min(420px, calc(100vw - 32px)) !important;
+  max-height: calc(100dvh - 40px);
+  overflow-y: auto;
+  gap: 14px !important;
+  font-size: 16px !important;
+  box-shadow: 0 25px 90px #0008;
+}
+.game-dialog button {
+  min-height: 44px;
+  font-size: 15px;
+}
+.game-dialog [data-slot='dialog-description'],
+.game-dialog [data-slot='alert-dialog-description'] {
+  font-size: 15px;
+  line-height: 1.6;
+  color: #b9c9dc;
+}
+.dialog-heading {
+  font-size: 25px !important;
+  line-height: 1.2 !important;
+}
+.success-dialog {
+  text-align: center;
+}
+.success-symbol {
+  font-size: 66px;
+  line-height: 1;
+  color: #ffdc91;
+  margin: 8px 0 10px;
+  animation: success-glow 0.7s ease-out;
+}
+.success-copy {
+  font-size: 15px;
+  color: #b9c9dc;
+  line-height: 1.5;
+  margin: 0 0 8px;
+}
+[data-slot='dialog-overlay'],
+[data-slot='alert-dialog-overlay'] {
+  background: #020811bb !important;
+  backdrop-filter: blur(4px);
+}
+@keyframes success-glow {
+  from {
+    opacity: 0.3;
+    transform: scale(0.7);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+@media (max-height: 650px) {
+  .app-header {
+    padding-top: 6px;
+    padding-bottom: 6px;
+    min-height: 50px;
+  }
+  .play-heading {
+    margin-bottom: 9px;
+  }
+  .play-screen .board {
+    width: min(100%, max(260px, calc(100dvh - 260px)));
+  }
+  .play-status {
+    min-height: 24px;
+  }
+  .home-screen {
+    padding-top: 0;
+  }
+  .home-symbol {
+    font-size: 48px;
+    margin-bottom: 15px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .success-symbol {
+    animation: none;
+  }
+  .rotor {
+    transition: none;
+  }
 }
