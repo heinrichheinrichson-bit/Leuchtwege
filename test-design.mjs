@@ -24,8 +24,8 @@ const ls = JSON.parse(readFileSync('lib/levels.json', 'utf8')),
   old = JSON.parse(
     readFileSync('test-data/legacy-puzzle-fingerprints.json', 'utf8'),
   );
-assert.equal(ls.length, 30);
-assert.equal(old.length, 21);
+assert.equal(ls.length, 60);
+assert.equal(old.length, 30);
 for (const f of old) {
   const l = ls[f.index];
   assert.equal(
@@ -43,10 +43,10 @@ for (const f of old) {
     'Existing puzzle changed: ' + f.index,
   );
 }
-assert.equal(new Set(ls.map((l) => l.id)).size, 30);
+assert.equal(new Set(ls.map((l) => l.id)).size, 60);
 assert.deepEqual(
   [...ls.map((l) => l.order)].sort((a, b) => a - b),
-  Array.from({ length: 30 }, (_, i) => i),
+  Array.from({ length: 60 }, (_, i) => i),
 );
 const order = recommendedOrder(ls);
 assert(
@@ -56,6 +56,15 @@ assert(
       (i) =>
         ls[i].n === 3 && ls[i].difficulty.tier === 'Leicht' && ls[i].lesson,
     ),
+);
+assert.deepEqual(order.slice(0, 3), [2, 21, 0]);
+assert.equal(
+  nextPuzzle(
+    ls,
+    29,
+    Array.from({ length: 30 }, (_, i) => i),
+  ) >= 30,
+  true,
 );
 const fixture = [{ order: 2 }, { order: 0 }, { order: 1 }];
 assert.deepEqual(recommendedOrder(fixture), [1, 2, 0]);
@@ -132,5 +141,5 @@ assert.throws(() =>
 assert(ls.some((l) => l.n === 4 && l.difficulty.tier === 'Schwer'));
 assert(ls.some((l) => l.n === 6 && l.difficulty.tier === 'Mittel'));
 console.log(
-  'PASS: stable 21 legacy puzzles; 30 unique IDs; progression; rotation-invariant difficulty; safe direct deductions; legal loops; similarity filter; manual overrides; size separate from difficulty.',
+  'PASS: stable 30 legacy puzzles; 60 unique IDs; progression; rotation-invariant difficulty; safe direct deductions; legal loops; similarity filter; manual overrides; size separate from difficulty.',
 );

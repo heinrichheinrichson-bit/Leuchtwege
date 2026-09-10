@@ -9,7 +9,7 @@ Ein ruhiges Logikspiel als Browser-Prototyp und Android-Testprojekt. Kacheln dre
 - Neustart erst nach Bestätigung; Android-Zurück schließt Dialoge oder kehrt zur vorherigen Ansicht zurück.
 - Abschlussdialog mit „Brett ansehen“, nächstem offenen Rätsel und Thinkheims selbst erzeugtem Erfolgssound (0,38 Lautstärke). Ton aus unterbindet auch diesen Sound; Laden einer gelösten Partie spielt ihn nicht erneut ab.
 
-- 30 geprüfte Rätsel: 13 leichte, 10 mittlere und 7 schwere. Die bisherigen 21 Anordnungen bleiben unverändert.
+- 60 geprüfte Rätsel: je 20 leichte, mittlere und schwere. Die bisherigen 30 Anordnungen bleiben unverändert.
 - Empfohlene Spielreihenfolge unabhängig von den stabilen Rätselnummern, drei kurze Einstiegshinweise und ein leichterer Abschnitt zur Auflockerung.
 - Automatisch geprüfte, eindeutige Lösungen.
 - Touch- und Tastaturbedienung, Lichtfluss, offene Anschlüsse, optionaler synthetischer Klickton.
@@ -37,13 +37,13 @@ Die Ausgabe ist statisch. Das Spiel benötigt weder eine Datenbank noch einen Sp
 
 ## Rätsel und Schwierigkeit
 
-`npm run levels:review` bewertet den Katalog erneut und erzeugt `docs/level-review.md`. Aus dem bisherigen 21er-Katalog ergänzt es reproduzierbar neun neue Aufgaben; bei 30 Aufgaben wird nichts ersetzt. `expand-levels.mjs` leitet auf diesen Ablauf weiter. Der alte Bootstrap-Generator verweigert das Überschreiben eines veröffentlichten Katalogs.
+`npm run levels:review` bewertet den Katalog erneut und erzeugt `docs/level-review.md`. Aus einem vorhandenen 21er- oder 30er-Katalog ergänzt es reproduzierbar auf 60 Aufgaben; bei 60 Aufgaben wird nichts ersetzt. `expand-levels.mjs` leitet auf diesen Ablauf weiter. Der alte Bootstrap-Generator verweigert das Überschreiben eines veröffentlichten Katalogs.
 
 Die Bewertung unterscheidet lokale Anschlussketten, notwendige Verbindungen des gesamten möglichen Netzes und Widerspruchsprüfungen einzelner Orientierungen. Mittlere Ableitungstiefe und benötigte Methode bestimmen die Einstufung; die Rastergröße erhält keinen eigenen Bonus. Rotationen des gesamten Rätsels ergeben dieselbe Bewertung. „Schwer“ bedeutet, dass unsere direkten Regeln nicht genügen; ein Mensch kann dennoch andere direkte Schlüsse erkennen. Die Schwellenwerte sind vorläufige Designentscheidungen, keine Messungen mit Spielern.
 
 Gezielte Korrekturen stehen in `difficulty-overrides.json`, etwa `{"lw-017":{"tier":"Leicht","reason":"Nutzerfeedback nach Spieltest"}}`. Der Schlüssel ist die stabile Rätsel-ID. Die automatische Bewertung bleibt dokumentiert. Derzeit sind keine Korrekturen aufgrund nicht vorhandener Einzelbewertungen eingetragen.
 
-Neue Aufgaben werden auf eindeutige Lösung und Ähnlichkeit geprüft. Gedrehte/gespiegelte Duplikate und über 90 % übereinstimmende Bauteiltypen an entsprechenden Positionen werden ausgeschlossen. Die ersten 21 Aufgaben sind durch feste Fingerabdrücke gegen versehentliche Veränderungen geschützt.
+Neue Aufgaben werden auf eindeutige Lösung und Ähnlichkeit geprüft. Gedrehte/gespiegelte Duplikate und über 90 % übereinstimmende Bauteiltypen an entsprechenden Positionen werden ausgeschlossen. Die ersten 30 Aufgaben sind durch feste Fingerabdrücke gegen versehentliche Veränderungen geschützt.
 
 ## Android-Testversion
 
@@ -63,6 +63,6 @@ Noch keine iOS-App, keine Werbung und keine Käufe. Die neue Schwierigkeitseinst
 
 Eine opt-in WebMCP-Leseschnittstelle wird in unterstützten Browsern registriert. Ihre Laufzeitprüfung war in dieser Entwicklungsumgebung nicht verfügbar. Ein manueller Test auf echten Mobilgeräten steht aus.
 
-Die erste APK wurde vom Nutzer auf dem Samsung S22 erfolgreich auf Bedienung, Drehungen, Ton, Sperren und Sichtbarkeit getestet. Die Version 1.2-test (versionCode 3) mit überarbeitetem Katalog benötigt einen erneuten Spieltest. Paketname und Debug-Signatur bleiben für ein Update mit erhaltenen Spielständen gleich. Browser und APK speichern getrennt.
+Die erste APK wurde vom Nutzer auf dem Samsung S22 erfolgreich auf Bedienung, Drehungen, Ton, Sperren und Sichtbarkeit getestet. Der Nutzer hat anschließend alle 30 Rätsel problemlos durchgespielt und Spaß daran gemeldet. Die Erweiterung auf 60 Rätsel in Version 1.3-test (versionCode 4) benötigt einen erneuten Spieltest. Paketname und Debug-Signatur bleiben für ein Update mit erhaltenen Spielständen gleich. Browser und APK speichern getrennt.
 
 Der Abhängigkeitsstand des Sites-Starters enthält npm-Audit-Meldungen. Vor einem öffentlichen Release sollten die Abhängigkeiten aktualisiert werden. Das Spiel wird als statische Dateien ohne Server- oder Bildverarbeitung ausgeliefert.
