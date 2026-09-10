@@ -22,6 +22,7 @@ import {
   acceptRandom,
   sizes,
 } from '@/lib/random-game.mjs';
+import { connectionSound } from '@/lib/connection-sound.mjs';
 import { topologyKey } from '@/lib/level-design.mjs';
 import RandomWorker from '../lib/random.worker?worker';
 import { App } from '@capacitor/app';
@@ -52,6 +53,24 @@ export default function Home() {
   const [victory, setVictory] = useState(false);
   const [restart, setRestart] = useState(false);
   const successAudio = useRef<HTMLAudioElement | null>(null);
+  const electricAudio = useRef<Record<string, HTMLAudioElement>>({});
+  function stopSounds() {
+    for (const audio of [
+      successAudio.current,
+      ...Object.values(electricAudio.current),
+    ]) {
+      if (audio) {
+        audio.pause();
+        audio.currentTime = 0;
+      }
+    }
+  }
+  function playElectric(name: string) {
+    if (!sound) return;
+    stopSounds();
+    const audio = electricAudio.current[name];
+    if (audio) void audio.play().catch(() => {});
+  }
   const backAction = useRef<() => void>(() => {});
   const [level, setLevel] = useState(0);
   const [sessions, setSessions] = useState<Record<number, any>>({});
@@ -200,10 +219,18 @@ export default function Home() {
     audio.preload = 'auto';
     audio.volume = 0.38;
     successAudio.current = audio;
+    for (const [name, volume] of [
+      ['connect', 0.34],
+      ['disconnect', 0.27],
+    ] as const) {
+      const effect = new Audio('/sounds/' + name + '.wav');
+      effect.preload = 'auto';
+      effect.volume = volume;
+      electricAudio.current[name] = effect;
+    }
     const stop = () => {
       if (document.hidden) {
-        audio.pause();
-        audio.currentTime = 0;
+        stopSounds();
       }
     };
     document.addEventListener('visibilitychange', stop);
@@ -212,14 +239,11 @@ export default function Home() {
       void nativeHandle?.remove();
       window.removeEventListener('popstate', pop);
       document.removeEventListener('visibilitychange', stop);
-      audio.pause();
+      stopSounds();
     };
   }, []);
   useEffect(() => {
-    if (!sound && successAudio.current) {
-      successAudio.current.pause();
-      successAudio.current.currentTime = 0;
-    }
+    if (!sound) stopSounds();
   }, [sound]);
   function start(i: number) {
     setLevel(i);
@@ -239,10 +263,21 @@ export default function Home() {
       setVictory(true);
       setLockMode(false);
       if (sound && successAudio.current) {
+        stopSounds();
         successAudio.current.currentTime = 0;
         void successAudio.current.play().catch(() => {});
       }
       return true;
+    }
+    if (action.type === 'turn') {
+      const effect = connectionSound(
+        status,
+        evaluate(boardOf(l, nextState), l.n, l.source),
+      );
+      if (effect) {
+        playElectric(effect);
+        return true;
+      }
     }
     return false;
   }

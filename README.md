@@ -75,3 +75,7 @@ Der Abhängigkeitsstand des Sites-Starters enthält npm-Audit-Meldungen. Vor ein
 Speicherung unter `leuchtwege-free-v1` enthält das tatsächliche Brett, Seed, Generatorversion, Drehungen, Sperren, Undo-Verlauf, Auswahl und jüngste Netzschlüssel. Die Kampagne bleibt unter ihrem bestehenden Schlüssel. Die Schwierigkeitsauswahl ist eine heuristische Schätzung, keine garantierte subjektive Einstufung. Automatisch wählt eine unterstützte Größe; Leicht bietet 3–5, Mittel/Schwer 4–6.
 
 `node test-random.mjs --report` prüft 144 neue Rätsel und schreibt Rechnerlaufzeiten nach `docs/randomizer-benchmark.json`. Diese sind keine Smartphone-Messwerte. Thinkheims Hitori- und Binär-Generatoren dienten als Referenz für Seed, Prüfung und begrenzte Versuche; es wurde kein Thinkheim-Code verändert.
+
+## Elektrisches Klangfeedback (1.5-test)
+
+Beim Drehen spielt zusätzlich aufleuchtendes Netz Thinkheims Hashi-Verbindungston (0,34). Erlöschen Kacheln, spielt der synthetische Hashi-Entladeton (0,27). Bei gleichzeitigem Zugewinn und Verlust hat die Entladung Vorrang; beim Gewinn ausschließlich der Erfolgssound. Ohne Änderung der beleuchteten Kacheln bleibt der kurze Klick. Laden, Sperren und Neustart lösen keine elektrischen Effekte aus. Ton aus und Wechsel in den Hintergrund stoppen die WAV-Wiedergabe. Herkunft siehe public/sounds/SOURCES.md.

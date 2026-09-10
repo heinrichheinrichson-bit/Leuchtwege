@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "vinext dev",
-    "test": "node test-game.mjs && node test-design.mjs && node test-random.mjs",
+    "test": "node test-game.mjs && node test-design.mjs && node test-random.mjs && node test-sound.mjs",
     "levels:review": "node curate-levels.mjs",
     "android:sync": "npm run build && cap sync android",
     "build": "vinext build",
