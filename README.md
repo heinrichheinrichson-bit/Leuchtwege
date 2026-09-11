@@ -89,3 +89,15 @@ Wischen entlang einer Achse zum benachbarten Leerfeld oder Kachel antippen und d
 Die sechs Rätsel werden aus gültigen Netzen mit Leerfeld durch legale Schübe und gegebenenfalls Drehungen erzeugt. Der gespeicherte Rückweg ist getestet; kombinierte Rätsel sind in ihrer Ausgangsposition nicht allein durch Drehen lösbar. generate-sliding.mjs verweigert ein Überschreiben des veröffentlichten Katalogs. Keine Schwierigkeitsversprechen oder freier Generator für die neuen Modi.
 
 Eigener Speicher leuchtwege-sliding-v1 mit sechs getrennten Partien und Undo-Verläufen. Kampagne und freies Drehspiel bleiben unverändert. Die neuen Modi verwenden die bestehenden elektrischen WAVs und den Erfolgssound; Lichtänderungen werden anhand der Kachel-Identität verglichen. Smartphone-Gesten und Spielgefühl müssen noch auf dem S22 geprüft werden.
+
+## Lösehilfen und Tipps (1.7-test)
+
+Die Glühbirne ist eine Spielerfunktion: drei kostenlose Tipps pro Rätsel, danach ein weiterer Tipp pro bestätigtem Reward. Verbrauch wird separat pro stabiler Rätsel-ID gespeichert (leuchtwege-hints-v1:ID); Neustart und Undo füllen das Kontingent nicht auf. Für jede neue zufällig erzeugte Partie gilt ein eigenes Kontingent.
+
+Die Testhilfe (Komplett lösen, Fast lösen, Nächsten Schritt lösen) verbraucht keine Tipps. Ein Testaufruf kann als Ganzes rückgängig gemacht werden. Die Aktionen verwenden legale Züge aus dem aktuellen Zustand. Drehpuzzles werden zur geprüften Orientierung geführt; nötige Sperren werden dabei aufgehoben. 3×3-Schiebepuzzles verwenden bidirektionale Suche zur gespeicherten Zielstellung, bei Bedarf gefolgt von Drehungen. Bereits vorher erreichte gültige Alternativnetze werden akzeptiert. Fast lösen lässt eine einzelne legale Aktion offen. Diese Wege sind nicht zwingend global kürzeste Lösungen.
+
+Die Suche läuft in einem abbrechbaren Worker. Testaktionen können den bestehenden Abschlussdialog und Kampagnenabschluss auslösen, damit diese getestet werden können. Es gibt noch keine Ranglisten, in denen dies als eigene Leistung gewertet würde.
+
+Testhilfe und Werbesimulation sind nur mit der Build-Umgebungsvariable LEUCHTWEGE_TEST_BUILD=1 verfügbar. Normale Builds lassen diese Zugänge weg. Für unsere private Browser-Testseite und Debug-APK wird das Flag ausdrücklich gesetzt. Beispiel PowerShell: $env:LEUCHTWEGE_TEST_BUILD='1', anschließend npm run build und Capacitor-Sync. Vor einem Store-Build die Variable entfernen.
+
+Wie Thinkheims rewarded_hint_dialog.dart nutzt diese Testversion eine deutlich beschriftete Werbesimulation; es ist noch kein echter Werbeanbieter eingebunden. Simulation abschließen vergibt einen Tipp, Abbrechen keinen. Ein Receipt kann nur einmal belohnt werden. In normalen Builds wird ohne Anbieter kein Reward vergeben. Echte Werbung erfordert später die Anbindung und bestätigte Reward-Callbacks.

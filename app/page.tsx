@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState, useRef } from 'react';
+import SolveControls from '@/components/solve-controls';
 import SlidingGame from '@/components/sliding-game';
 import { Button } from '@/components/ui/button';
 import {
@@ -72,6 +73,7 @@ export default function Home() {
     const audio = electricAudio.current[name];
     if (audio) void audio.play().catch(() => {});
   }
+  const helpBack = useRef<(() => boolean) | null>(null);
   const slideBack = useRef<(() => boolean) | null>(null);
   const backAction = useRef<() => void>(() => {});
   const [level, setLevel] = useState(0);
@@ -164,6 +166,7 @@ export default function Home() {
     setView(to);
   }
   backAction.current = () => {
+    if (view === 'game' && helpBack.current?.()) return;
     if (view === 'sliding' && slideBack.current?.()) return;
     if (generating) {
       cancelGeneration();
@@ -889,6 +892,27 @@ export default function Home() {
               <span aria-hidden="true">↻</span> Neustart
             </Button>
           </div>
+          <SolveControls
+            key={l.id}
+            puzzle={l}
+            session={session}
+            back={helpBack}
+            onApplied={(nextState) => {
+              if (isFree) setFree((v: any) => ({ ...v, session: nextState }));
+              else setSessions((v) => ({ ...v, [level]: nextState }));
+              setLockMode(false);
+              const solved = evaluate(
+                boardOf(l, nextState),
+                l.n,
+                l.source,
+              ).solved;
+              setVictory(solved);
+              if (solved && sound && successAudio.current) {
+                stopSounds();
+                void successAudio.current.play().catch(() => {});
+              }
+            }}
+          />
           {status.solved && (
             <Button className="next-inline" onClick={nextGame}>
               {isFree

@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useRef, useState, type MutableRefObject } from 'react';
+import SolveControls from '@/components/solve-controls';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -36,6 +37,7 @@ export default function SlidingGame({
   back: MutableRefObject<(() => boolean) | null>;
   playSound: (name: string) => void;
 }) {
+  const helpBack = useRef<(() => boolean) | null>(null);
   const [saved, setSaved] = useState<any>({
     version: 1,
     current: 0,
@@ -90,6 +92,7 @@ export default function SlidingGame({
     setPreview(null);
   }
   back.current = () => {
+    if (helpBack.current?.()) return true;
     if (restart) {
       setRestart(false);
       return true;
@@ -445,6 +448,24 @@ export default function SlidingGame({
               <span>↻</span>Neustart
             </Button>
           </div>
+          <SolveControls
+            key={l.id}
+            puzzle={l}
+            session={s}
+            back={helpBack}
+            onApplied={(next) => {
+              setSaved((v: any) => ({
+                ...v,
+                sessions: { ...v.sessions, [l.id]: next },
+              }));
+              setSelected(null);
+              setHint('');
+              clearGesture();
+              const solved = slidingStatus(l, next).solved;
+              setVictory(solved);
+              if (solved) playSound('success');
+            }}
+          />
           {status.solved && (
             <Button
               className="next-inline"

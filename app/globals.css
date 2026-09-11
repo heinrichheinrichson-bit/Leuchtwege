@@ -774,3 +774,15 @@ body {
     transition: none;
   }
 }
+
+.solve-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 12px;
+}
+.solve-controls button {
+  min-height: 44px;
+  gap: 7px;
+}
