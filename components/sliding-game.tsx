@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useRef, useState, type MutableRefObject } from 'react';
+import { useVictory } from '@/lib/use-victory';
 import SolveControls from '@/components/solve-controls';
 import { Button } from '@/components/ui/button';
 import {
@@ -50,7 +51,10 @@ export default function SlidingGame({
   const [preview, setPreview] = useState<number | null>(null);
   const [rules, setRules] = useState(false);
   const [restart, setRestart] = useState(false);
-  const [victory, setVictory] = useState(false);
+  const { victory, celebrating, setVictory } = useVictory(
+    () => playSound('success'),
+    [saved.current, playing, rules, restart].join(':'),
+  );
   const [hint, setHint] = useState('');
   const gesture = useRef<{
     pointer: number;
@@ -143,7 +147,6 @@ export default function SlidingGame({
     if (after.solved) {
       setVictory(true);
       setSelected(null);
-      playSound('success');
     } else {
       // Compare identities: the source and its illuminated tiles can move together.
       const effect = connectionSound(
@@ -243,7 +246,11 @@ export default function SlidingGame({
             </span>
           </div>
           <div
-            className={'board slide-board ' + (status.solved ? 'complete' : '')}
+            className={
+              'board slide-board ' +
+              (status.solved ? 'complete ' : '') +
+              (celebrating ? 'celebrating' : '')
+            }
           >
             <div className="slide-grid">
               <button
@@ -463,7 +470,6 @@ export default function SlidingGame({
               clearGesture();
               const solved = slidingStatus(l, next).solved;
               setVictory(solved);
-              if (solved) playSound('success');
             }}
           />
           {status.solved && (

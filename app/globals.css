@@ -786,3 +786,77 @@ body {
   min-height: 44px;
   gap: 7px;
 }
+
+.board {
+  position: relative;
+}
+.board.celebrating {
+  animation: board-celebration 1100ms ease-out both;
+}
+.celebrating .wire {
+  animation: wire-celebration 1100ms ease-out both;
+}
+.board.celebrating::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 15% 22%, #fff3ce 0 2px, transparent 4px),
+    radial-gradient(circle at 38% 12%, #ffdc91 0 3px, transparent 5px),
+    radial-gradient(circle at 76% 16%, #fff3ce 0 2px, transparent 4px),
+    radial-gradient(circle at 89% 44%, #ffdc91 0 3px, transparent 5px),
+    radial-gradient(circle at 74% 82%, #fff3ce 0 2px, transparent 4px),
+    radial-gradient(circle at 43% 91%, #ffdc91 0 3px, transparent 5px),
+    radial-gradient(circle at 12% 74%, #fff3ce 0 2px, transparent 4px),
+    radial-gradient(circle at 55% 37%, #fff3ce 0 2px, transparent 4px);
+  animation: light-sparks 950ms ease-out both;
+}
+@keyframes board-celebration {
+  0%,
+  100% {
+    box-shadow: 0 0 25px #ffdc9120;
+  }
+  35% {
+    box-shadow:
+      0 0 42px #ffdc9170,
+      inset 0 0 20px #ffdc9125;
+  }
+}
+@keyframes wire-celebration {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 3px #ffdc9180);
+  }
+  35% {
+    filter: drop-shadow(0 0 7px #ffeabb);
+    stroke: #fff0c4;
+  }
+}
+@keyframes light-sparks {
+  0% {
+    opacity: 0;
+    transform: scale(0.85);
+  }
+  25% {
+    opacity: 0.9;
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.12);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .board.celebrating,
+  .celebrating .wire {
+    animation: none;
+  }
+  .board.celebrating {
+    box-shadow: 0 0 30px #ffdc9135;
+  }
+  .board.celebrating::after {
+    display: none;
+    animation: none;
+  }
+}

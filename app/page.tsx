@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState, useRef } from 'react';
+import { useVictory } from '@/lib/use-victory';
 import SolveControls from '@/components/solve-controls';
 import SlidingGame from '@/components/sliding-game';
 import { Button } from '@/components/ui/button';
@@ -52,7 +53,6 @@ export default function Home() {
   const freeRef = useRef(free);
   freeRef.current = free;
   const [view, setView] = useState('home');
-  const [victory, setVictory] = useState(false);
   const [restart, setRestart] = useState(false);
   const successAudio = useRef<HTMLAudioElement | null>(null);
   const electricAudio = useRef<Record<string, HTMLAudioElement>>({});
@@ -81,6 +81,12 @@ export default function Home() {
   const [done, setDone] = useState<number[]>([]);
   const [ready, setReady] = useState(false);
   const [sound, setSound] = useState(false);
+  const { victory, celebrating, setVictory } = useVictory(() => {
+    if (sound && successAudio.current) {
+      stopSounds();
+      void successAudio.current.play().catch(() => {});
+    }
+  }, [view, level, isFree, free.puzzle?.id, restart].join(':'));
   const [lockMode, setLockMode] = useState(false);
   const [storageError, setStorageError] = useState(false);
   const l = isFree && free.puzzle ? free.puzzle : levels[level],
@@ -270,11 +276,6 @@ export default function Home() {
       if (!isFree) setDone((v) => (v.includes(level) ? v : [...v, level]));
       setVictory(true);
       setLockMode(false);
-      if (sound && successAudio.current) {
-        stopSounds();
-        successAudio.current.currentTime = 0;
-        void successAudio.current.play().catch(() => {});
-      }
       return true;
     }
     if (action.type === 'turn') {
@@ -771,7 +772,11 @@ export default function Home() {
             <span>{moves} Drehungen</span>
           </div>
           <div
-            className={'board ' + (status.solved ? 'complete' : '')}
+            className={
+              'board ' +
+              (status.solved ? 'complete ' : '') +
+              (celebrating ? 'celebrating' : '')
+            }
             style={{ gridTemplateColumns: 'repeat(' + l.n + ',1fr)' }}
           >
             {board.map((mask, i) => (
@@ -907,10 +912,6 @@ export default function Home() {
                 l.source,
               ).solved;
               setVictory(solved);
-              if (solved && sound && successAudio.current) {
-                stopSounds();
-                void successAudio.current.play().catch(() => {});
-              }
             }}
           />
           {status.solved && (

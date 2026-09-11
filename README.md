@@ -101,3 +101,7 @@ Die Suche läuft in einem abbrechbaren Worker. Testaktionen können den bestehen
 Testhilfe und Werbesimulation sind nur mit der Build-Umgebungsvariable LEUCHTWEGE_TEST_BUILD=1 verfügbar. Normale Builds lassen diese Zugänge weg. Für unsere private Browser-Testseite und Debug-APK wird das Flag ausdrücklich gesetzt. Beispiel PowerShell: $env:LEUCHTWEGE_TEST_BUILD='1', anschließend npm run build und Capacitor-Sync. Vor einem Store-Build die Variable entfernen.
 
 Wie Thinkheims rewarded_hint_dialog.dart nutzt diese Testversion eine deutlich beschriftete Werbesimulation; es ist noch kein echter Werbeanbieter eingebunden. Simulation abschließen vergibt einen Tipp, Abbrechen keinen. Ein Receipt kann nur einmal belohnt werden. In normalen Builds wird ohne Anbieter kein Reward vergeben. Echte Werbung erfordert später die Anbindung und bestätigte Reward-Callbacks.
+
+## Sichtbarer Abschluss (1.8-test)
+
+Alle Modi und Lösehilfen verwenden useVictory: 300 ms für die letzte Bewegung, dann Erfolgssound und ein einzelner Lichtimpuls mit Funken; nach weiteren 1500 ms öffnet sich die Erfolgsmeldung. Laden gelöster Partien startet keinen Ablauf. Navigation, Undo, Neustartdialog, Regeln und Hintergrundwechsel brechen ausstehende Abläufe ab. Reduzierte Bewegung deaktiviert Funken und Pulsanimationen. Der Zeitablauf und abgebrochene Callbacks werden separat getestet.
