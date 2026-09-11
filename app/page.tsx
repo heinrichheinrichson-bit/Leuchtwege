@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState, useRef } from 'react';
+import SlidingGame from '@/components/sliding-game';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -71,6 +72,7 @@ export default function Home() {
     const audio = electricAudio.current[name];
     if (audio) void audio.play().catch(() => {});
   }
+  const slideBack = useRef<(() => boolean) | null>(null);
   const backAction = useRef<() => void>(() => {});
   const [level, setLevel] = useState(0);
   const [sessions, setSessions] = useState<Record<number, any>>({});
@@ -162,6 +164,7 @@ export default function Home() {
     setView(to);
   }
   backAction.current = () => {
+    if (view === 'sliding' && slideBack.current?.()) return;
     if (generating) {
       cancelGeneration();
       return;
@@ -199,7 +202,9 @@ export default function Home() {
       if (v === 'game' && Number.isInteger(p) && p >= 0 && p < levels.length)
         setLevel(p);
       setView(
-        ['home', 'catalog', 'game', 'rules', 'random'].includes(v) ? v : 'home',
+        ['home', 'catalog', 'game', 'rules', 'random', 'sliding'].includes(v)
+          ? v
+          : 'home',
       );
       setVictory(false);
       setRestart(false);
@@ -374,6 +379,7 @@ export default function Home() {
       } catch {}
   }
   useEffect(() => {
+    if (view === 'sliding') return;
     const context = (document as any).modelContext;
     if (!context?.registerTool) return;
     const ac = new AbortController();
@@ -404,7 +410,7 @@ export default function Home() {
       ).catch(() => {});
     } catch {}
     return () => ac.abort();
-  }, [level, board, l.n, l.source, status.solved, isFree]);
+  }, [level, board, l.n, l.source, status.solved, isFree, view]);
 
   return (
     <main className={'app-shell ' + (view === 'game' ? 'playing' : '')}>
@@ -499,8 +505,28 @@ export default function Home() {
           >
             Freies Spiel <span>✳</span>
           </Button>
+          <Button
+            variant="outline"
+            className="home-option"
+            disabled={!ready}
+            onClick={() => navigate('sliding')}
+          >
+            Schiebepuzzles <span>→</span>
+          </Button>
           <p className="home-foot">Kein Zeitdruck. In deinem Tempo.</p>
         </section>
+      )}
+      {view === 'sliding' && (
+        <SlidingGame
+          back={slideBack}
+          playSound={(name) => {
+            if (!sound) return;
+            if (name === 'success' && successAudio.current) {
+              stopSounds();
+              void successAudio.current.play().catch(() => {});
+            } else playElectric(name);
+          }}
+        />
       )}
       {view === 'random' && (
         <section className="random-screen">

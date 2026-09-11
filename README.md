@@ -79,3 +79,13 @@ Speicherung unter `leuchtwege-free-v1` enthält das tatsächliche Brett, Seed, G
 ## Elektrisches Klangfeedback (1.5-test)
 
 Beim Drehen spielt zusätzlich aufleuchtendes Netz Thinkheims Hashi-Verbindungston (0,34). Erlöschen Kacheln, spielt der synthetische Hashi-Entladeton (0,27). Bei gleichzeitigem Zugewinn und Verlust hat die Entladung Vorrang; beim Gewinn ausschließlich der Erfolgssound. Ohne Änderung der beleuchteten Kacheln bleibt der kurze Klick. Laden, Sperren und Neustart lösen keine elektrischen Effekte aus. Ton aus und Wechsel in den Hintergrund stoppen die WAV-Wiedergabe. Herkunft siehe public/sounds/SOURCES.md.
+
+## Schiebepuzzles (1.6-test)
+
+Zwei Prototyp-Modi mit je drei festen 3×3-Rätseln: Nur Schieben und Schieben & Drehen. Acht Kacheln plus ein Leerfeld; Quelle an einer stabilen Kachel-ID, die beim Verschieben mitwandert. Jedes Netz mit allen acht verbundenen Kacheln ohne offene Anschlüsse gewinnt. Eine eindeutige Zielanordnung wird nicht verlangt.
+
+Wischen entlang einer Achse zum benachbarten Leerfeld oder Kachel antippen und dann Leerfeld antippen führt zum gleichen Zug. Erneutes Antippen der ausgewählten Kachel dreht nur im kombinierten Modus. Pointer Capture, Richtungsschwelle, Abbruchbehandlung und Unterdrückung des anschließenden Klicks trennen Wischen von Tippen. Das Hashi-GestureDetector-Verhalten in Thinkheims hashi_foundation.dart (Start/Target, getrennte Tap/Pan-Callbacks, Abbruch) diente als Vorlage; Flutter-Code wurde nicht kopiert.
+
+Die sechs Rätsel werden aus gültigen Netzen mit Leerfeld durch legale Schübe und gegebenenfalls Drehungen erzeugt. Der gespeicherte Rückweg ist getestet; kombinierte Rätsel sind in ihrer Ausgangsposition nicht allein durch Drehen lösbar. generate-sliding.mjs verweigert ein Überschreiben des veröffentlichten Katalogs. Keine Schwierigkeitsversprechen oder freier Generator für die neuen Modi.
+
+Eigener Speicher leuchtwege-sliding-v1 mit sechs getrennten Partien und Undo-Verläufen. Kampagne und freies Drehspiel bleiben unverändert. Die neuen Modi verwenden die bestehenden elektrischen WAVs und den Erfolgssound; Lichtänderungen werden anhand der Kachel-Identität verglichen. Smartphone-Gesten und Spielgefühl müssen noch auf dem S22 geprüft werden.

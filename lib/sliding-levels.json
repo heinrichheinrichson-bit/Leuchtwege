@@ -1,0 +1,620 @@
+[
+  {
+    "id": "slide-1",
+    "mode": "slide",
+    "n": 3,
+    "name": "Erste Schritte",
+    "pieces": [2, 14, 8, 7, 8, 2, 11, 8],
+    "sourceId": 4,
+    "solution": {
+      "positions": [0, 1, 2, null, 3, 4, 5, 6, 7],
+      "turns": [0, 0, 0, 0, 0, 0, 0, 0]
+    },
+    "initial": {
+      "positions": [1, 3, 2, 5, 4, null, 6, 0, 7],
+      "turns": [0, 0, 0, 0, 0, 0, 0, 0]
+    },
+    "witness": [
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 0
+      }
+    ],
+    "seed": 413
+  },
+  {
+    "id": "slide-2",
+    "mode": "slide",
+    "n": 3,
+    "name": "Wechselwege",
+    "pieces": [6, 14, 12, 5, 1, 5, 1, 1],
+    "sourceId": 2,
+    "solution": {
+      "positions": [0, 1, 2, 3, 4, 5, 6, null, 7],
+      "turns": [0, 0, 0, 0, 0, 0, 0, 0]
+    },
+    "initial": {
+      "positions": [0, 2, 4, 6, 3, null, 7, 5, 1],
+      "turns": [0, 0, 0, 0, 0, 0, 0, 0]
+    },
+    "witness": [
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 7
+      }
+    ],
+    "seed": 1413
+  },
+  {
+    "id": "slide-3",
+    "mode": "slide",
+    "n": 3,
+    "name": "Lückenspiel",
+    "pieces": [4, 4, 3, 12, 5, 2, 11, 9],
+    "sourceId": 0,
+    "solution": {
+      "positions": [0, null, 1, 2, 3, 4, 5, 6, 7],
+      "turns": [0, 0, 0, 0, 0, 0, 0, 0]
+    },
+    "initial": {
+      "positions": [6, 5, 0, 2, 1, 4, 7, null, 3],
+      "turns": [0, 0, 0, 0, 0, 0, 0, 0]
+    },
+    "witness": [
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 0
+      }
+    ],
+    "seed": 2413
+  },
+  {
+    "id": "rotate-1",
+    "mode": "rotate",
+    "n": 3,
+    "name": "Erste Schritte",
+    "pieces": [2, 14, 8, 7, 8, 2, 11, 8],
+    "sourceId": 4,
+    "solution": {
+      "positions": [0, 1, 2, null, 3, 4, 5, 6, 7],
+      "turns": [0, 0, 0, 0, 0, 0, 0, 0]
+    },
+    "initial": {
+      "positions": [1, 3, 2, 5, 4, null, 6, 0, 7],
+      "turns": [2, 2, 3, 3, 3, 0, 3, 1]
+    },
+    "witness": [
+      {
+        "type": "turn",
+        "id": 7
+      },
+      {
+        "type": "turn",
+        "id": 7
+      },
+      {
+        "type": "turn",
+        "id": 7
+      },
+      {
+        "type": "turn",
+        "id": 6
+      },
+      {
+        "type": "turn",
+        "id": 4
+      },
+      {
+        "type": "turn",
+        "id": 3
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 0
+      }
+    ],
+    "seed": 413
+  },
+  {
+    "id": "rotate-2",
+    "mode": "rotate",
+    "n": 3,
+    "name": "Wechselwege",
+    "pieces": [6, 14, 12, 5, 1, 5, 1, 1],
+    "sourceId": 2,
+    "solution": {
+      "positions": [0, 1, 2, 3, 4, 5, 6, null, 7],
+      "turns": [0, 0, 0, 0, 0, 0, 0, 0]
+    },
+    "initial": {
+      "positions": [0, 2, 4, 6, 3, null, 7, 5, 1],
+      "turns": [2, 3, 2, 3, 1, 3, 1, 2]
+    },
+    "witness": [
+      {
+        "type": "turn",
+        "id": 7
+      },
+      {
+        "type": "turn",
+        "id": 7
+      },
+      {
+        "type": "turn",
+        "id": 6
+      },
+      {
+        "type": "turn",
+        "id": 6
+      },
+      {
+        "type": "turn",
+        "id": 6
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 4
+      },
+      {
+        "type": "turn",
+        "id": 4
+      },
+      {
+        "type": "turn",
+        "id": 4
+      },
+      {
+        "type": "turn",
+        "id": 3
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 7
+      }
+    ],
+    "seed": 1413
+  },
+  {
+    "id": "rotate-3",
+    "mode": "rotate",
+    "n": 3,
+    "name": "Lückenspiel",
+    "pieces": [4, 4, 3, 12, 5, 2, 11, 9],
+    "sourceId": 0,
+    "solution": {
+      "positions": [0, null, 1, 2, 3, 4, 5, 6, 7],
+      "turns": [0, 0, 0, 0, 0, 0, 0, 0]
+    },
+    "initial": {
+      "positions": [6, 5, 0, 2, 1, 4, 7, null, 3],
+      "turns": [1, 3, 2, 3, 0, 2, 2, 3]
+    },
+    "witness": [
+      {
+        "type": "turn",
+        "id": 7
+      },
+      {
+        "type": "turn",
+        "id": 6
+      },
+      {
+        "type": "turn",
+        "id": 6
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 3
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 0
+      }
+    ],
+    "seed": 2413
+  }
+]
