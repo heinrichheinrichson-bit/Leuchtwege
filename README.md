@@ -105,3 +105,15 @@ Wie Thinkheims rewarded_hint_dialog.dart nutzt diese Testversion eine deutlich b
 ## Sichtbarer Abschluss (1.8-test)
 
 Alle Modi und Lösehilfen verwenden useVictory: 300 ms für die letzte Bewegung, dann Erfolgssound und ein einzelner Lichtimpuls mit Funken; nach weiteren 1500 ms öffnet sich die Erfolgsmeldung. Laden gelöster Partien startet keinen Ablauf. Navigation, Undo, Neustartdialog, Regeln und Hintergrundwechsel brechen ausstehende Abläufe ab. Reduzierte Bewegung deaktiviert Funken und Pulsanimationen. Der Zeitablauf und abgebrochene Callbacks werden separat getestet.
+
+## Freie Schiebepartien und direkter Testschritt (1.9-test)
+
+Beide Schiebemodi bieten jetzt freie 3×3-Rätsel mit Leicht, Mittel und Schwer. Der Generator zählt sämtliche gültigen Zielanordnungen auf, einschließlich vertauschter gleichartiger Kachel-IDs. Eine Mehrquellen-Breitensuche ermittelt die tatsächliche Mindestzahl an Schüben bis zu irgendeinem gültigen Netz. Nur Schieben: 4–7 / 10–14 / 17–21 Schübe. Schieben & Drehen: 2–3 / 4–5 / 6–8 notwendige Schübe bei frei wählbaren Orientierungen; zusätzlich ist Drehen erforderlich. Dies misst Schiebedistanz, nicht subjektive menschliche Denkzeit. Die Einstufung ist getrennt vom Drehpuzzle und wird anhand von Spieltests weiter kalibriert.
+
+Jedes Ergebnis enthält eine erreichbare geprüfte Zielstellung für die bestehenden Lösehilfen. Der Generator läuft in einem eigenen Worker, begrenzt die Suche auf zwölf Sekunden und wird von der Oberfläche nach fünfzehn Sekunden beendet. Abbrechen, Verlassen und Fehler behalten die vorherige Partie. Identische jüngste Ausgangsnetze werden über die letzten 100 Fingerprints vermieden; symmetrische Varianten sind nicht ausgeschlossen. Es gibt zunächst keine freie Rastergrößenwahl.
+
+leuchtwege-sliding-free-v1 speichert je eine freie Partie pro Schiebemodus inklusive vollständigem Rätsel, Sitzung, Verlauf und zuletzt gewählter Stufe. Das Ersetzen einer offenen Partie wird bestätigt. Die sechs Proberätsel, 60 Kampagnenrätsel und das freie Drehspiel behalten ihre bisherigen Speicherschlüssel. Jede generierte Rätsel-ID verwendet das vorhandene Drei-Tipps-Kontingent.
+
+Der separate Entwicklerbutton „Test: Nächster Schritt“ liegt direkt bei den Spielaktionen und führt ohne Auswahlfenster genau eine Aktion aus. Wiederholtes Drücken zeigt den Lösungsweg Schritt für Schritt; auch beim letzten Testschritt erscheint kein Erfolgsdialog. Lichtimpuls und Sound bleiben erhalten. Komplett/Fast lösen bleiben im Testhilfe-Dialog. Spieler-Tipps und normale Abschlüsse behalten ihr bisheriges Verhalten. Veraltete Suchergebnisse werden verworfen, wenn zwischenzeitlich das Brett verändert wurde.
+
+Automatisch geprüft: 72 neue Partien über beide Modi und alle Stufen, komplette und fast komplette Lösungen, einzelne und wiederholte Testschritte, Undo, Speicherwiederherstellung und unabhängige Vorwärtssuche zur Distanzkontrolle an sechs Stichproben. Die ausgelieferte Workerdatei wurde separat geprüft. Gemessene Erzeugung auf dem Entwicklungsrechner unter 300 ms in dieser Stichprobe; kein Smartphone-Leistungsversprechen. Die aktuelle APK muss weiterhin auf dem S22 getestet werden.

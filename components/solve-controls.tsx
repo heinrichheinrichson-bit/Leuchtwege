@@ -25,7 +25,7 @@ export default function SolveControls({
 }: {
   puzzle: any;
   session: any;
-  onApplied: (s: any) => void;
+  onApplied: (s: any, quiet?: boolean) => void;
   back: MutableRefObject<(() => boolean) | null>;
 }) {
   const [panel, setPanel] = useState<'test' | 'hint' | 'reward' | null>(null);
@@ -35,6 +35,8 @@ export default function SolveControls({
   const remaining = remainingHints(budget);
   const rewardReceipt = useRef<string | null>(null);
   const [ready, setReady] = useState(false);
+  const currentSession = useRef(session);
+  currentSession.current = session;
   const job = useRef<{
     worker: Worker;
     timer: ReturnType<typeof setTimeout>;
@@ -64,6 +66,10 @@ export default function SolveControls({
     setPanel(null);
   }
   back.current = () => {
+    if (busy && !panel) {
+      cancel();
+      return true;
+    }
     if (panel) {
       close();
       return true;
@@ -80,7 +86,11 @@ export default function SolveControls({
     },
     [back],
   );
-  function solve(mode: 'all' | 'almost' | 'step', spend = false) {
+  function solve(
+    mode: 'all' | 'almost' | 'step',
+    spend = false,
+    quiet = false,
+  ) {
     if (spend && (!ready || remaining === 0)) return;
     cancel();
     setMessage('');
@@ -109,6 +119,12 @@ export default function SolveControls({
         }
         cancel();
         try {
+          if (currentSession.current !== session) {
+            setMessage(
+              'Das Brett wurde inzwischen verändert. Bitte erneut drücken.',
+            );
+            return;
+          }
           const next = applyHelp(puzzle, session, data.plan, mode);
           if (next === session) {
             setMessage(
@@ -127,7 +143,7 @@ export default function SolveControls({
             setBudget(updated);
           }
           setPanel(null);
-          onApplied(next);
+          onApplied(next, quiet);
         } catch {
           setMessage(
             'Die Hilfe konnte nicht angewendet oder gespeichert werden.',
@@ -163,7 +179,7 @@ export default function SolveControls({
       <div className="solve-controls">
         <Button
           variant="outline"
-          disabled={!ready || solved}
+          disabled={!ready || solved || busy}
           onClick={() => {
             setMessage('');
             setPanel('hint');
@@ -174,16 +190,26 @@ export default function SolveControls({
           {remaining} {remaining === 1 ? 'Tipp' : 'Tipps'}
         </Button>
         {__LEUCHTWEGE_DEVTOOLS__ && (
-          <Button
-            variant="ghost"
-            onClick={() => {
-              setMessage('');
-              setPanel('test');
-            }}
-          >
-            <Wrench size={16} aria-hidden="true" />
-            Testhilfe
-          </Button>
+          <>
+            <Button
+              variant="outline"
+              disabled={busy || solved}
+              onClick={() => solve('step', false, true)}
+            >
+              {busy ? 'Schritt wird geprüft …' : 'Test: Nächster Schritt'}
+            </Button>
+            <Button
+              variant="ghost"
+              disabled={busy}
+              onClick={() => {
+                setMessage('');
+                setPanel('test');
+              }}
+            >
+              <Wrench size={16} aria-hidden="true" />
+              Testhilfe
+            </Button>
+          </>
         )}
       </div>
       {message && !panel && (
@@ -235,13 +261,10 @@ export default function SolveControls({
               >
                 Fast lösen · einen Zug übrig lassen
               </Button>
-              <Button
-                variant="outline"
-                disabled={busy || solved}
-                onClick={() => solve('step')}
-              >
-                Nächsten Schritt lösen
-              </Button>
+              <p>
+                Einzelschritte kannst du direkt am Spielfeld mit „Test: Nächster
+                Schritt“ ausführen, ohne dieses Fenster zu öffnen.
+              </p>
             </>
           ) : panel === 'reward' ? (
             <Button onClick={completeReward}>

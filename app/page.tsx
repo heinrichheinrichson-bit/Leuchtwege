@@ -902,7 +902,7 @@ export default function Home() {
             puzzle={l}
             session={session}
             back={helpBack}
-            onApplied={(nextState) => {
+            onApplied={(nextState, quiet) => {
               if (isFree) setFree((v: any) => ({ ...v, session: nextState }));
               else setSessions((v) => ({ ...v, [level]: nextState }));
               setLockMode(false);
@@ -911,7 +911,7 @@ export default function Home() {
                 l.n,
                 l.source,
               ).solved;
-              setVictory(solved);
+              setVictory(solved, !quiet);
             }}
           />
           {status.solved && (
@@ -931,7 +931,10 @@ export default function Home() {
           geöffnet.
         </p>
       )}
-      <Dialog open={victory && view === 'game'} onOpenChange={setVictory}>
+      <Dialog
+        open={victory && view === 'game'}
+        onOpenChange={(open) => setVictory(open)}
+      >
         <DialogContent
           className="game-dialog success-dialog"
           showCloseButton={false}

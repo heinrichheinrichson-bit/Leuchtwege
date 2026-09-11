@@ -30,6 +30,8 @@ import {
 } from '@/lib/sliding.mjs';
 import { neighbor } from '@/lib/game.mjs';
 import { connectionSound } from '@/lib/connection-sound.mjs';
+import { restoreFreeSliding, slidingTiers } from '@/lib/random-sliding.mjs';
+import RandomSlidingWorker from '@/lib/random-sliding.worker?worker';
 
 export default function SlidingGame({
   back,
@@ -47,13 +49,29 @@ export default function SlidingGame({
   const [ready, setReady] = useState(false);
   const [storageError, setStorageError] = useState(false);
   const [playing, setPlaying] = useState(false);
+  const [free, setFree] = useState<any>(() => restoreFreeSliding(null));
+  const [freeMode, setFreeMode] = useState<string | null>(null);
+  const [generating, setGenerating] = useState(false);
+  const [generationError, setGenerationError] = useState('');
+  const [replaceMode, setReplaceMode] = useState<string | null>(null);
+  const job = useRef<{
+    worker: Worker;
+    timer: ReturnType<typeof setTimeout>;
+  } | null>(null);
   const [selected, setSelected] = useState<number | null>(null);
   const [preview, setPreview] = useState<number | null>(null);
   const [rules, setRules] = useState(false);
   const [restart, setRestart] = useState(false);
   const { victory, celebrating, setVictory } = useVictory(
     () => playSound('success'),
-    [saved.current, playing, rules, restart].join(':'),
+    [
+      saved.current,
+      freeMode,
+      freeMode && free[freeMode]?.puzzle.id,
+      playing,
+      rules,
+      restart,
+    ].join(':'),
   );
   const [hint, setHint] = useState('');
   const gesture = useRef<{
@@ -64,8 +82,14 @@ export default function SlidingGame({
     size: number;
   } | null>(null);
   const suppressClick = useRef(0);
-  const l = puzzles[saved.current],
-    s = saved.sessions[l.id] || freshSliding(l);
+  const l =
+      freeMode && free[freeMode]
+        ? free[freeMode].puzzle
+        : puzzles[saved.current],
+    s =
+      freeMode && free[freeMode]
+        ? free[freeMode].session
+        : saved.sessions[l.id] || freshSliding(l);
   const board = slidingBoard(l, s),
     status = slidingStatus(l, s),
     hole = s.positions.indexOf(null);
@@ -80,22 +104,144 @@ export default function SlidingGame({
     } catch {
       setStorageError(true);
     }
+    try {
+      setFree(
+        restoreFreeSliding(
+          JSON.parse(
+            localStorage.getItem('leuchtwege-sliding-free-v1') || 'null',
+          ),
+        ),
+      );
+    } catch {
+      setStorageError(true);
+    }
     setReady(true);
   }, []);
   useEffect(() => {
     if (!ready) return;
     try {
       localStorage.setItem('leuchtwege-sliding-v1', JSON.stringify(saved));
+      localStorage.setItem('leuchtwege-sliding-free-v1', JSON.stringify(free));
       setStorageError(false);
     } catch {
       setStorageError(true);
     }
-  }, [saved, ready]);
+  }, [saved, free, ready]);
+  function cancelGeneration() {
+    if (job.current) {
+      job.current.worker.terminate();
+      clearTimeout(job.current.timer);
+      job.current = null;
+    }
+    setGenerating(false);
+  }
+  useEffect(
+    () => () => {
+      if (job.current) {
+        job.current.worker.terminate();
+        clearTimeout(job.current.timer);
+      }
+    },
+    [],
+  );
+  function storeSession(next: any) {
+    if (freeMode)
+      setFree((v: any) => ({
+        ...v,
+        [freeMode]: { ...v[freeMode], session: next },
+      }));
+    else
+      setSaved((v: any) => ({
+        ...v,
+        sessions: { ...v.sessions, [l.id]: next },
+      }));
+  }
+  function openFree(mode: string) {
+    setFreeMode(mode);
+    setPlaying(true);
+    setSelected(null);
+    setHint('');
+    setVictory(false);
+    clearGesture();
+  }
+  function generate(mode: string, tier = free.tiers[mode]) {
+    cancelGeneration();
+    setGenerationError('');
+    setGenerating(true);
+    setVictory(false);
+    let worker: Worker;
+    try {
+      worker = new RandomSlidingWorker();
+    } catch {
+      setGenerating(false);
+      setGenerationError(
+        'Die Erzeugung konnte nicht starten. Bitte erneut versuchen.',
+      );
+      return;
+    }
+    const timer = setTimeout(() => {
+      if (job.current?.worker === worker) {
+        cancelGeneration();
+        setGenerationError(
+          'Das Rätsel braucht zu lange. Bitte erneut versuchen.',
+        );
+      }
+    }, 15000);
+    job.current = { worker, timer };
+    worker.onmessage = ({ data }) => {
+      if (job.current?.worker !== worker) return;
+      cancelGeneration();
+      if (data.error) {
+        setGenerationError(data.error);
+        return;
+      }
+      const puzzle = data.puzzle;
+      setFree((v: any) => ({
+        ...v,
+        [mode]: { puzzle, session: freshSliding(puzzle) },
+        recent: [...v.recent, puzzle.fingerprint].slice(-100),
+      }));
+      openFree(mode);
+    };
+    worker.onerror = () => {
+      if (job.current?.worker === worker) {
+        cancelGeneration();
+        setGenerationError(
+          'Die Erzeugung wurde unterbrochen. Bitte erneut versuchen.',
+        );
+      }
+    };
+    worker.postMessage({
+      mode,
+      tier,
+      seed: crypto.getRandomValues(new Uint32Array(1))[0],
+      exclude: free.recent,
+    });
+  }
+  function requestGeneration(mode: string) {
+    const entry = free[mode];
+    if (entry && !slidingStatus(entry.puzzle, entry.session).solved)
+      setReplaceMode(mode);
+    else generate(mode);
+  }
+  function nextGame() {
+    if (freeMode) generate(freeMode, l.tier);
+    else if (nextIndex >= 0) open(nextIndex);
+    else setPlaying(false);
+  }
   function clearGesture() {
     gesture.current = null;
     setPreview(null);
   }
   back.current = () => {
+    if (generating) {
+      cancelGeneration();
+      return true;
+    }
+    if (replaceMode) {
+      setReplaceMode(null);
+      return true;
+    }
     if (helpBack.current?.()) return true;
     if (restart) {
       setRestart(false);
@@ -124,6 +270,7 @@ export default function SlidingGame({
     [back],
   );
   function open(index: number) {
+    setFreeMode(null);
     setSaved((v: any) => ({ ...v, current: index }));
     setPlaying(true);
     setSelected(null);
@@ -134,7 +281,7 @@ export default function SlidingGame({
   function dispatch(action: { type: string; id?: number }) {
     const next = slideAct(l, s, action);
     if (next === s) return;
-    setSaved((v: any) => ({ ...v, sessions: { ...v.sessions, [l.id]: next } }));
+    storeSession(next);
     setHint('');
     if (action.type === 'reset' || action.type === 'undo') {
       setSelected(null);
@@ -177,8 +324,8 @@ export default function SlidingGame({
         <section className="catalog-screen">
           <h1>Wege in Bewegung</h1>
           <p className="section-intro">
-            Zwei neue Varianten mit je drei Proberätseln. Acht Kacheln, ein
-            Leerfeld, ein leuchtendes Netz.
+            Acht Kacheln, ein Leerfeld, ein leuchtendes Netz. Spiele die
+            Proberätsel oder lass neue Wege entstehen.
           </p>
           {['slide', 'rotate'].map((mode) => (
             <section className="catalog-group" key={mode}>
@@ -188,6 +335,44 @@ export default function SlidingGame({
                   ? 'Bringe die Kacheln durch das Leerfeld an ihren Platz. Ihre Ausrichtung bleibt fest.'
                   : 'Finde die passenden Plätze und drehe die Kacheln, bis alle Wege zusammenpassen.'}
               </p>
+              <div className="sliding-free-options">
+                <label htmlFor={'slide-tier-' + mode}>
+                  Freies Spiel · 3 × 3
+                </label>
+                <select
+                  id={'slide-tier-' + mode}
+                  value={free.tiers[mode]}
+                  disabled={generating || !ready}
+                  onChange={(e) =>
+                    setFree((v: any) => ({
+                      ...v,
+                      tiers: { ...v.tiers, [mode]: e.target.value },
+                    }))
+                  }
+                >
+                  {slidingTiers.map((t) => (
+                    <option key={t}>{t}</option>
+                  ))}
+                </select>
+                <Button
+                  disabled={!ready || generating}
+                  onClick={() => requestGeneration(mode)}
+                >
+                  Neues Rätsel erzeugen
+                </Button>
+                {free[mode] && (
+                  <Button
+                    variant="outline"
+                    disabled={generating || !ready}
+                    onClick={() => openFree(mode)}
+                  >
+                    {slidingStatus(free[mode].puzzle, free[mode].session).solved
+                      ? 'Letztes Brett ansehen'
+                      : 'Freie Partie fortsetzen'}{' '}
+                    · {free[mode].puzzle.tier}
+                  </Button>
+                )}
+              </div>
               <div className="puzzle-cards">
                 {puzzles.map((p, i) =>
                   p.mode !== mode ? null : (
@@ -216,7 +401,11 @@ export default function SlidingGame({
               </div>
             </section>
           ))}
-          <p className="home-foot">Jede Partie bleibt separat gespeichert.</p>
+          <p className="home-foot">
+            Je eine freie Partie pro Modus bleibt gespeichert. Die Einstufung
+            berücksichtigt die nötigen Schübe bis zu einem gültigen Netz. Beim
+            Schieben & Drehen kommt das Ausrichten dazu.
+          </p>
         </section>
       ) : (
         <section className="play-screen slide-screen">
@@ -224,7 +413,9 @@ export default function SlidingGame({
             <div>
               <p className="level-label">
                 {l.mode === 'slide' ? 'Nur Schieben' : 'Schieben & Drehen'} ·
-                Probe {(saved.current % 3) + 1} / 3
+                {freeMode
+                  ? 'Freies Spiel · ' + l.tier
+                  : 'Probe ' + ((saved.current % 3) + 1) + ' / 3'}
               </p>
               <h1>{l.name}</h1>
             </div>
@@ -272,7 +463,7 @@ export default function SlidingGame({
               >
                 <span>Leerfeld</span>
               </button>
-              {l.pieces.map((baseMask, id) => {
+              {l.pieces.map((baseMask: number, id: number) => {
                 const pos = s.positions.indexOf(id),
                   mask = board[pos];
                 return (
@@ -460,29 +651,40 @@ export default function SlidingGame({
             puzzle={l}
             session={s}
             back={helpBack}
-            onApplied={(next) => {
-              setSaved((v: any) => ({
-                ...v,
-                sessions: { ...v.sessions, [l.id]: next },
-              }));
+            onApplied={(next, quiet) => {
+              storeSession(next);
               setSelected(null);
               setHint('');
               clearGesture();
               const solved = slidingStatus(l, next).solved;
-              setVictory(solved);
+              setVictory(solved, !quiet);
             }}
           />
           {status.solved && (
             <Button
               className="next-inline"
-              onClick={() =>
-                nextIndex >= 0 ? open(nextIndex) : setPlaying(false)
-              }
+              disabled={generating}
+              onClick={nextGame}
             >
-              {nextIndex >= 0 ? 'Nächstes Rätsel →' : 'Zur Modusauswahl →'}
+              {freeMode || nextIndex >= 0
+                ? 'Nächstes Rätsel →'
+                : 'Zur Modusauswahl →'}
             </Button>
           )}
         </section>
+      )}
+      {generating && (
+        <div className="mode-help" role="status">
+          Neue Wege entstehen …{' '}
+          <Button variant="outline" onClick={cancelGeneration}>
+            Abbrechen
+          </Button>
+        </div>
+      )}
+      {generationError && (
+        <p className="mode-help" role="alert">
+          {generationError}
+        </p>
       )}
       {storageError && (
         <p role="status" className="mode-help">
@@ -490,7 +692,7 @@ export default function SlidingGame({
           geöffnet.
         </p>
       )}
-      <Dialog open={victory} onOpenChange={setVictory}>
+      <Dialog open={victory} onOpenChange={(open) => setVictory(open)}>
         <DialogContent
           className="game-dialog success-dialog"
           showCloseButton={false}
@@ -509,16 +711,44 @@ export default function SlidingGame({
           <Button
             onClick={() => {
               setVictory(false);
-              nextIndex >= 0 ? open(nextIndex) : setPlaying(false);
+              nextGame();
             }}
           >
-            {nextIndex >= 0 ? 'Nächstes Rätsel →' : 'Zur Modusauswahl'}
+            {freeMode || nextIndex >= 0
+              ? 'Nächstes Rätsel →'
+              : 'Zur Modusauswahl'}
           </Button>
           <Button variant="outline" onClick={() => setVictory(false)}>
             Brett ansehen
           </Button>
         </DialogContent>
       </Dialog>
+      <AlertDialog
+        open={replaceMode !== null}
+        onOpenChange={(open) => {
+          if (!open) setReplaceMode(null);
+        }}
+      >
+        <AlertDialogContent className="game-dialog">
+          <AlertDialogTitle className="dialog-heading">
+            Neue freie Partie?
+          </AlertDialogTitle>
+          <AlertDialogDescription>
+            Deine noch offene freie Partie in diesem Modus wird ersetzt. Die
+            Proberätsel und der andere Modus bleiben gespeichert.
+          </AlertDialogDescription>
+          <AlertDialogCancel>Weiterspielen</AlertDialogCancel>
+          <AlertDialogAction
+            onClick={() => {
+              const mode = replaceMode;
+              setReplaceMode(null);
+              if (mode) generate(mode);
+            }}
+          >
+            Neue Partie
+          </AlertDialogAction>
+        </AlertDialogContent>
+      </AlertDialog>
       <Dialog open={rules} onOpenChange={setRules}>
         <DialogContent className="game-dialog">
           <DialogTitle className="dialog-heading">

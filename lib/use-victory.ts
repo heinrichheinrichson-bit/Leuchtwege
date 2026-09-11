@@ -8,7 +8,7 @@ export function useVictory(onSound: () => void, scope: string) {
   const sound = useRef(onSound);
   sound.current = onSound;
   const cancel = useRef<(() => void) | null>(null);
-  const setVictory = useCallback((open: boolean) => {
+  const setVictory = useCallback((open: boolean, showDialog = true) => {
     cancel.current?.();
     cancel.current = null;
     show(false);
@@ -21,7 +21,7 @@ export function useVictory(onSound: () => void, scope: string) {
         },
         reveal: () => {
           glow(false);
-          show(true);
+          show(showDialog);
         },
       });
   }, []);
