@@ -82,8 +82,12 @@ export default function PlayStatistics() {
                 <strong>{a.name}</strong>
                 <small>
                   {names[a.mode]} ·{' '}
-                  {a.origin === 'free' ? 'Freies Spiel' : 'Katalog'} · {a.tier}{' '}
-                  · {a.n} × {a.n}
+                  {a.origin === 'daily'
+                    ? 'Tagesrätsel'
+                    : a.origin === 'free'
+                      ? 'Freies Spiel'
+                      : 'Katalog'}{' '}
+                  · {a.tier} · {a.n} × {a.n}
                 </small>
                 <small>
                   {new Date(a.completedAt).toLocaleString('de-DE')} ·{' '}

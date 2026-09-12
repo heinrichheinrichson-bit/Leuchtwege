@@ -40,10 +40,16 @@ export default function SlidingGame({
   back,
   playSound,
   onLearn,
+  daily,
+  onDailyChange,
+  onDailyExit,
 }: {
   back: MutableRefObject<(() => boolean) | null>;
   playSound: (name: string) => void;
   onLearn: () => void;
+  daily?: any;
+  onDailyChange?: (session: any) => void;
+  onDailyExit?: () => void;
 }) {
   const helpBack = useRef<(() => boolean) | null>(null);
   const [saved, setSaved] = useState<any>({
@@ -53,7 +59,7 @@ export default function SlidingGame({
   });
   const [ready, setReady] = useState(false);
   const [storageError, setStorageError] = useState(false);
-  const [playing, setPlaying] = useState(false);
+  const [playing, setPlaying] = useState(!!daily);
   const [helpPaused, setHelpPaused] = useState(false);
   const [free, setFree] = useState<any>(() => restoreFreeSliding(null));
   const [freeMode, setFreeMode] = useState<string | null>(null);
@@ -77,6 +83,7 @@ export default function SlidingGame({
       playing,
       rules,
       restart,
+      daily?.puzzle.id,
     ].join(':'),
   );
   const [hint, setHint] = useState('');
@@ -88,12 +95,14 @@ export default function SlidingGame({
     size: number;
   } | null>(null);
   const suppressClick = useRef(0);
-  const l =
-      freeMode && free[freeMode]
+  const l = daily
+      ? daily.puzzle
+      : freeMode && free[freeMode]
         ? free[freeMode].puzzle
         : puzzles[saved.current],
-    s =
-      freeMode && free[freeMode]
+    s = daily
+      ? daily.session
+      : freeMode && free[freeMode]
         ? free[freeMode].session
         : saved.sessions[l.id] || freshSliding(l);
   const board = slidingBoard(l, s),
@@ -104,7 +113,8 @@ export default function SlidingGame({
       puzzleId: l.id,
       name: l.name,
       mode: l.mode,
-      origin: freeMode ? 'free' : 'catalog',
+      origin: daily ? 'daily' : freeMode ? 'free' : 'catalog',
+      dailyDay: daily?.day,
       tier: l.tier || '',
       n: l.n,
     },
@@ -169,6 +179,10 @@ export default function SlidingGame({
     [],
   );
   function storeSession(next: any) {
+    if (daily) {
+      onDailyChange?.(next);
+      return;
+    }
     if (freeMode)
       setFree((v: any) => ({
         ...v,
@@ -249,6 +263,11 @@ export default function SlidingGame({
     else generate(mode);
   }
   function nextGame() {
+    if (daily) {
+      setVictory(false);
+      onDailyExit?.();
+      return;
+    }
     if (freeMode) generate(freeMode, l.tier);
     else if (nextIndex >= 0) open(nextIndex);
     else setPlaying(false);
@@ -280,6 +299,10 @@ export default function SlidingGame({
       return true;
     }
     if (playing) {
+      if (daily) {
+        onDailyExit?.();
+        return true;
+      }
       setPlaying(false);
       setSelected(null);
       clearGesture();
@@ -470,13 +493,15 @@ export default function SlidingGame({
             <div>
               <p className="level-label">
                 {l.mode === 'slide' ? 'Nur Schieben' : 'Schieben & Drehen'} ·
-                {freeMode
-                  ? 'Freies Spiel · ' + l.tier
-                  : l.tier +
-                    ' · Rätsel ' +
-                    (catalogNumber + 1) +
-                    ' / ' +
-                    ordered.length}
+                {daily
+                  ? 'Tagesrätsel · ' + l.tier
+                  : freeMode
+                    ? 'Freies Spiel · ' + l.tier
+                    : l.tier +
+                      ' · Rätsel ' +
+                      (catalogNumber + 1) +
+                      ' / ' +
+                      ordered.length}
               </p>
               <h1>{l.name}</h1>
             </div>
@@ -734,9 +759,11 @@ export default function SlidingGame({
               disabled={generating}
               onClick={nextGame}
             >
-              {freeMode || nextIndex >= 0
-                ? 'Nächstes Rätsel →'
-                : 'Zur Modusauswahl →'}
+              {daily
+                ? 'Zum Kalender →'
+                : freeMode || nextIndex >= 0
+                  ? 'Nächstes Rätsel →'
+                  : 'Zur Modusauswahl →'}
             </Button>
           )}
         </section>
@@ -782,9 +809,11 @@ export default function SlidingGame({
               nextGame();
             }}
           >
-            {freeMode || nextIndex >= 0
-              ? 'Nächstes Rätsel →'
-              : 'Zur Modusauswahl'}
+            {daily
+              ? 'Zum Kalender'
+              : freeMode || nextIndex >= 0
+                ? 'Nächstes Rätsel →'
+                : 'Zur Modusauswahl'}
           </Button>
           <Button variant="outline" onClick={() => setVictory(false)}>
             Brett ansehen

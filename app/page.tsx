@@ -6,6 +6,7 @@ import SlidingGame from '@/components/sliding-game';
 import TutorialGame from '@/components/tutorial-game';
 import PlayClock from '@/components/play-clock';
 import PlayStatistics from '@/components/play-statistics';
+import DailyHub from '@/components/daily-hub';
 import { usePlayClock } from '@/lib/use-play-clock';
 import { Button } from '@/components/ui/button';
 import {
@@ -80,6 +81,7 @@ export default function Home() {
   }
   const helpBack = useRef<(() => boolean) | null>(null);
   const slideBack = useRef<(() => boolean) | null>(null);
+  const dailyBack = useRef<(() => boolean) | null>(null);
   const backAction = useRef<() => void>(() => {});
   const [level, setLevel] = useState(0);
   const [sessions, setSessions] = useState<Record<number, any>>({});
@@ -192,6 +194,7 @@ export default function Home() {
   backAction.current = () => {
     if (view === 'game' && helpBack.current?.()) return;
     if (view === 'sliding' && slideBack.current?.()) return;
+    if (view === 'daily' && dailyBack.current?.()) return;
     if (generating) {
       cancelGeneration();
       return;
@@ -238,6 +241,7 @@ export default function Home() {
           'sliding',
           'learn',
           'statistics',
+          'daily',
         ].includes(v)
           ? v
           : 'home',
@@ -417,7 +421,7 @@ export default function Home() {
       } catch {}
   }
   useEffect(() => {
-    if (view === 'sliding' || view === 'learn') return;
+    if (view === 'sliding' || view === 'learn' || view === 'daily') return;
     const context = (document as any).modelContext;
     if (!context?.registerTool) return;
     const ac = new AbortController();
@@ -554,6 +558,13 @@ export default function Home() {
           >
             Schiebepuzzles <span>→</span>
           </Button>
+          <Button
+            variant="outline"
+            className="home-option"
+            onClick={() => navigate('daily')}
+          >
+            Tagesrätsel & Kalender <span>→</span>
+          </Button>
           <p className="home-foot">Kein Zeitdruck. In deinem Tempo.</p>
           <Button
             variant="outline"
@@ -565,6 +576,19 @@ export default function Home() {
         </section>
       )}
       {view === 'statistics' && <PlayStatistics />}
+      {view === 'daily' && (
+        <DailyHub
+          back={dailyBack}
+          onLearn={() => navigate('learn')}
+          playSound={(name) => {
+            if (!sound) return;
+            if (name === 'success' && successAudio.current) {
+              stopSounds();
+              void successAudio.current.play().catch(() => {});
+            } else playElectric(name);
+          }}
+        />
+      )}
       {view === 'learn' && (
         <TutorialGame
           initialMode={learnMode}

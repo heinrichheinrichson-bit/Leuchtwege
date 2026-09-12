@@ -1024,3 +1024,93 @@ body {
   flex-shrink: 0;
   max-width: 35%;
 }
+.daily-screen h1 {
+  font-size: clamp(30px, 5vw, 44px);
+  margin: 12px 0 22px;
+}
+.daily-screen h2 {
+  font-size: 22px;
+  margin: 22px 0 14px;
+}
+.streak-card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 20px;
+  border: 1px solid #ffdc9160;
+  border-radius: 16px;
+  background: #182a39;
+  margin-bottom: 20px;
+}
+.streak-card strong {
+  color: #ffdc91;
+  font-size: 25px;
+}
+.streak-card span {
+  color: #afc2d5;
+}
+.calendar-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+.calendar-heading h2 {
+  margin: 18px 0;
+}
+.daily-calendar {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 5px;
+}
+.daily-calendar .weekday {
+  text-align: center;
+  color: #afc2d5;
+  padding: 10px 0;
+  font-size: 14px;
+}
+.calendar-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  min-height: 54px;
+  border: 1px solid #35485c;
+  border-radius: 9px;
+  background: #152537;
+  color: #eef4fa;
+}
+.calendar-day strong {
+  font-size: 17px;
+}
+.calendar-day small {
+  font-size: 12px;
+}
+.calendar-day.played {
+  border-bottom: 4px solid #ffdc91;
+}
+.calendar-day.chosen {
+  background: #ffdc91;
+  color: #142235;
+}
+.calendar-day:disabled {
+  opacity: 0.3;
+}
+.calendar-day[aria-current='date'] {
+  outline: 1px solid #afc2d5;
+  outline-offset: 1px;
+}
+.calendar-legend {
+  color: #afc2d5;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-top: 14px;
+}
+.lock-mark {
+  position: absolute;
+  right: 6px;
+  bottom: 3px;
+  color: #ffdc91;
+  font-size: 14px;
+}
