@@ -265,12 +265,9 @@ export default function SolveControls({
                 disabled={busy || solved}
                 onClick={() => solve('almost')}
               >
-                Fast lösen · einen Zug übrig lassen
+                Fast lösen · noch ein Zug
               </Button>
-              <p>
-                Einzelschritte kannst du direkt am Spielfeld mit „Test: Nächster
-                Schritt“ ausführen, ohne dieses Fenster zu öffnen.
-              </p>
+              <p>„Test: Nächster Schritt“ liegt direkt am Spielfeld.</p>
             </>
           ) : panel === 'reward' ? (
             <Button onClick={completeReward}>

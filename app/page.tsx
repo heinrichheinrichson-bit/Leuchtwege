@@ -176,6 +176,9 @@ export default function Home() {
   );
   const target = continueTarget(levels, sessions, level, done);
   const next = nextPuzzle(levels, level, [...done, level]);
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [view]);
   function navigate(
     to: string,
     puzzle = level,
@@ -501,94 +504,97 @@ export default function Home() {
       </header>
       {view === 'home' && (
         <section className="home-screen">
-          <div className="home-symbol" aria-hidden="true">
-            ✳
-          </div>
-          <h1>Ein Weg zum Abschalten.</h1>
-          <ExperienceCard />
-          <p className="home-intro">
-            Ein paar Drehungen. Ein neuer Lichtblick.
-          </p>
-          <div className="home-progress">
-            <strong>
-              {done.length} / {levels.length}
-            </strong>
-            <span>Rätsel gelöst</span>
-          </div>
+          <h1>Dein nächster Lichtblick</h1>
+          <p className="home-intro">Verbinde die Wege. In deinem Tempo.</p>
           <Button
             className="continue-button"
             disabled={!ready}
             onClick={() => start(target.index)}
           >
-            {target.resume
-              ? 'Weiterspielen'
-              : done.length === levels.length
-                ? 'Noch eine Runde'
-                : 'Spielen'}{' '}
-            <span>→</span>
+            <span>
+              {target.resume ? 'Weiterspielen' : 'Drehpuzzle spielen'}
+              <small>
+                {levels[target.index].name} · {done.length}/{levels.length}{' '}
+                gelöst
+              </small>
+            </span>
+            <span aria-hidden="true">→</span>
           </Button>
-          <p className="continue-detail">
-            {target.resume
-              ? levels[target.index].name
-              : done.length === levels.length
-                ? 'Alle Wege leuchten. Wähle dein Lieblingsrätsel.'
-                : 'Dein nächstes Rätsel wartet.'}
-          </p>
-          <Button
-            variant="outline"
-            className="home-option"
-            disabled={!ready}
-            onClick={() => navigate('catalog')}
-          >
-            Rätsel auswählen <span>→</span>
-          </Button>
+          <h2 className="home-section-title">Spielen</h2>
+          <div className="home-grid">
+            <Button
+              variant="outline"
+              className="home-option"
+              disabled={!ready}
+              onClick={() => navigate('catalog')}
+            >
+              <span>
+                Drehpuzzles<small>60 Rätsel</small>
+              </span>
+              <span aria-hidden="true">↻</span>
+            </Button>
+            <Button
+              variant="outline"
+              className="home-option"
+              disabled={!ready}
+              onClick={() => navigate('sliding')}
+            >
+              <span>
+                Schiebepuzzles<small>Zwei Spielmodi</small>
+              </span>
+              <span aria-hidden="true">↔</span>
+            </Button>
+            <Button
+              variant="outline"
+              className="home-option"
+              disabled={!ready}
+              onClick={() => navigate('random')}
+            >
+              <span>
+                Freies Spiel<small>Neue Drehpuzzles</small>
+              </span>
+              <span aria-hidden="true">✳</span>
+            </Button>
+            <Button
+              variant="outline"
+              className="home-option"
+              onClick={() => navigate('daily')}
+            >
+              <span>
+                Tagesrätsel<small>Drei neue pro Tag</small>
+              </span>
+              <span aria-hidden="true">☀</span>
+            </Button>
+          </div>
+          <h2 className="home-section-title">Dein Fortschritt</h2>
+          <ExperienceCard />
+          <div className="home-grid">
+            <Button
+              variant="outline"
+              className="home-option"
+              onClick={() => navigate('streak')}
+            >
+              <span>Streak-Kalender</span>
+              <span aria-hidden="true">✓</span>
+            </Button>
+            <Button
+              variant="outline"
+              className="home-option"
+              onClick={() => navigate('statistics')}
+            >
+              <span>Statistik</span>
+              <span aria-hidden="true">↗</span>
+            </Button>
+          </div>
           <Button
             variant="ghost"
-            className="home-option"
+            className="learn-link"
             onClick={() => {
               setLearnMode('turn');
               navigate('learn');
             }}
           >
-            Spielend lernen <span>→</span>
-          </Button>
-          <Button
-            variant="outline"
-            className="home-option"
-            disabled={!ready}
-            onClick={() => navigate('random')}
-          >
-            Freies Spiel <span>✳</span>
-          </Button>
-          <Button
-            variant="outline"
-            className="home-option"
-            disabled={!ready}
-            onClick={() => navigate('sliding')}
-          >
-            Schiebepuzzles <span>→</span>
-          </Button>
-          <Button
-            variant="outline"
-            className="home-option"
-            onClick={() => navigate('daily')}
-          >
-            Tagesrätsel <span>→</span>
-          </Button>
-          <Button
-            variant="outline"
-            className="home-option"
-            onClick={() => navigate('streak')}
-          >
-            Streak-Kalender <span>✓</span>
-          </Button>
-          <p className="home-foot">Kein Zeitdruck. In deinem Tempo.</p>
-          <Button
-            variant="outline"
-            className="home-option"
-            onClick={() => navigate('statistics')}
-          >
-            Deine Statistik <span>→</span>
+            Spielend lernen →
           </Button>
         </section>
       )}
@@ -624,8 +630,8 @@ export default function Home() {
       {view === 'sliding' && (
         <SlidingGame
           back={slideBack}
-          onLearn={() => {
-            setLearnMode('slide');
+          onLearn={(mode) => {
+            setLearnMode(mode || 'slide');
             navigate('learn');
           }}
           playSound={(name) => {
@@ -705,16 +711,13 @@ export default function Home() {
               ))}
             </RadioGroup>
           </fieldset>
-          <p className="section-intro">
-            Die Größe bestimmt den Umfang. Die Schwierigkeit richtet sich nach
-            den nötigen Denkschritten.
-          </p>
+          <p className="section-intro">Größeres Raster, längere Partie.</p>
           <Button
             className="continue-button"
             disabled={generating || !ready}
             onClick={requestRandom}
           >
-            {generating ? 'Rätsel wird geprüft …' : 'Neues Rätsel erzeugen'}{' '}
+            {generating ? 'Rätsel wird geprüft …' : 'Neues Rätsel'}{' '}
             <span>✳</span>
           </Button>
           {generating && (
@@ -744,14 +747,13 @@ export default function Home() {
       )}
       {view === 'catalog' && (
         <section className="catalog-screen">
-          <h1>Deine Rätsel</h1>
+          <h1>Drehpuzzles</h1>
           <p className="section-intro">
-            {done.length} von {levels.length} gelöst · Jeder Zwischenstand
-            bleibt erhalten.
+            {done.length} von {levels.length} gelöst
           </p>
           {['Leicht', 'Mittel', 'Schwer'].map((tier) => (
-            <section className="catalog-group" key={tier}>
-              <h2>
+            <details className="slide-catalog-tier" key={tier}>
+              <summary>
                 {tier}
                 <span>
                   {
@@ -761,7 +763,7 @@ export default function Home() {
                   }{' '}
                   / {levels.filter((x) => x.difficulty.tier === tier).length}
                 </span>
-              </h2>
+              </summary>
               <div className="puzzle-cards">
                 {recommendedOrder(levels).map((i: number) =>
                   levels[i].difficulty.tier !== tier ? null : (
@@ -793,12 +795,8 @@ export default function Home() {
                   ),
                 )}
               </div>
-            </section>
+            </details>
           ))}
-          <p className="section-intro">
-            Die Schwierigkeitseinstufung wird mit euren Spielerfahrungen weiter
-            abgestimmt.
-          </p>
         </section>
       )}
       {view === 'rules' && (
@@ -818,17 +816,15 @@ export default function Home() {
             <li>
               <strong>Anschlüsse verbinden</strong>
               <p>
-                Benachbarte Wege müssen zueinander zeigen. Kleine rosafarbene
-                Punkte markieren offene Anschlüsse. Kein Weg darf am
-                Spielfeldrand ins Leere führen.
+                Wege müssen zueinander zeigen. Rosa Punkte markieren offene
+                Anschlüsse – auch am Rand.
               </p>
             </li>
             <li>
-              <strong>Das ganze Netz zum Leuchten bringen</strong>
+              <strong>Das Netz schließen</strong>
               <p>
-                Gewonnen ist das Rätsel, wenn alle Kacheln mit der Quelle
-                verbunden sind und keine Anschlüsse offen bleiben. Licht allein
-                bedeutet noch nicht, dass eine Kachel endgültig richtig liegt.
+                Verbinde alle Kacheln mit der Quelle, ohne offene Anschlüsse.
+                Leuchten allein bestätigt noch keine richtige Ausrichtung.
               </p>
             </li>
           </ol>
@@ -838,10 +834,9 @@ export default function Home() {
             Sperränderung zurück.
           </p>
           <p>
-            <strong>Sperren</strong> schaltet den Markiermodus ein. Tippe
-            Kacheln an, um sie zu sperren oder freizugeben. Schalte den Modus
-            anschließend wieder aus, um weiterzudrehen. Eine Sperre ist deine
-            eigene Notiz, keine Bestätigung der Lösung.
+            <strong>Sperren</strong>: Kacheln antippen, um sie zu markieren oder
+            freizugeben. Danach zurück zu „Drehen“. Sperren sind eigene Notizen,
+            keine Lösungsbestätigung.
           </p>
           <p>
             <strong>Neu starten</strong> setzt nur dieses Rätsel nach einer
@@ -1092,9 +1087,7 @@ export default function Home() {
             bereit ist. Deine Kampagne bleibt erhalten.
           </AlertDialogDescription>
           <AlertDialogCancel>Weiter behalten</AlertDialogCancel>
-          <AlertDialogAction onClick={generate}>
-            Neues Rätsel erzeugen
-          </AlertDialogAction>
+          <AlertDialogAction onClick={generate}>Neues Rätsel</AlertDialogAction>
         </AlertDialogContent>
       </AlertDialog>
       <AlertDialog open={restart} onOpenChange={setRestart}>

@@ -47,7 +47,7 @@ export default function SlidingGame({
 }: {
   back: MutableRefObject<(() => boolean) | null>;
   playSound: (name: string) => void;
-  onLearn: () => void;
+  onLearn: (mode?: string) => void;
   daily?: any;
   onDailyChange?: (session: any) => void;
   onDailyExit?: () => void;
@@ -61,6 +61,10 @@ export default function SlidingGame({
   const [ready, setReady] = useState(false);
   const [storageError, setStorageError] = useState(false);
   const [playing, setPlaying] = useState(!!daily);
+  const [catalogMode, setCatalogMode] = useState('slide');
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [playing, catalogMode]);
   const [helpPaused, setHelpPaused] = useState(false);
   const [free, setFree] = useState<any>(() => restoreFreeSliding(null));
   const [freeMode, setFreeMode] = useState<string | null>(null);
@@ -377,21 +381,33 @@ export default function SlidingGame({
     <>
       {!playing ? (
         <section className="catalog-screen">
-          <h1>Wege in Bewegung</h1>
+          <h1>Schiebepuzzles</h1>
           <p className="section-intro">
-            Acht Kacheln, ein Leerfeld, ein leuchtendes Netz. 60 Rätsel pro
-            Modus – oder immer neue freie Wege.
+            60 Rätsel je Modus. Oder starte ein freies Spiel.
           </p>
-          <Button variant="outline" onClick={onLearn}>
-            Schieben spielend kennenlernen →
+          <Button variant="outline" onClick={() => onLearn(catalogMode)}>
+            Schieben lernen →
           </Button>
-          {['slide', 'rotate'].map((mode) => (
+          <div className="stats-filters" aria-label="Schiebemodus auswählen">
+            {['slide', 'rotate'].map((mode) => (
+              <Button
+                key={mode}
+                variant={catalogMode === mode ? 'default' : 'outline'}
+                aria-pressed={catalogMode === mode}
+                disabled={generating}
+                onClick={() => setCatalogMode(mode)}
+              >
+                {mode === 'slide' ? 'Nur Schieben' : 'Schieben & Drehen'}
+              </Button>
+            ))}
+          </div>
+          {[catalogMode].map((mode) => (
             <section className="catalog-group" key={mode}>
               <h2>{mode === 'slide' ? 'Nur Schieben' : 'Schieben & Drehen'}</h2>
               <p className="section-intro">
                 {mode === 'slide'
-                  ? 'Bringe die Kacheln durch das Leerfeld an ihren Platz. Ihre Ausrichtung bleibt fest.'
-                  : 'Finde die passenden Plätze und drehe die Kacheln, bis alle Wege zusammenpassen.'}
+                  ? 'Kacheln verschieben. Die Ausrichtung bleibt fest.'
+                  : 'Kacheln verschieben und zusätzlich drehen.'}
               </p>
               <div className="sliding-free-options">
                 <label htmlFor={'slide-tier-' + mode}>
@@ -416,7 +432,7 @@ export default function SlidingGame({
                   disabled={!ready || generating}
                   onClick={() => requestGeneration(mode)}
                 >
-                  Neues Rätsel erzeugen
+                  Neues Rätsel
                 </Button>
                 {free[mode] && (
                   <Button
@@ -482,11 +498,6 @@ export default function SlidingGame({
               ))}
             </section>
           ))}
-          <p className="home-foot">
-            Je eine freie Partie pro Modus bleibt gespeichert. Die Einstufung
-            berücksichtigt die nötigen Schübe bis zu einem gültigen Netz. Beim
-            Schieben & Drehen kommt das Ausrichten dazu.
-          </p>
         </section>
       ) : (
         <section className="play-screen slide-screen">

@@ -45,6 +45,9 @@ export default function DailyHub({
     `leuchtwege-daily-v1:${day}:${mode}`;
   const calendar = monthDays(month);
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [entry?.puzzle.id]);
+  useEffect(() => {
     const update = () => {
       setHistory(readHistory());
       setToday(dayKey());
@@ -200,81 +203,83 @@ export default function DailyHub({
   return (
     <section className="daily-screen">
       <p className="level-label">Jeden Tag ein Lichtblick</p>
-      <h1>Deine Tagesrätsel</h1>
+      <h1>Tagesrätsel</h1>
       <p className="section-intro">
-        Jeden Tag drei feste Rätsel. Spiele deinen Lieblingsmodus oder alle
-        drei. Tipps sind erlaubt; Testlösungen zählen nicht für Kalender und
-        Serie.
+        Drei Rätsel pro Tag. Löse sie und sammle XP.
       </p>
-      <div className="calendar-heading">
-        <Button
-          variant="outline"
-          aria-label="Vorheriger Monat"
-          disabled={month <= DAILY_START.slice(0, 7) || busy}
-          onClick={() => setMonth(shiftDay(month + '-01', -1).slice(0, 7))}
-        >
-          ←
-        </Button>
-        <h2>
-          {new Date(month + '-01T12:00:00').toLocaleDateString('de-DE', {
-            month: 'long',
-            year: 'numeric',
+      <details className="info-details daily-archive">
+        <summary>Kalender & frühere Rätsel</summary>
+        <div className="calendar-heading">
+          <Button
+            variant="outline"
+            aria-label="Vorheriger Monat"
+            disabled={month <= DAILY_START.slice(0, 7) || busy}
+            onClick={() => setMonth(shiftDay(month + '-01', -1).slice(0, 7))}
+          >
+            ←
+          </Button>
+          <h2>
+            {new Date(month + '-01T12:00:00').toLocaleDateString('de-DE', {
+              month: 'long',
+              year: 'numeric',
+            })}
+          </h2>
+          <Button
+            variant="outline"
+            aria-label="Nächster Monat"
+            disabled={month >= today.slice(0, 7) || busy}
+            onClick={() =>
+              setMonth(shiftDay(calendar.days.at(-1)!, 1).slice(0, 7))
+            }
+          >
+            →
+          </Button>
+        </div>
+        <div className="daily-calendar">
+          {['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'].map((d) => (
+            <span className="weekday" key={d}>
+              {d}
+            </span>
+          ))}
+          {Array.from({ length: calendar.leading }, (_, i) => (
+            <span key={'blank' + i} />
+          ))}
+          {calendar.days.map((day) => {
+            const count = dailyModes.filter((m) =>
+              dailyCompleted(history.attempts, day, m),
+            ).length;
+            return (
+              <button
+                key={day}
+                className={
+                  'calendar-day ' + (day === selected ? 'chosen ' : '')
+                }
+                disabled={day < DAILY_START || day > today || busy}
+                aria-pressed={day === selected}
+                aria-current={day === today ? 'date' : undefined}
+                aria-label={`${day.split('-').reverse().join('.')}: ${count} von 3 Tagesrätseln gelöst`}
+                onClick={() => setSelected(day)}
+              >
+                <strong>{Number(day.slice(-2))}</strong>
+                <small>{count ? count + '/3' : '·'}</small>
+              </button>
+            );
           })}
-        </h2>
+        </div>
+        <p className="calendar-legend">
+          Die Zahl zeigt deine gelösten Tagesrätsel.
+        </p>
         <Button
-          variant="outline"
-          aria-label="Nächster Monat"
-          disabled={month >= today.slice(0, 7) || busy}
-          onClick={() =>
-            setMonth(shiftDay(calendar.days.at(-1)!, 1).slice(0, 7))
-          }
+          variant="ghost"
+          disabled={busy}
+          onClick={() => {
+            setSelected(today);
+            setMonth(today.slice(0, 7));
+          }}
         >
-          →
+          Zu heute
         </Button>
-      </div>
-      <div className="daily-calendar">
-        {['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'].map((d) => (
-          <span className="weekday" key={d}>
-            {d}
-          </span>
-        ))}
-        {Array.from({ length: calendar.leading }, (_, i) => (
-          <span key={'blank' + i} />
-        ))}
-        {calendar.days.map((day) => {
-          const count = dailyModes.filter((m) =>
-            dailyCompleted(history.attempts, day, m),
-          ).length;
-          return (
-            <button
-              key={day}
-              className={'calendar-day ' + (day === selected ? 'chosen ' : '')}
-              disabled={day < DAILY_START || day > today || busy}
-              aria-pressed={day === selected}
-              aria-current={day === today ? 'date' : undefined}
-              aria-label={`${day.split('-').reverse().join('.')}: ${count} von 3 Tagesrätseln gelöst`}
-              onClick={() => setSelected(day)}
-            >
-              <strong>{Number(day.slice(-2))}</strong>
-              <small>{count ? count + '/3' : '·'}</small>
-            </button>
-          );
-        })}
-      </div>
-      <p className="calendar-legend">
-        1/3 bis 3/3: gelöste Tagesrätsel. Deine tatsächlichen Spieltage findest
-        du im separaten Streak-Kalender auf der Startseite.
-      </p>
-      <Button
-        variant="ghost"
-        disabled={busy}
-        onClick={() => {
-          setSelected(today);
-          setMonth(today.slice(0, 7));
-        }}
-      >
-        Zu heute
-      </Button>
+      </details>
       <h2>
         {selected === today
           ? 'Heute'
@@ -304,7 +309,7 @@ export default function DailyHub({
                 </small>
                 <small>
                   {spec.tier} · {spec.n} × {spec.n} ·{' '}
-                  {done ? 'Gelöst – Brett öffnen' : 'Spielen / fortsetzen'}
+                  {done ? 'Gelöst – Brett öffnen' : 'Spielen'}
                 </small>
               </span>
               <span>→</span>
@@ -321,12 +326,15 @@ export default function DailyHub({
         </p>
       )}
       {error && <p role="alert">{error}</p>}
-      <p className="home-foot">
-        Archiv ab {DAILY_START.split('-').reverse().join('.')}. Nachholen ist
-        jederzeit möglich. Für deine Serie zählt der tatsächliche Spieltag, auch
-        bei Katalog- und freien Rätseln. Bereits abgeschlossene Rätsel erneut
-        anzusehen zählt nicht.
-      </p>
+      <details className="info-details">
+        <summary>Nachholen & Streak</summary>
+        <p>
+          Archiv ab {DAILY_START.split('-').reverse().join('.')}. Nachholen ist
+          jederzeit möglich. Für deine Serie zählt der tatsächliche Spieltag,
+          auch bei Katalog- und freien Rätseln. Bereits abgeschlossene Rätsel
+          erneut anzusehen zählt nicht.
+        </p>
+      </details>
     </section>
   );
 }

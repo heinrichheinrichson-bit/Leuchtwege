@@ -22,8 +22,9 @@ export default function PlayClock({ clock }: { clock: any }) {
         variant="ghost"
         onClick={clock.toggle}
         aria-pressed={clock.visible}
+        aria-label={clock.visible ? 'Uhr ausblenden' : 'Uhr einblenden'}
       >
-        {clock.visible ? 'Uhr ausblenden' : 'Uhr einblenden'}
+        {clock.visible ? 'Uhr an' : 'Uhr aus'}
       </Button>
       {clock.error && (
         <p role="status">Die Zeit kann gerade nicht gespeichert werden.</p>

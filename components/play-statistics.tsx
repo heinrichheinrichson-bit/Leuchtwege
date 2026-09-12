@@ -30,11 +30,7 @@ export default function PlayStatistics() {
   return (
     <section className="stats-screen">
       <p className="level-label">Dein Spielverlauf</p>
-      <h1>Deine Lichtblicke</h1>
-      <p className="section-intro">
-        Die Aufzeichnung beginnt mit diesem Update. Frühere Abschlüsse bleiben
-        im Rätselkatalog erhalten.
-      </p>
+      <h1>Statistik</h1>
       <div className="stats-filters">
         {Object.entries(names).map(([key, name]) => (
           <Button
@@ -62,12 +58,16 @@ export default function PlayStatistics() {
           </div>
         ))}
       </div>
-      <p className="mode-help">
-        Testlösungen zählen separat. Die aktive Spielzeit umfasst auch offene
-        und getestete Partien. Ausblenden der Uhr stoppt die Aufzeichnung nicht.
-        {s.partial > 0 &&
-          ` Bei ${s.partial} Abschlüssen ist die Vorgeschichte unbekannt; sie zählen nicht als nachweislich ohne Hilfe gelöst.`}
-      </p>
+      <details className="info-details">
+        <summary>Was wird gezählt?</summary>
+        <p>
+          Testlösungen zählen separat. Die aktive Spielzeit umfasst auch offene
+          und getestete Partien. Ausblenden der Uhr stoppt die Aufzeichnung
+          nicht.
+          {s.partial > 0 &&
+            ` Bei ${s.partial} Abschlüssen ist die Vorgeschichte unbekannt; sie zählen nicht als nachweislich ohne Hilfe gelöst.`}
+        </p>
+      </details>
       <h2>Letzte Abschlüsse</h2>
       {!s.recent.length ? (
         <p>

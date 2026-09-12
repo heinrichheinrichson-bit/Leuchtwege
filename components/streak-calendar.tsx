@@ -45,8 +45,7 @@ export default function StreakCalendar() {
         </p>
       </div>
       <p className="section-intro">
-        Schließe mindestens ein Rätsel ab – jeder Modus zählt, auch Katalog und
-        freie Spiele. Tipps sind erlaubt. Testhilfen zählen nicht.
+        Ein gelöstes Rätsel pro Tag. Jeder Modus zählt.
       </p>
       <div className="calendar-heading">
         <Button
@@ -121,11 +120,15 @@ export default function StreakCalendar() {
       <Button variant="ghost" onClick={() => setMonth(today.slice(0, 7))}>
         Zum aktuellen Monat
       </Button>
-      <p className="home-foot">
-        Für den Haken zählt ausschließlich der tatsächliche Abschlusstag. Ein
-        nachgeholtes Tagesrätsel schließt keine frühere Streak-Lücke.
-        Streak-Freeze ist noch nicht verfügbar.
-      </p>
+      <details className="info-details">
+        <summary>Streak-Regeln</summary>
+        <p>
+          Tipps sind erlaubt. Testlösungen zählen nicht. Für den Haken zählt
+          ausschließlich der tatsächliche Abschlusstag. Ein nachgeholtes
+          Tagesrätsel schließt keine frühere Streak-Lücke. Streak-Freeze ist
+          noch nicht verfügbar.
+        </p>
+      </details>
     </section>
   );
 }
