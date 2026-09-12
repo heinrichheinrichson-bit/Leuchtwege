@@ -452,7 +452,9 @@ export default function Home() {
             annotations: { readOnlyHint: true },
             execute: () => ({
               mode: isFree ? 'free' : 'campaign',
-              level: isFree ? null : level + 1,
+              level: isFree
+                ? null
+                : recommendedOrder(levels).indexOf(level) + 1,
               size: l.n,
               source: l.source,
               board,
@@ -765,34 +767,35 @@ export default function Home() {
                 </span>
               </summary>
               <div className="puzzle-cards">
-                {recommendedOrder(levels).map((i: number) =>
-                  levels[i].difficulty.tier !== tier ? null : (
-                    <button
-                      key={i}
-                      onClick={() => start(i)}
-                      className={
-                        'puzzle-card ' + (done.includes(i) ? 'finished' : '')
-                      }
-                    >
-                      <span className="puzzle-number">
-                        {String(i + 1).padStart(2, '0')}
-                      </span>
-                      <span className="puzzle-copy">
-                        <strong>{levels[i].name}</strong>
-                        <small>
-                          {levels[i].n} × {levels[i].n} ·{' '}
-                          {isInProgress(levels[i], sessions[i])
-                            ? 'Begonnen'
-                            : done.includes(i)
-                              ? 'Gelöst'
-                              : 'Noch offen'}
-                        </small>
-                      </span>
-                      <span aria-hidden="true">
-                        {done.includes(i) ? '✓' : '→'}
-                      </span>
-                    </button>
-                  ),
+                {recommendedOrder(levels).map(
+                  (i: number, displayIndex: number) =>
+                    levels[i].difficulty.tier !== tier ? null : (
+                      <button
+                        key={i}
+                        onClick={() => start(i)}
+                        className={
+                          'puzzle-card ' + (done.includes(i) ? 'finished' : '')
+                        }
+                      >
+                        <span className="puzzle-number">
+                          {String(displayIndex + 1).padStart(2, '0')}
+                        </span>
+                        <span className="puzzle-copy">
+                          <strong>{levels[i].name}</strong>
+                          <small>
+                            {levels[i].n} × {levels[i].n} ·{' '}
+                            {isInProgress(levels[i], sessions[i])
+                              ? 'Begonnen'
+                              : done.includes(i)
+                                ? 'Gelöst'
+                                : 'Noch offen'}
+                          </small>
+                        </span>
+                        <span aria-hidden="true">
+                          {done.includes(i) ? '✓' : '→'}
+                        </span>
+                      </button>
+                    ),
                 )}
               </div>
             </details>
@@ -854,7 +857,10 @@ export default function Home() {
               <p className="level-label">
                 {isFree
                   ? 'Freies Spiel'
-                  : 'Rätsel ' + String(level + 1).padStart(2, '0')}{' '}
+                  : 'Rätsel ' +
+                    String(
+                      recommendedOrder(levels).indexOf(level) + 1,
+                    ).padStart(2, '0')}{' '}
                 · {l.difficulty.tier}
               </p>
               <h1>{l.name}</h1>
