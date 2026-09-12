@@ -949,3 +949,78 @@ body {
 .slide-catalog-tier .puzzle-cards {
   margin-top: 14px;
 }
+.play-clock {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 12px 0;
+  font-size: 14px;
+  color: #afc2d5;
+}
+.play-clock strong {
+  color: #ffdc91;
+  font-variant-numeric: tabular-nums;
+}
+.play-clock button {
+  min-height: 44px;
+  font-size: 13px;
+}
+.stats-screen {
+  margin: 24px auto;
+}
+.stats-screen h1 {
+  font-size: clamp(30px, 5vw, 44px);
+  margin: 10px 0;
+}
+.stats-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 20px 0;
+}
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 1px solid #35485c;
+  border-radius: 14px;
+  padding: 18px;
+  background: #152537;
+}
+.stat-card strong {
+  color: #ffdc91;
+  font-size: clamp(23px, 5vw, 34px);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+.stat-card span {
+  color: #afc2d5;
+}
+.stats-screen h2 {
+  margin: 28px 0 12px;
+  font-size: 24px;
+}
+.stats-history article {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 16px 0;
+  border-bottom: 1px solid #35485c;
+}
+.stats-history small {
+  display: block;
+  color: #afc2d5;
+  margin-top: 5px;
+}
+.stats-history article > div:last-child {
+  text-align: right;
+  flex-shrink: 0;
+  max-width: 35%;
+}

@@ -22,14 +22,20 @@ export default function SolveControls({
   session,
   onApplied,
   back,
+  onPauseChange,
 }: {
   puzzle: any;
   session: any;
-  onApplied: (s: any, quiet?: boolean) => void;
+  onApplied: (s: any, quiet?: boolean, assistance?: string) => void;
+  onPauseChange?: (paused: boolean) => void;
   back: MutableRefObject<(() => boolean) | null>;
 }) {
   const [panel, setPanel] = useState<'test' | 'hint' | 'reward' | null>(null);
   const [busy, setBusy] = useState(false);
+  useEffect(() => {
+    onPauseChange?.(panel !== null || busy);
+    return () => onPauseChange?.(false);
+  }, [panel, busy, onPauseChange]);
   const [message, setMessage] = useState('');
   const [budget, setBudget] = useState<any>(hintBudget(null));
   const remaining = remainingHints(budget);
@@ -143,7 +149,7 @@ export default function SolveControls({
             setBudget(updated);
           }
           setPanel(null);
-          onApplied(next, quiet);
+          onApplied(next, quiet, spend ? 'hint' : 'test');
         } catch {
           setMessage(
             'Die Hilfe konnte nicht angewendet oder gespeichert werden.',

@@ -33,6 +33,8 @@ import { connectionSound } from '@/lib/connection-sound.mjs';
 import { restoreFreeSliding, slidingTiers } from '@/lib/random-sliding.mjs';
 import RandomSlidingWorker from '@/lib/random-sliding.worker?worker';
 import { slidingOrder } from '@/lib/sliding-catalog.mjs';
+import PlayClock from '@/components/play-clock';
+import { usePlayClock } from '@/lib/use-play-clock';
 
 export default function SlidingGame({
   back,
@@ -52,6 +54,7 @@ export default function SlidingGame({
   const [ready, setReady] = useState(false);
   const [storageError, setStorageError] = useState(false);
   const [playing, setPlaying] = useState(false);
+  const [helpPaused, setHelpPaused] = useState(false);
   const [free, setFree] = useState<any>(() => restoreFreeSliding(null));
   const [freeMode, setFreeMode] = useState<string | null>(null);
   const [generating, setGenerating] = useState(false);
@@ -96,6 +99,24 @@ export default function SlidingGame({
   const board = slidingBoard(l, s),
     status = slidingStatus(l, s),
     hole = s.positions.indexOf(null);
+  const clock = usePlayClock(
+    {
+      puzzleId: l.id,
+      name: l.name,
+      mode: l.mode,
+      origin: freeMode ? 'free' : 'catalog',
+      tier: l.tier || '',
+      n: l.n,
+    },
+    ready &&
+      playing &&
+      !status.solved &&
+      !rules &&
+      !restart &&
+      !helpPaused &&
+      !generating,
+    s.slides + s.rotations,
+  );
   useEffect(() => {
     try {
       setSaved(
@@ -285,6 +306,12 @@ export default function SlidingGame({
   function dispatch(action: { type: string; id?: number }) {
     const next = slideAct(l, s, action);
     if (next === s) return;
+    clock.record(
+      slidingStatus(l, next).solved,
+      next.slides + next.rotations,
+      'none',
+      action.type === 'reset',
+    );
     storeSession(next);
     setHint('');
     if (action.type === 'reset' || action.type === 'undo') {
@@ -460,6 +487,7 @@ export default function SlidingGame({
               ? 'Wische zum Leerfeld. Oder tippe erst die Kachel, dann das Leerfeld an.'
               : 'Wischen verschiebt. Antippen wählt aus; nochmals antippen dreht. Tippen aufs Leerfeld verschiebt die Auswahl.'}
           </p>
+          <PlayClock clock={clock} />
           <div className="meter">
             <span>
               <i />
@@ -682,10 +710,16 @@ export default function SlidingGame({
           </div>
           <SolveControls
             key={l.id}
+            onPauseChange={setHelpPaused}
             puzzle={l}
             session={s}
             back={helpBack}
-            onApplied={(next, quiet) => {
+            onApplied={(next, quiet, assistance) => {
+              clock.record(
+                slidingStatus(l, next).solved,
+                next.slides + next.rotations,
+                assistance,
+              );
               storeSession(next);
               setSelected(null);
               setHint('');

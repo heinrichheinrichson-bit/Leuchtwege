@@ -4,6 +4,9 @@ import { useVictory } from '@/lib/use-victory';
 import SolveControls from '@/components/solve-controls';
 import SlidingGame from '@/components/sliding-game';
 import TutorialGame from '@/components/tutorial-game';
+import PlayClock from '@/components/play-clock';
+import PlayStatistics from '@/components/play-statistics';
+import { usePlayClock } from '@/lib/use-play-clock';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -83,6 +86,7 @@ export default function Home() {
   const [done, setDone] = useState<number[]>([]);
   const [ready, setReady] = useState(false);
   const [sound, setSound] = useState(false);
+  const [helpPaused, setHelpPaused] = useState(false);
   const { victory, celebrating, setVictory } = useVictory(() => {
     if (sound && successAudio.current) {
       stopSounds();
@@ -97,6 +101,18 @@ export default function Home() {
   const board: number[] = boardOf(l, session),
     moves = session.moves,
     status = evaluate(board, l.n, l.source);
+  const clock = usePlayClock(
+    {
+      puzzleId: l.id,
+      name: l.name,
+      mode: 'turn',
+      origin: isFree ? 'free' : 'catalog',
+      tier: l.tier || l.difficulty?.tier || '',
+      n: l.n,
+    },
+    ready && view === 'game' && !status.solved && !restart && !helpPaused,
+    session.moves,
+  );
   useEffect(() => {
     try {
       const saved = restore(
@@ -221,6 +237,7 @@ export default function Home() {
           'random',
           'sliding',
           'learn',
+          'statistics',
         ].includes(v)
           ? v
           : 'home',
@@ -275,6 +292,13 @@ export default function Home() {
   }
   function dispatch(action: { type: string; index?: number }) {
     const nextState = act(l, session, action);
+    if (nextState !== session)
+      clock.record(
+        evaluate(boardOf(l, nextState), l.n, l.source).solved,
+        nextState.moves,
+        'none',
+        action.type === 'reset',
+      );
     if (isFree) setFree((all: any) => ({ ...all, session: nextState }));
     else setSessions((all) => ({ ...all, [level]: nextState }));
     if (action.type === 'reset' || action.type === 'undo') setVictory(false);
@@ -531,8 +555,16 @@ export default function Home() {
             Schiebepuzzles <span>→</span>
           </Button>
           <p className="home-foot">Kein Zeitdruck. In deinem Tempo.</p>
+          <Button
+            variant="outline"
+            className="home-option"
+            onClick={() => navigate('statistics')}
+          >
+            Deine Statistik <span>→</span>
+          </Button>
         </section>
       )}
+      {view === 'statistics' && <PlayStatistics />}
       {view === 'learn' && (
         <TutorialGame
           initialMode={learnMode}
@@ -795,6 +827,7 @@ export default function Home() {
             </span>
           </div>
           {l.lesson && <p className="lesson">{l.lesson}</p>}
+          <PlayClock clock={clock} />
           <div className="meter">
             <span>
               <i />
@@ -930,10 +963,16 @@ export default function Home() {
           </div>
           <SolveControls
             key={l.id}
+            onPauseChange={setHelpPaused}
             puzzle={l}
             session={session}
             back={helpBack}
-            onApplied={(nextState, quiet) => {
+            onApplied={(nextState, quiet, assistance) => {
+              clock.record(
+                evaluate(boardOf(l, nextState), l.n, l.source).solved,
+                nextState.moves,
+                assistance,
+              );
               if (isFree) setFree((v: any) => ({ ...v, session: nextState }));
               else setSessions((v) => ({ ...v, [level]: nextState }));
               setLockMode(false);
