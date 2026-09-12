@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useRef, useState, type MutableRefObject } from 'react';
 import { useVictory } from '@/lib/use-victory';
-import { DailyReward } from './experience';
+import { PuzzleReward } from './experience';
 import SolveControls from '@/components/solve-controls';
 import { Button } from '@/components/ui/button';
 import {
@@ -815,7 +815,7 @@ export default function SlidingGame({
             {l.mode === 'rotate' ? ' · ' + s.rotations + ' Drehungen' : ''}.
             Alle acht Kacheln sind verbunden.
           </DialogDescription>
-          {daily && <DailyReward puzzleId={l.id} attemptId={clock.entry?.id} />}
+          <PuzzleReward puzzleId={l.id} attemptId={clock.entry?.id} />
           <Button
             onClick={() => {
               setVictory(false);

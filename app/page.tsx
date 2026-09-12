@@ -8,7 +8,7 @@ import PlayClock from '@/components/play-clock';
 import PlayStatistics from '@/components/play-statistics';
 import DailyHub from '@/components/daily-hub';
 import StreakCalendar from '@/components/streak-calendar';
-import ExperienceCard from '@/components/experience';
+import ExperienceCard, { PuzzleReward } from '@/components/experience';
 import { usePlayClock } from '@/lib/use-play-clock';
 import { Button } from '@/components/ui/button';
 import {
@@ -1057,6 +1057,7 @@ export default function Home() {
           <DialogDescription>
             {l.name} gelöst · {moves} Drehungen
           </DialogDescription>
+          <PuzzleReward puzzleId={l.id} attemptId={clock.entry?.id} />
           <p className="success-copy">
             {!isFree && done.length === levels.length
               ? 'Du hast alle ' + levels.length + ' Rätsel gelöst.'

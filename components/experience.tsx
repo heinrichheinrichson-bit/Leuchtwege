@@ -38,20 +38,18 @@ export default function ExperienceCard() {
       <details>
         <summary>So sammelst du XP</summary>
         <p>
-          Tagesrätsel geben einmalig 35 XP auf Leicht, 45 XP auf Mittel und 60
-          XP auf Schwer. Ohne Tipps erhältst du zusätzlich 10 XP. Nachholen ist
-          erlaubt; Wiederholungen und Testlösungen geben keine XP.
+          Alle Modi geben XP: Katalog 20, Zufallsrätsel 25, Tagesrätsel 35. Dazu
+          kommen +10 auf Mittel oder +25 auf Schwer und +10 ohne Tipps.
         </p>
         <p>
-          Bereits regulär abgeschlossene Tagesrätsel aus deinem gespeicherten
-          Verlauf zählen mit. Dein Level bleibt erhalten, auch wenn deine
-          Streak-Serie endet.
+          Erneut gelöste Katalog- und Zufallsrätsel geben 5 XP. Tagesrätsel
+          zählen einmalig. Testlösungen geben keine XP.
         </p>
       </details>
     </section>
   );
 }
-export function DailyReward({
+export function PuzzleReward({
   puzzleId,
   attemptId,
 }: {
@@ -59,14 +57,17 @@ export function DailyReward({
   attemptId?: string;
 }) {
   const xp = useExperience(),
-    award = xp.awards.find((a) => a.id === puzzleId);
+    award = xp.awards.find(
+      (a) => a.id === puzzleId && a.attemptId === attemptId,
+    ),
+    previous = xp.awards.find((a) => a.id === puzzleId);
   return (
     <p className="xp-reward">
       {award
-        ? award.attemptId === attemptId
-          ? `+${award.points} XP · Level ${xp.level}`
-          : `${award.points} XP für dieses Tagesrätsel bereits gesammelt`
-        : 'Keine XP für diesen Abschluss. Für Punkte ohne Testhilfe neu spielen.'}
+        ? `+${award.points} XP · Level ${xp.level}`
+        : previous
+          ? 'Für diesen Abschluss keine weiteren XP.'
+          : 'Keine XP für diesen Abschluss.'}
     </p>
   );
 }

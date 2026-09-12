@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import { dailySpec, streakSummary } from './lib/daily.mjs';
-import { experienceSummary, dailyXp } from './lib/experience.mjs';
+import { experienceSummary, dailyXp, puzzleXp } from './lib/experience.mjs';
 import {
   emptyHistory,
   updateAttempt,
@@ -55,7 +55,7 @@ assert.equal(
 );
 assert.equal(
   experienceSummary(h.attempts.map((a) => ({ ...a, origin: 'catalog' }))).total,
-  0,
+  puzzleXp('catalog', spec.tier) + 5,
 );
 assert.equal(
   experienceSummary(h.attempts.map((a) => ({ ...a, puzzleId: 'wrong' }))).total,
@@ -82,6 +82,68 @@ assert.equal(xp.level, 2);
 assert.equal(xp.current, 70);
 assert.equal(xp.required, 150);
 assert.equal(experienceSummary([]).level, 1);
+for (const origin of ['catalog', 'free'])
+  for (const mode of ['turn', 'slide', 'rotate'])
+    for (const tier of ['Leicht', 'Mittel', 'Schwer']) {
+      const m = {
+        ...meta,
+        origin,
+        mode,
+        tier,
+        puzzleId: `${origin}-${mode}-${tier}`,
+      };
+      let data = updateAttempt(emptyHistory(), m, {
+        id: 'one',
+        now: '2026-09-15T12:00:00Z',
+        solved: true,
+      });
+      const expected = puzzleXp(origin, tier, true);
+      assert.equal(experienceSummary(data.attempts).total, expected);
+      data = updateAttempt(data, m, {
+        id: 'duplicate',
+        now: '2026-09-15T12:00:01Z',
+        solved: true,
+      });
+      assert.equal(
+        experienceSummary(data.attempts).total,
+        expected,
+        'Repeated completion event is not a new game',
+      );
+      data = updateAttempt(data, m, {
+        id: 'two',
+        now: '2026-09-16T12:00:00Z',
+        restart: true,
+        solved: true,
+      });
+      assert.equal(experienceSummary(data.attempts).total, expected + 5);
+      data = updateAttempt(data, m, {
+        id: 'three',
+        now: '2026-09-17T12:00:00Z',
+        restart: true,
+        solved: true,
+        assistance: 'test',
+      });
+      assert.equal(
+        experienceSummary(
+          restoreHistory(JSON.parse(JSON.stringify(data))).attempts,
+        ).total,
+        expected + 5,
+      );
+      data = updateAttempt(
+        data,
+        { ...m, puzzleId: m.puzzleId + '-new' },
+        {
+          id: 'new',
+          now: '2026-09-18T12:00:00Z',
+          solved: true,
+          assistance: 'hint',
+        },
+      );
+      assert.equal(
+        experienceSummary(data.attempts).total,
+        expected + 5 + puzzleXp(origin, tier),
+      );
+    }
 console.log(
   'PASS: first eligible daily reward, tips, tests, repeats, replay, restore, catch-up without streak repair, three modes and level thresholds.',
 );
