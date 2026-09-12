@@ -15,6 +15,7 @@ import { restoreDaily } from '@/lib/daily-generator.mjs';
 import { readHistory } from '@/lib/history-store';
 import { emptyHistory } from '@/lib/play-history.mjs';
 import { helpSolved } from '@/lib/solve-help.mjs';
+import { dailyXp, experienceSummary } from '@/lib/experience.mjs';
 import DailyWorker from '@/lib/daily.worker?worker';
 import SlidingGame from './sliding-game';
 import DailyRotation from './daily-rotation';
@@ -283,6 +284,9 @@ export default function DailyHub({
         {dailyModes.map((mode) => {
           const spec = dailySpec(selected, mode),
             done = dailyCompleted(history.attempts, selected, mode);
+          const award = experienceSummary(history.attempts).awards.find(
+            (a) => a.id === spec.id,
+          );
           return (
             <button
               className="puzzle-card"
@@ -293,6 +297,11 @@ export default function DailyHub({
               <span className="puzzle-number">{done ? '✓' : '✳'}</span>
               <span className="puzzle-copy">
                 <strong>{(modeNames as any)[mode]}</strong>
+                <small>
+                  {award
+                    ? `${award.points} XP gesammelt`
+                    : `${dailyXp(spec.tier)} XP + 10 XP ohne Tipps`}
+                </small>
                 <small>
                   {spec.tier} · {spec.n} × {spec.n} ·{' '}
                   {done ? 'Gelöst – Brett öffnen' : 'Spielen / fortsetzen'}

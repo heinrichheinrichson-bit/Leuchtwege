@@ -19,6 +19,7 @@ import SolveControls from './solve-controls';
 import PlayClock from './play-clock';
 import { usePlayClock } from '@/lib/use-play-clock';
 import { useVictory } from '@/lib/use-victory';
+import { DailyReward } from './experience';
 import { act, boardOf } from '@/lib/session.mjs';
 import { evaluate, neighbor } from '@/lib/game.mjs';
 import { connectionSound } from '@/lib/connection-sound.mjs';
@@ -231,6 +232,7 @@ export default function DailyRotation({
       <Dialog open={victory} onOpenChange={(open) => setVictory(open)}>
         <DialogContent className="game-dialog success-dialog">
           <DialogTitle>Dein Tageslicht leuchtet!</DialogTitle>
+          <DailyReward puzzleId={entry.puzzle.id} attemptId={clock.entry?.id} />
           <DialogDescription>
             {s.moves} Drehungen. Das fertige Netz bleibt für dich gespeichert.
           </DialogDescription>

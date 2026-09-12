@@ -8,6 +8,7 @@ import PlayClock from '@/components/play-clock';
 import PlayStatistics from '@/components/play-statistics';
 import DailyHub from '@/components/daily-hub';
 import StreakCalendar from '@/components/streak-calendar';
+import ExperienceCard from '@/components/experience';
 import { usePlayClock } from '@/lib/use-play-clock';
 import { Button } from '@/components/ui/button';
 import {
@@ -504,6 +505,7 @@ export default function Home() {
             ✳
           </div>
           <h1>Ein Weg zum Abschalten.</h1>
+          <ExperienceCard />
           <p className="home-intro">
             Ein paar Drehungen. Ein neuer Lichtblick.
           </p>
