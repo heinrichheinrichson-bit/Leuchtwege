@@ -4,6 +4,7 @@ import { useVictory } from '@/lib/use-victory';
 import SolveControls from '@/components/solve-controls';
 import SlidingGame from '@/components/sliding-game';
 import TutorialGame from '@/components/tutorial-game';
+import { tutorialProgress } from '@/lib/tutorial.mjs';
 import PlayClock from '@/components/play-clock';
 import PlayStatistics from '@/components/play-statistics';
 import DailyHub from '@/components/daily-hub';
@@ -62,6 +63,17 @@ export default function Home() {
   freeRef.current = free;
   const [view, setView] = useState('home');
   const [learnMode, setLearnMode] = useState('turn');
+  const [learned, setLearned] = useState(false);
+  useEffect(() => {
+    try {
+      const progress = tutorialProgress(
+        JSON.parse(localStorage.getItem('leuchtwege-learn-v1') || 'null'),
+      );
+      setLearned(Object.values(progress).some(Boolean));
+    } catch {
+      /* Keep the introduction available when storage is unavailable. */
+    }
+  }, [view]);
   const [restart, setRestart] = useState(false);
   const successAudio = useRef<HTMLAudioElement | null>(null);
   const electricAudio = useRef<Record<string, HTMLAudioElement>>({});
@@ -506,18 +518,21 @@ export default function Home() {
       {view === 'home' && (
         <section className="home-screen">
           <h1>Dein nächster Lichtblick</h1>
-          <p className="home-intro">Verbinde die Wege. In deinem Tempo.</p>
           <Button
-            className="continue-button"
-            disabled={!ready}
-            onClick={() => start(target.index)}
+            className={
+              learned ? 'home-learn-compact' : 'continue-button home-learn'
+            }
+            variant={learned ? 'outline' : 'default'}
+            onClick={() => {
+              setLearnMode('turn');
+              navigate('learn');
+            }}
           >
             <span>
-              {target.resume ? 'Weiterspielen' : 'Drehpuzzle spielen'}
-              <small>
-                {levels[target.index].name} · {done.length}/{levels.length}{' '}
-                gelöst
-              </small>
+              {learned ? 'Spielregeln & Einführung' : 'Spielend lernen'}
+              {!learned && (
+                <small>Entdecke die Spiele Schritt für Schritt</small>
+              )}
             </span>
             <span aria-hidden="true">→</span>
           </Button>
@@ -587,16 +602,6 @@ export default function Home() {
               <span aria-hidden="true">↗</span>
             </Button>
           </div>
-          <Button
-            variant="ghost"
-            className="learn-link"
-            onClick={() => {
-              setLearnMode('turn');
-              navigate('learn');
-            }}
-          >
-            Spielend lernen →
-          </Button>
         </section>
       )}
       {view === 'statistics' && <PlayStatistics />}
@@ -749,6 +754,17 @@ export default function Home() {
       {view === 'catalog' && (
         <section className="catalog-screen">
           <h1>Drehpuzzles</h1>
+          {target.resume && (
+            <Button
+              className="continue-button"
+              onClick={() => start(target.index)}
+            >
+              <span>
+                Weiterspielen<small>{levels[target.index].name}</small>
+              </span>
+              <span aria-hidden="true">→</span>
+            </Button>
+          )}
           <p className="section-intro">
             {done.length} von {levels.length} gelöst
           </p>
