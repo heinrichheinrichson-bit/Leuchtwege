@@ -80,5 +80,7 @@ assert.equal(
 b = rewardHint(b, 'completed-video-2');
 assert.equal(remainingHints(b), 1);
 console.log(
-  'PASS: full/near/step solves on all 66 puzzles and modified states; legal final move; one-step undo; locked cells; three free hints; one reward per completed ad; no cancellation/duplicate rewards.',
+  'PASS: full/near/step solves on all ' +
+    (campaign.length + sliding.length) +
+    ' puzzles and modified states; legal final move; one-step undo; locked cells; three free hints; one reward per completed ad; no cancellation/duplicate rewards.',
 );

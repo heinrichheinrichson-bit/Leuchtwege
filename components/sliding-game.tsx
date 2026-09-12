@@ -32,13 +32,16 @@ import { neighbor } from '@/lib/game.mjs';
 import { connectionSound } from '@/lib/connection-sound.mjs';
 import { restoreFreeSliding, slidingTiers } from '@/lib/random-sliding.mjs';
 import RandomSlidingWorker from '@/lib/random-sliding.worker?worker';
+import { slidingOrder } from '@/lib/sliding-catalog.mjs';
 
 export default function SlidingGame({
   back,
   playSound,
+  onLearn,
 }: {
   back: MutableRefObject<(() => boolean) | null>;
   playSound: (name: string) => void;
+  onLearn: () => void;
 }) {
   const helpBack = useRef<(() => boolean) | null>(null);
   const [saved, setSaved] = useState<any>({
@@ -270,6 +273,7 @@ export default function SlidingGame({
     [back],
   );
   function open(index: number) {
+    cancelGeneration();
     setFreeMode(null);
     setSaved((v: any) => ({ ...v, current: index }));
     setPlaying(true);
@@ -315,18 +319,21 @@ export default function SlidingGame({
           : '',
       );
   }
-  const nextIndex = puzzles.findIndex(
-    (p, i) => i > saved.current && p.mode === l.mode,
-  );
+  const ordered = slidingOrder(puzzles, l.mode);
+  const catalogNumber = ordered.indexOf(saved.current);
+  const nextIndex = ordered[catalogNumber + 1] ?? -1;
   return (
     <>
       {!playing ? (
         <section className="catalog-screen">
           <h1>Wege in Bewegung</h1>
           <p className="section-intro">
-            Acht Kacheln, ein Leerfeld, ein leuchtendes Netz. Spiele die
-            Proberätsel oder lass neue Wege entstehen.
+            Acht Kacheln, ein Leerfeld, ein leuchtendes Netz. 60 Rätsel pro
+            Modus – oder immer neue freie Wege.
           </p>
+          <Button variant="outline" onClick={onLearn}>
+            Schieben spielend kennenlernen →
+          </Button>
           {['slide', 'rotate'].map((mode) => (
             <section className="catalog-group" key={mode}>
               <h2>{mode === 'slide' ? 'Nur Schieben' : 'Schieben & Drehen'}</h2>
@@ -373,32 +380,55 @@ export default function SlidingGame({
                   </Button>
                 )}
               </div>
-              <div className="puzzle-cards">
-                {puzzles.map((p, i) =>
-                  p.mode !== mode ? null : (
-                    <button
-                      className="puzzle-card"
-                      key={p.id}
-                      disabled={!ready}
-                      onClick={() => open(i)}
-                    >
-                      <span className="puzzle-number">{(i % 3) + 1}</span>
-                      <span className="puzzle-copy">
-                        <strong>{p.name}</strong>
-                        <small>
-                          3 × 3 ·{' '}
-                          {saved.sessions[p.id]
-                            ? slidingStatus(p, saved.sessions[p.id]).solved
-                              ? 'Gelöst'
-                              : 'Fortsetzen'
-                            : 'Noch offen'}
-                        </small>
-                      </span>
-                      <span>→</span>
-                    </button>
-                  ),
-                )}
-              </div>
+              {slidingTiers.map((tier) => (
+                <details className="slide-catalog-tier" key={tier}>
+                  <summary>
+                    {tier}
+                    <span>
+                      {
+                        puzzles.filter(
+                          (p) =>
+                            p.mode === mode &&
+                            p.tier === tier &&
+                            saved.sessions[p.id] &&
+                            slidingStatus(p, saved.sessions[p.id]).solved,
+                        ).length
+                      }{' '}
+                      / 20 gelöst
+                    </span>
+                  </summary>
+                  <div className="puzzle-cards">
+                    {slidingOrder(puzzles, mode).map(
+                      (i: number, number: number) => {
+                        const p = puzzles[i];
+                        return p.tier !== tier ? null : (
+                          <button
+                            className="puzzle-card"
+                            key={p.id}
+                            disabled={!ready}
+                            onClick={() => open(i)}
+                          >
+                            <span className="puzzle-number">{number + 1}</span>
+                            <span className="puzzle-copy">
+                              <strong>{p.name}</strong>
+                              <small>
+                                3 × 3 ·{' '}
+                                {saved.sessions[p.id]
+                                  ? slidingStatus(p, saved.sessions[p.id])
+                                      .solved
+                                    ? 'Gelöst'
+                                    : 'Fortsetzen'
+                                  : 'Noch offen'}
+                              </small>
+                            </span>
+                            <span>→</span>
+                          </button>
+                        );
+                      },
+                    )}
+                  </div>
+                </details>
+              ))}
             </section>
           ))}
           <p className="home-foot">
@@ -415,7 +445,11 @@ export default function SlidingGame({
                 {l.mode === 'slide' ? 'Nur Schieben' : 'Schieben & Drehen'} ·
                 {freeMode
                   ? 'Freies Spiel · ' + l.tier
-                  : 'Probe ' + ((saved.current % 3) + 1) + ' / 3'}
+                  : l.tier +
+                    ' · Rätsel ' +
+                    (catalogNumber + 1) +
+                    ' / ' +
+                    ordered.length}
               </p>
               <h1>{l.name}</h1>
             </div>

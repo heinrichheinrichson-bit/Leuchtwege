@@ -3,6 +3,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useVictory } from '@/lib/use-victory';
 import SolveControls from '@/components/solve-controls';
 import SlidingGame from '@/components/sliding-game';
+import TutorialGame from '@/components/tutorial-game';
 import { Button } from '@/components/ui/button';
 import {
   Dialog,
@@ -53,6 +54,7 @@ export default function Home() {
   const freeRef = useRef(free);
   freeRef.current = free;
   const [view, setView] = useState('home');
+  const [learnMode, setLearnMode] = useState('turn');
   const [restart, setRestart] = useState(false);
   const successAudio = useRef<HTMLAudioElement | null>(null);
   const electricAudio = useRef<Record<string, HTMLAudioElement>>({});
@@ -211,7 +213,15 @@ export default function Home() {
       if (v === 'game' && Number.isInteger(p) && p >= 0 && p < levels.length)
         setLevel(p);
       setView(
-        ['home', 'catalog', 'game', 'rules', 'random', 'sliding'].includes(v)
+        [
+          'home',
+          'catalog',
+          'game',
+          'rules',
+          'random',
+          'sliding',
+          'learn',
+        ].includes(v)
           ? v
           : 'home',
       );
@@ -383,7 +393,7 @@ export default function Home() {
       } catch {}
   }
   useEffect(() => {
-    if (view === 'sliding') return;
+    if (view === 'sliding' || view === 'learn') return;
     const context = (document as any).modelContext;
     if (!context?.registerTool) return;
     const ac = new AbortController();
@@ -497,9 +507,12 @@ export default function Home() {
           <Button
             variant="ghost"
             className="home-option"
-            onClick={() => navigate('rules')}
+            onClick={() => {
+              setLearnMode('turn');
+              navigate('learn');
+            }}
           >
-            So funktioniert’s <span>→</span>
+            Spielend lernen <span>→</span>
           </Button>
           <Button
             variant="outline"
@@ -520,9 +533,27 @@ export default function Home() {
           <p className="home-foot">Kein Zeitdruck. In deinem Tempo.</p>
         </section>
       )}
+      {view === 'learn' && (
+        <TutorialGame
+          initialMode={learnMode}
+          onExit={() => backAction.current()}
+          onPlay={(mode) => navigate(mode === 'turn' ? 'catalog' : 'sliding')}
+          playSound={(name) => {
+            if (!sound) return;
+            if (name === 'success' && successAudio.current) {
+              stopSounds();
+              void successAudio.current.play().catch(() => {});
+            } else playElectric(name);
+          }}
+        />
+      )}
       {view === 'sliding' && (
         <SlidingGame
           back={slideBack}
+          onLearn={() => {
+            setLearnMode('slide');
+            navigate('learn');
+          }}
           playSound={(name) => {
             if (!sound) return;
             if (name === 'success' && successAudio.current) {

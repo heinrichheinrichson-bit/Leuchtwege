@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { slidingOrder } from './lib/sliding-catalog.mjs';
 import {
   adjacent,
   freshSliding,
@@ -11,8 +13,41 @@ import {
   restoreSliding,
 } from './lib/sliding.mjs';
 const levels = JSON.parse(readFileSync('lib/sliding-levels.json'));
-assert.equal(levels.length, 6);
-assert.equal(new Set(levels.map((l) => l.id)).size, 6);
+assert.equal(levels.length, 120);
+assert.equal(new Set(levels.map((l) => l.id)).size, 120);
+const legacy = levels.slice(0, 6).map(({ tier, minSlides, ...l }) => l);
+assert.equal(
+  createHash('sha256').update(JSON.stringify(legacy)).digest('hex'),
+  '7460452d1a7be2fe7854a9d118896e6078623db73890b6ade6efef79927a5809',
+  'Original six puzzles and their indices must stay identical',
+);
+for (const mode of ['slide', 'rotate']) {
+  const order = slidingOrder(levels, mode);
+  assert.equal(order.length, 60);
+  assert.equal(new Set(order).size, 60);
+  for (const tier of ['Leicht', 'Mittel', 'Schwer'])
+    assert.equal(
+      levels.filter((l) => l.mode === mode && l.tier === tier).length,
+      20,
+    );
+  for (let i = 1; i < order.length; i++)
+    if (levels[order[i - 1]].tier === levels[order[i]].tier)
+      assert(levels[order[i - 1]].minSlides <= levels[order[i]].minSlides);
+}
+assert.equal(
+  new Set(
+    levels.map(
+      (l) =>
+        l.mode +
+        ':' +
+        l.initial.positions
+          .map((id) => (id === null ? 0 : l.pieces[id]))
+          .join(','),
+    ),
+  ).size,
+  120,
+  'No repeated initial networks',
+);
 for (const l of levels) {
   assert(slidingStatus(l, l.solution).solved);
   let s = freshSliding(l);
@@ -112,5 +147,5 @@ assert(slidingStatus(sourceFixture, moved).litIds.has(0));
 assert(slidingStatus(sourceFixture, start).open > 0);
 assert(!slidingStatus(sourceFixture, start).solved);
 console.log(
-  'PASS: six reachable puzzles; eight tiles and blank; inverse solution paths; undo/reset; two-tap and swipe equivalence; rotation only in combined mode; diagonal/wrap rejection; source movement; saved sessions/corruption.',
+  'PASS: 120 reachable puzzles; 60 per mode, 20 per tier; six legacy puzzles unchanged; unique starting networks; legal solutions; undo/reset; tap/swipe equivalence; saved sessions and ordering.',
 );
