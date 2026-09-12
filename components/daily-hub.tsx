@@ -9,7 +9,6 @@ import {
   dailySpec,
   monthDays,
   shiftDay,
-  streakSummary,
   dailyCompleted,
 } from '@/lib/daily.mjs';
 import { restoreDaily } from '@/lib/daily-generator.mjs';
@@ -43,8 +42,7 @@ export default function DailyHub({
     } | null>(null);
   const storageKey = (day: string, mode: string) =>
     `leuchtwege-daily-v1:${day}:${mode}`;
-  const streak = streakSummary(history.attempts, today),
-    calendar = monthDays(month);
+  const calendar = monthDays(month);
   useEffect(() => {
     const update = () => {
       setHistory(readHistory());
@@ -202,17 +200,6 @@ export default function DailyHub({
     <section className="daily-screen">
       <p className="level-label">Jeden Tag ein Lichtblick</p>
       <h1>Deine Tagesrätsel</h1>
-      <div className="streak-card">
-        <strong>
-          {streak.current} {streak.current === 1 ? 'Tag' : 'Tage'} in Folge
-        </strong>
-        <span>
-          Längste Serie: {streak.longest} ·{' '}
-          {streak.today
-            ? 'Heute schon gespielt ✓'
-            : 'Ein gelöstes Rätsel reicht für heute.'}
-        </span>
-      </div>
       <p className="section-intro">
         Jeden Tag drei feste Rätsel. Spiele deinen Lieblingsmodus oder alle
         drei. Tipps sind erlaubt; Testlösungen zählen nicht für Kalender und
@@ -260,15 +247,11 @@ export default function DailyHub({
           return (
             <button
               key={day}
-              className={
-                'calendar-day ' +
-                (day === selected ? 'chosen ' : '') +
-                (streak.days.has(day) ? 'played' : '')
-              }
+              className={'calendar-day ' + (day === selected ? 'chosen ' : '')}
               disabled={day < DAILY_START || day > today || busy}
               aria-pressed={day === selected}
               aria-current={day === today ? 'date' : undefined}
-              aria-label={`${day.split('-').reverse().join('.')}: ${count} von 3 Tagesrätseln gelöst${streak.days.has(day) ? ', Spieltag' : ''}`}
+              aria-label={`${day.split('-').reverse().join('.')}: ${count} von 3 Tagesrätseln gelöst`}
               onClick={() => setSelected(day)}
             >
               <strong>{Number(day.slice(-2))}</strong>
@@ -278,8 +261,8 @@ export default function DailyHub({
         })}
       </div>
       <p className="calendar-legend">
-        Goldene Markierung: an diesem Tag gespielt · 1/3 bis 3/3: Tagesrätsel
-        erledigt
+        1/3 bis 3/3: gelöste Tagesrätsel. Deine tatsächlichen Spieltage findest
+        du im separaten Streak-Kalender auf der Startseite.
       </p>
       <Button
         variant="ghost"

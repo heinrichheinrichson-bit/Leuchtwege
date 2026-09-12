@@ -1087,8 +1087,22 @@ body {
 .calendar-day small {
   font-size: 12px;
 }
-.calendar-day.played {
-  border-bottom: 4px solid #ffdc91;
+.streak-day.completed {
+  background: #ffdc91;
+  color: #142235;
+  border-color: #ffdc91;
+}
+.streak-day.future {
+  opacity: 0.3;
+}
+.streak-check {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.1;
+}
+.streak-today {
+  color: #ffdc91;
+  font-weight: 600;
 }
 .calendar-day.chosen {
   background: #ffdc91;

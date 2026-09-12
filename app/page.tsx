@@ -7,6 +7,7 @@ import TutorialGame from '@/components/tutorial-game';
 import PlayClock from '@/components/play-clock';
 import PlayStatistics from '@/components/play-statistics';
 import DailyHub from '@/components/daily-hub';
+import StreakCalendar from '@/components/streak-calendar';
 import { usePlayClock } from '@/lib/use-play-clock';
 import { Button } from '@/components/ui/button';
 import {
@@ -242,6 +243,7 @@ export default function Home() {
           'learn',
           'statistics',
           'daily',
+          'streak',
         ].includes(v)
           ? v
           : 'home',
@@ -421,7 +423,13 @@ export default function Home() {
       } catch {}
   }
   useEffect(() => {
-    if (view === 'sliding' || view === 'learn' || view === 'daily') return;
+    if (
+      view === 'sliding' ||
+      view === 'learn' ||
+      view === 'daily' ||
+      view === 'streak'
+    )
+      return;
     const context = (document as any).modelContext;
     if (!context?.registerTool) return;
     const ac = new AbortController();
@@ -563,7 +571,14 @@ export default function Home() {
             className="home-option"
             onClick={() => navigate('daily')}
           >
-            Tagesrätsel & Kalender <span>→</span>
+            Tagesrätsel <span>→</span>
+          </Button>
+          <Button
+            variant="outline"
+            className="home-option"
+            onClick={() => navigate('streak')}
+          >
+            Streak-Kalender <span>✓</span>
           </Button>
           <p className="home-foot">Kein Zeitdruck. In deinem Tempo.</p>
           <Button
@@ -576,6 +591,7 @@ export default function Home() {
         </section>
       )}
       {view === 'statistics' && <PlayStatistics />}
+      {view === 'streak' && <StreakCalendar />}
       {view === 'daily' && (
         <DailyHub
           back={dailyBack}
