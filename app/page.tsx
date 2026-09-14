@@ -4,6 +4,10 @@ import { useVictory } from '@/lib/use-victory';
 import SolveControls from '@/components/solve-controls';
 import SlidingGame from '@/components/sliding-game';
 import TutorialGame from '@/components/tutorial-game';
+import Settings from '@/components/settings';
+import { Settings as SettingsIcon } from 'lucide-react';
+import { applyPreferences, readPreferences } from '@/lib/preferences.mjs';
+import { recoverBackup } from '@/lib/backup.mjs';
 import { tutorialProgress } from '@/lib/tutorial.mjs';
 import PlayClock from '@/components/play-clock';
 import PlayStatistics from '@/components/play-statistics';
@@ -112,6 +116,7 @@ export default function Home() {
   }, [view, level, isFree, free.puzzle?.id, restart].join(':'));
   const [lockMode, setLockMode] = useState(false);
   const [storageError, setStorageError] = useState(false);
+  const [recoveryError, setRecoveryError] = useState(false);
   const l = isFree && free.puzzle ? free.puzzle : levels[level],
     session =
       isFree && free.puzzle ? free.session : sessions[level] || fresh(l);
@@ -132,6 +137,16 @@ export default function Home() {
   );
   useEffect(() => {
     try {
+      if (recoverBackup(localStorage)) {
+        window.location.reload();
+        return;
+      }
+    } catch {
+      setRecoveryError(true);
+      return;
+    }
+    try {
+      applyPreferences(readPreferences());
       const saved = restore(
         levels,
         JSON.parse(localStorage.getItem('leuchtwege-v2') || 'null'),
@@ -261,6 +276,7 @@ export default function Home() {
           'statistics',
           'daily',
           'streak',
+          'settings',
         ].includes(v)
           ? v
           : 'home',
@@ -479,6 +495,20 @@ export default function Home() {
     return () => ac.abort();
   }, [level, board, l.n, l.source, status.solved, isFree, view]);
 
+  if (recoveryError)
+    return (
+      <main className="settings-screen">
+        <h1>Sicherung wiederherstellen</h1>
+        <p role="alert">
+          Ein unterbrochener Import konnte noch nicht zurückgesetzt werden.
+          Bitte schaffe Speicherplatz und starte die App erneut. Deine Sicherung
+          bleibt aufbewahrt.
+        </p>
+        <Button onClick={() => window.location.reload()}>
+          Erneut versuchen
+        </Button>
+      </main>
+    );
   return (
     <main className={'app-shell ' + (view === 'game' ? 'playing' : '')}>
       <header className="app-header">
@@ -505,14 +535,25 @@ export default function Home() {
               ? Regeln
             </Button>
           )}
-          <Button
-            variant="ghost"
-            className="sound"
-            onClick={() => setSound((v) => !v)}
-            aria-pressed={sound}
-          >
-            Ton {sound ? 'an' : 'aus'}
-          </Button>
+          {view !== 'home' && view !== 'settings' && (
+            <Button
+              variant="ghost"
+              className="sound"
+              onClick={() => setSound((v) => !v)}
+              aria-pressed={sound}
+            >
+              Ton {sound ? 'an' : 'aus'}
+            </Button>
+          )}
+          {view === 'home' && (
+            <Button
+              variant="ghost"
+              aria-label="Einstellungen öffnen"
+              onClick={() => navigate('settings')}
+            >
+              <SettingsIcon size={22} aria-hidden="true" />
+            </Button>
+          )}
         </div>
       </header>
       {view === 'home' && (
@@ -603,6 +644,15 @@ export default function Home() {
             </Button>
           </div>
         </section>
+      )}
+      {view === 'settings' && (
+        <Settings
+          sound={sound}
+          setSound={(value) => {
+            setSound(value);
+            if (!value) stopSounds();
+          }}
+        />
       )}
       {view === 'statistics' && <PlayStatistics />}
       {view === 'streak' && <StreakCalendar />}

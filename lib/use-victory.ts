@@ -1,6 +1,7 @@
 'use client';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { victoryTimeline } from './victory-timing.mjs';
+import { readPreferences } from './preferences.mjs';
 
 export function useVictory(onSound: () => void, scope: string) {
   const [victory, show] = useState(false);
@@ -16,7 +17,7 @@ export function useVictory(onSound: () => void, scope: string) {
     if (open)
       cancel.current = victoryTimeline({
         glow: () => {
-          glow(true);
+          glow(readPreferences().animations);
           sound.current();
         },
         reveal: () => {

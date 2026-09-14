@@ -2,6 +2,7 @@
 @import 'tw-animate-css';
 @import 'shadcn/tailwind.css';
 @theme inline {
+  --color-input: var(--muted);
   --color-popover: var(--popover);
   --color-popover-foreground: var(--foreground);
   --color-background: var(--background);
@@ -1242,6 +1243,119 @@ body {
   text-align: left;
   font-size: 0.875rem;
   border-radius: 12px;
+}
+.settings-screen {
+  width: min(calc(100% - 32px), 560px);
+  margin: 12px auto 28px;
+}
+.settings-screen h1 {
+  font-size: 1.75rem;
+  font-weight: 650;
+  letter-spacing: -0.03em;
+}
+.settings-screen h2 {
+  font-size: 1.125rem;
+  margin: 24px 0 12px;
+}
+.settings-group {
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px 16px;
+  min-height: 76px;
+  cursor: pointer;
+}
+.settings-row + .settings-row {
+  border-top: 1px solid var(--border);
+}
+.settings-row strong {
+  display: block;
+  font-weight: 600;
+  font-size: 1rem;
+}
+.settings-row small,
+.settings-note {
+  display: block;
+  color: var(--muted-foreground);
+  font-size: 0.875rem;
+  line-height: 1.5;
+  margin: 4px 0 0;
+}
+.settings-row [data-slot='switch'] {
+  width: 44px;
+  height: 26px;
+}
+.settings-row [data-slot='switch-thumb'] {
+  width: 22px;
+  height: 22px;
+  transform: none;
+  translate: 0;
+}
+.settings-row [data-slot='switch-thumb'][data-checked] {
+  translate: 18px;
+}
+.settings-backup details {
+  margin: 0;
+}
+.settings-backup {
+  margin-top: 12px;
+  padding: 14px;
+  display: grid;
+  gap: 12px;
+}
+.settings-backup button {
+  min-height: 44px;
+  height: auto;
+  white-space: normal;
+}
+.settings-backup summary {
+  min-height: 44px;
+  align-content: center;
+  cursor: pointer;
+  font-size: 0.875rem;
+}
+.settings-backup label {
+  display: block;
+  font-size: 0.875rem;
+  margin: 10px 0;
+}
+.settings-backup textarea {
+  width: 100%;
+  min-height: 112px;
+  resize: vertical;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 10px;
+  background: var(--background);
+  color: var(--foreground);
+  font-size: 1rem;
+}
+.settings-backup details button {
+  width: 100%;
+  margin-top: 10px;
+}
+.settings-error {
+  color: #ffb3a0;
+  line-height: 1.5;
+}
+.settings-confirm {
+  display: flex;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+html[data-animations='off'] *,
+html[data-animations='off'] *::before,
+html[data-animations='off'] *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
 }
 .home-screen .experience-card > p {
   margin: 0;
