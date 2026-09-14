@@ -148,3 +148,11 @@ for (const mode of ['turn', 'slide', 'rotate']) {
 }
 assert.ok(validateBackup(createBackup(s, levels, sliding), levels, sliding));
 console.log('PASS: all three daily puzzle modes survive backup validation.');
+put('leuchtwege-preferences-v1', {
+  version: 1,
+  animations: false,
+  language: 'en',
+  theme: 'light',
+  haptics: false,
+});
+assert.ok(validateBackup(createBackup(s, levels, sliding), levels, sliding));

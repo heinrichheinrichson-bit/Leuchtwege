@@ -15056,5 +15056,7301 @@
         "id": 7
       }
     ]
+  },
+  {
+    "id": "slide-catalog-1-21",
+    "mode": "slide",
+    "tier": "Leicht",
+    "n": 3,
+    "name": "Lichtgarten",
+    "seed": 2300260,
+    "pieces": [
+      6,
+      8,
+      4,
+      3,
+      14,
+      13,
+      1,
+      1
+    ],
+    "sourceId": 4,
+    "solution": {
+      "positions": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        null,
+        7,
+        6
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "initial": {
+      "positions": [
+        0,
+        2,
+        null,
+        3,
+        1,
+        5,
+        7,
+        4,
+        6
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "minSlides": 4,
+    "fingerprint": "slide:6,4,0,3,8,13,1,14,1",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 7
+      }
+    ]
+  },
+  {
+    "id": "slide-catalog-1-22",
+    "mode": "slide",
+    "tier": "Leicht",
+    "n": 3,
+    "name": "Stiller Morgen",
+    "seed": 2300273,
+    "pieces": [
+      4,
+      6,
+      12,
+      3,
+      13,
+      1,
+      3,
+      8
+    ],
+    "sourceId": 1,
+    "solution": {
+      "positions": [
+        0,
+        1,
+        2,
+        6,
+        4,
+        5,
+        null,
+        3,
+        7
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "initial": {
+      "positions": [
+        0,
+        5,
+        1,
+        null,
+        4,
+        2,
+        6,
+        3,
+        7
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "minSlides": 7,
+    "fingerprint": "slide:4,1,6,0,13,12,3,3,8",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 6
+      }
+    ]
+  },
+  {
+    "id": "slide-catalog-1-23",
+    "mode": "slide",
+    "tier": "Leicht",
+    "n": 3,
+    "name": "Sonnenpfad",
+    "seed": 2300286,
+    "pieces": [
+      4,
+      6,
+      8,
+      3,
+      13,
+      4,
+      3,
+      9
+    ],
+    "sourceId": 6,
+    "solution": {
+      "positions": [
+        5,
+        1,
+        2,
+        3,
+        4,
+        0,
+        null,
+        6,
+        7
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "initial": {
+      "positions": [
+        5,
+        2,
+        0,
+        4,
+        1,
+        7,
+        3,
+        6,
+        null
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "minSlides": 6,
+    "fingerprint": "slide:4,8,4,13,6,9,3,3,0",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 3
+      }
+    ]
+  },
+  {
+    "id": "slide-catalog-1-24",
+    "mode": "slide",
+    "tier": "Leicht",
+    "n": 3,
+    "name": "Kleine Strahlen",
+    "seed": 2300299,
+    "pieces": [
+      6,
+      14,
+      12,
+      1,
+      5,
+      5,
+      1,
+      1
+    ],
+    "sourceId": 3,
+    "solution": {
+      "positions": [
+        0,
+        1,
+        2,
+        5,
+        3,
+        4,
+        6,
+        null,
+        7
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "initial": {
+      "positions": [
+        0,
+        2,
+        4,
+        5,
+        1,
+        7,
+        6,
+        3,
+        null
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "minSlides": 5,
+    "fingerprint": "slide:6,12,5,5,14,1,1,1,0",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 3
+      }
+    ]
+  },
+  {
+    "id": "slide-catalog-1-25",
+    "mode": "slide",
+    "tier": "Leicht",
+    "n": 3,
+    "name": "Weite Bögen",
+    "seed": 2300312,
+    "pieces": [
+      6,
+      10,
+      12,
+      1,
+      2,
+      13,
+      2,
+      9
+    ],
+    "sourceId": 0,
+    "solution": {
+      "positions": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        null,
+        6,
+        7
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "initial": {
+      "positions": [
+        1,
+        2,
+        null,
+        0,
+        4,
+        5,
+        3,
+        6,
+        7
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "minSlides": 4,
+    "fingerprint": "slide:10,12,0,6,2,13,1,2,9",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 3
+      }
+    ]
+  },
+  {
+    "id": "slide-catalog-1-26",
+    "mode": "slide",
+    "tier": "Leicht",
+    "n": 3,
+    "name": "Lichtquelle im Wald",
+    "seed": 2300325,
+    "pieces": [
+      2,
+      14,
+      12,
+      2,
+      13,
+      5,
+      1,
+      1
+    ],
+    "sourceId": 5,
+    "solution": {
+      "positions": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        null,
+        6,
+        7
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "initial": {
+      "positions": [
+        0,
+        1,
+        2,
+        6,
+        3,
+        4,
+        7,
+        null,
+        5
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "minSlides": 7,
+    "fingerprint": "slide:2,14,12,1,2,13,1,0,5",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 6
+      }
+    ]
+  },
+  {
+    "id": "slide-catalog-1-27",
+    "mode": "slide",
+    "tier": "Leicht",
+    "n": 3,
+    "name": "Sanfter Strom",
+    "seed": 2300338,
+    "pieces": [
+      6,
+      14,
+      8,
+      1,
+      7,
+      8,
+      3,
+      8
+    ],
+    "sourceId": 2,
+    "solution": {
+      "positions": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        7,
+        null,
+        6,
+        5
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "initial": {
+      "positions": [
+        0,
+        2,
+        7,
+        3,
+        null,
+        1,
+        6,
+        4,
+        5
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "minSlides": 6,
+    "fingerprint": "slide:6,8,8,1,0,14,3,7,8",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 6
+      }
+    ]
+  },
+  {
+    "id": "slide-catalog-1-28",
+    "mode": "slide",
+    "tier": "Leicht",
+    "n": 3,
+    "name": "Abendstern",
+    "seed": 2300351,
+    "pieces": [
+      6,
+      10,
+      12,
+      3,
+      12,
+      1,
+      3,
+      8
+    ],
+    "sourceId": 6,
+    "solution": {
+      "positions": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        null,
+        6,
+        7
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "initial": {
+      "positions": [
+        1,
+        4,
+        2,
+        null,
+        0,
+        5,
+        3,
+        6,
+        7
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "minSlides": 5,
+    "fingerprint": "slide:10,12,12,0,6,1,3,3,8",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 3
+      }
+    ]
+  },
+  {
+    "id": "slide-catalog-1-29",
+    "mode": "slide",
+    "tier": "Leicht",
+    "n": 3,
+    "name": "Goldene Wege",
+    "seed": 2300364,
+    "pieces": [
+      6,
+      12,
+      4,
+      1,
+      7,
+      13,
+      1,
+      1
+    ],
+    "sourceId": 3,
+    "solution": {
+      "positions": [
+        2,
+        0,
+        1,
+        4,
+        5,
+        7,
+        6,
+        3,
+        null
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "initial": {
+      "positions": [
+        2,
+        0,
+        1,
+        4,
+        3,
+        5,
+        null,
+        6,
+        7
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "minSlides": 4,
+    "fingerprint": "slide:4,6,12,7,1,13,0,1,1",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 7
+      }
+    ]
+  },
+  {
+    "id": "slide-catalog-1-30",
+    "mode": "slide",
+    "tier": "Leicht",
+    "n": 3,
+    "name": "Neuer Horizont",
+    "seed": 2300377,
+    "pieces": [
+      6,
+      14,
+      8,
+      1,
+      7,
+      12,
+      1,
+      1
+    ],
+    "sourceId": 0,
+    "solution": {
+      "positions": [
+        0,
+        2,
+        null,
+        4,
+        1,
+        5,
+        6,
+        7,
+        3
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "initial": {
+      "positions": [
+        0,
+        2,
+        5,
+        6,
+        4,
+        null,
+        7,
+        3,
+        1
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "minSlides": 7,
+    "fingerprint": "slide:6,8,12,1,7,0,1,1,14",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 5
+      }
+    ]
+  },
+  {
+    "id": "slide-catalog-2-21",
+    "mode": "slide",
+    "tier": "Mittel",
+    "n": 3,
+    "name": "Lichtgarten",
+    "seed": 2310260,
+    "pieces": [
+      6,
+      10,
+      8,
+      7,
+      12,
+      1,
+      3,
+      8
+    ],
+    "sourceId": 5,
+    "solution": {
+      "positions": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        null,
+        5,
+        6,
+        7
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "initial": {
+      "positions": [
+        4,
+        3,
+        1,
+        0,
+        7,
+        6,
+        5,
+        null,
+        2
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "minSlides": 12,
+    "fingerprint": "slide:12,7,10,6,8,3,1,0,8",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 2
+      }
+    ]
+  },
+  {
+    "id": "slide-catalog-2-22",
+    "mode": "slide",
+    "tier": "Mittel",
+    "n": 3,
+    "name": "Stiller Morgen",
+    "seed": 2310273,
+    "pieces": [
+      4,
+      6,
+      8,
+      7,
+      9,
+      3,
+      10,
+      8
+    ],
+    "sourceId": 2,
+    "solution": {
+      "positions": [
+        1,
+        7,
+        0,
+        3,
+        6,
+        4,
+        5,
+        2,
+        null
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "initial": {
+      "positions": [
+        1,
+        0,
+        6,
+        2,
+        7,
+        4,
+        3,
+        null,
+        5
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "minSlides": 11,
+    "fingerprint": "slide:6,4,10,8,8,9,7,0,3",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 4
+      }
+    ]
+  },
+  {
+    "id": "slide-catalog-2-23",
+    "mode": "slide",
+    "tier": "Mittel",
+    "n": 3,
+    "name": "Sonnenpfad",
+    "seed": 2310286,
+    "pieces": [
+      6,
+      10,
+      8,
+      7,
+      8,
+      3,
+      10,
+      8
+    ],
+    "sourceId": 7,
+    "solution": {
+      "positions": [
+        0,
+        6,
+        7,
+        3,
+        1,
+        2,
+        5,
+        4,
+        null
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "initial": {
+      "positions": [
+        6,
+        7,
+        2,
+        0,
+        null,
+        4,
+        3,
+        1,
+        5
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "minSlides": 10,
+    "fingerprint": "slide:10,8,8,6,0,8,7,10,3",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 4
+      }
+    ]
+  },
+  {
+    "id": "slide-catalog-2-24",
+    "mode": "slide",
+    "tier": "Mittel",
+    "n": 3,
+    "name": "Kleine Strahlen",
+    "seed": 2310299,
+    "pieces": [
+      2,
+      14,
+      8,
+      2,
+      13,
+      2,
+      11,
+      8
+    ],
+    "sourceId": 4,
+    "solution": {
+      "positions": [
+        5,
+        1,
+        2,
+        0,
+        4,
+        null,
+        3,
+        6,
+        7
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "initial": {
+      "positions": [
+        0,
+        7,
+        5,
+        4,
+        null,
+        1,
+        3,
+        2,
+        6
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "minSlides": 13,
+    "fingerprint": "slide:2,8,2,13,0,14,2,8,11",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 2
+      }
+    ]
+  },
+  {
+    "id": "slide-catalog-2-25",
+    "mode": "slide",
+    "tier": "Mittel",
+    "n": 3,
+    "name": "Weite Bögen",
+    "seed": 2310312,
+    "pieces": [
+      6,
+      10,
+      8,
+      7,
+      12,
+      1,
+      3,
+      8
+    ],
+    "sourceId": 1,
+    "solution": {
+      "positions": [
+        0,
+        1,
+        7,
+        3,
+        4,
+        null,
+        5,
+        6,
+        2
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "initial": {
+      "positions": [
+        4,
+        0,
+        1,
+        3,
+        2,
+        7,
+        5,
+        null,
+        6
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "minSlides": 12,
+    "fingerprint": "slide:12,6,10,7,8,8,1,0,3",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 2
+      }
+    ]
+  },
+  {
+    "id": "slide-catalog-2-26",
+    "mode": "slide",
+    "tier": "Mittel",
+    "n": 3,
+    "name": "Lichtquelle im Wald",
+    "seed": 2310325,
+    "pieces": [
+      6,
+      14,
+      8,
+      5,
+      1,
+      3,
+      10,
+      8
+    ],
+    "sourceId": 6,
+    "solution": {
+      "positions": [
+        0,
+        1,
+        7,
+        3,
+        4,
+        null,
+        5,
+        6,
+        2
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "initial": {
+      "positions": [
+        3,
+        0,
+        4,
+        7,
+        6,
+        1,
+        null,
+        5,
+        2
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "minSlides": 11,
+    "fingerprint": "slide:5,6,1,8,10,14,0,3,8",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 7
+      }
+    ]
+  },
+  {
+    "id": "slide-catalog-2-27",
+    "mode": "slide",
+    "tier": "Mittel",
+    "n": 3,
+    "name": "Sanfter Strom",
+    "seed": 2310338,
+    "pieces": [
+      4,
+      6,
+      8,
+      7,
+      13,
+      1,
+      3,
+      8
+    ],
+    "sourceId": 3,
+    "solution": {
+      "positions": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        null,
+        5,
+        6,
+        7
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "initial": {
+      "positions": [
+        6,
+        0,
+        2,
+        1,
+        5,
+        4,
+        3,
+        null,
+        7
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "minSlides": 10,
+    "fingerprint": "slide:3,4,8,6,1,13,7,0,8",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 4
+      }
+    ]
+  },
+  {
+    "id": "slide-catalog-2-28",
+    "mode": "slide",
+    "tier": "Mittel",
+    "n": 3,
+    "name": "Abendstern",
+    "seed": 2310351,
+    "pieces": [
+      6,
+      10,
+      8,
+      7,
+      8,
+      3,
+      10,
+      8
+    ],
+    "sourceId": 0,
+    "solution": {
+      "positions": [
+        0,
+        1,
+        7,
+        3,
+        4,
+        null,
+        5,
+        6,
+        2
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "initial": {
+      "positions": [
+        4,
+        0,
+        null,
+        1,
+        5,
+        7,
+        3,
+        6,
+        2
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "minSlides": 13,
+    "fingerprint": "slide:8,6,0,10,3,8,7,10,8",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 2
+      }
+    ]
+  },
+  {
+    "id": "slide-catalog-2-29",
+    "mode": "slide",
+    "tier": "Mittel",
+    "n": 3,
+    "name": "Goldene Wege",
+    "seed": 2310364,
+    "pieces": [
+      6,
+      14,
+      8,
+      5,
+      1,
+      3,
+      10,
+      8
+    ],
+    "sourceId": 5,
+    "solution": {
+      "positions": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        null,
+        5,
+        6,
+        7
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "initial": {
+      "positions": [
+        1,
+        null,
+        2,
+        5,
+        3,
+        7,
+        4,
+        0,
+        6
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "minSlides": 12,
+    "fingerprint": "slide:14,0,8,3,5,8,1,6,10",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 7
+      }
+    ]
+  },
+  {
+    "id": "slide-catalog-2-30",
+    "mode": "slide",
+    "tier": "Mittel",
+    "n": 3,
+    "name": "Neuer Horizont",
+    "seed": 2310377,
+    "pieces": [
+      6,
+      14,
+      8,
+      5,
+      5,
+      1,
+      3,
+      8
+    ],
+    "sourceId": 2,
+    "solution": {
+      "positions": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        null,
+        5,
+        6,
+        7
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "initial": {
+      "positions": [
+        1,
+        3,
+        2,
+        0,
+        7,
+        6,
+        null,
+        5,
+        4
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "minSlides": 11,
+    "fingerprint": "slide:14,5,8,6,8,3,0,1,5",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 4
+      }
+    ]
+  },
+  {
+    "id": "slide-catalog-3-21",
+    "mode": "slide",
+    "tier": "Schwer",
+    "n": 3,
+    "name": "Lichtgarten",
+    "seed": 2320260,
+    "pieces": [
+      6,
+      10,
+      12,
+      5,
+      5,
+      3,
+      8,
+      1
+    ],
+    "sourceId": 7,
+    "solution": {
+      "positions": [
+        0,
+        1,
+        2,
+        3,
+        null,
+        4,
+        5,
+        6,
+        7
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "initial": {
+      "positions": [
+        0,
+        7,
+        1,
+        null,
+        6,
+        5,
+        4,
+        3,
+        2
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "minSlides": 17,
+    "fingerprint": "slide:6,1,10,0,8,3,5,5,12",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 4
+      }
+    ]
+  },
+  {
+    "id": "slide-catalog-3-22",
+    "mode": "slide",
+    "tier": "Schwer",
+    "n": 3,
+    "name": "Stiller Morgen",
+    "seed": 2320273,
+    "pieces": [
+      6,
+      10,
+      12,
+      5,
+      5,
+      3,
+      8,
+      1
+    ],
+    "sourceId": 3,
+    "solution": {
+      "positions": [
+        0,
+        1,
+        2,
+        3,
+        null,
+        4,
+        5,
+        6,
+        7
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "initial": {
+      "positions": [
+        null,
+        7,
+        4,
+        0,
+        6,
+        2,
+        3,
+        5,
+        1
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "minSlides": 20,
+    "fingerprint": "slide:0,1,5,6,8,12,5,3,10",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 4
+      }
+    ]
+  },
+  {
+    "id": "slide-catalog-3-23",
+    "mode": "slide",
+    "tier": "Schwer",
+    "n": 3,
+    "name": "Sonnenpfad",
+    "seed": 2320286,
+    "pieces": [
+      6,
+      10,
+      12,
+      5,
+      5,
+      1,
+      2,
+      9
+    ],
+    "sourceId": 0,
+    "solution": {
+      "positions": [
+        0,
+        1,
+        2,
+        3,
+        null,
+        4,
+        5,
+        6,
+        7
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "initial": {
+      "positions": [
+        3,
+        2,
+        1,
+        0,
+        4,
+        7,
+        5,
+        null,
+        6
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "minSlides": 19,
+    "fingerprint": "slide:5,12,10,6,5,9,1,0,2",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 1
+      }
+    ]
+  },
+  {
+    "id": "slide-catalog-3-24",
+    "mode": "slide",
+    "tier": "Schwer",
+    "n": 3,
+    "name": "Kleine Strahlen",
+    "seed": 2320299,
+    "pieces": [
+      6,
+      10,
+      12,
+      5,
+      5,
+      1,
+      2,
+      9
+    ],
+    "sourceId": 5,
+    "solution": {
+      "positions": [
+        0,
+        1,
+        2,
+        4,
+        null,
+        3,
+        5,
+        6,
+        7
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "initial": {
+      "positions": [
+        6,
+        5,
+        1,
+        4,
+        0,
+        3,
+        null,
+        7,
+        2
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "minSlides": 18,
+    "fingerprint": "slide:2,1,10,5,6,5,0,9,12",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 4
+      }
+    ]
+  },
+  {
+    "id": "slide-catalog-3-25",
+    "mode": "slide",
+    "tier": "Schwer",
+    "n": 3,
+    "name": "Weite Bögen",
+    "seed": 2320312,
+    "pieces": [
+      6,
+      10,
+      12,
+      5,
+      5,
+      3,
+      8,
+      1
+    ],
+    "sourceId": 2,
+    "solution": {
+      "positions": [
+        0,
+        1,
+        2,
+        4,
+        null,
+        3,
+        5,
+        6,
+        7
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "initial": {
+      "positions": [
+        6,
+        2,
+        3,
+        1,
+        4,
+        7,
+        5,
+        null,
+        0
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "minSlides": 17,
+    "fingerprint": "slide:8,12,5,10,5,1,3,0,6",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 6
+      }
+    ]
+  },
+  {
+    "id": "slide-catalog-3-26",
+    "mode": "slide",
+    "tier": "Schwer",
+    "n": 3,
+    "name": "Lichtquelle im Wald",
+    "seed": 2320325,
+    "pieces": [
+      6,
+      10,
+      12,
+      1,
+      5,
+      2,
+      10,
+      9
+    ],
+    "sourceId": 7,
+    "solution": {
+      "positions": [
+        0,
+        6,
+        2,
+        3,
+        null,
+        4,
+        5,
+        1,
+        7
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "initial": {
+      "positions": [
+        2,
+        1,
+        null,
+        6,
+        7,
+        0,
+        5,
+        3,
+        4
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "minSlides": 20,
+    "fingerprint": "slide:12,10,0,10,9,6,2,1,5",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 3
+      }
+    ]
+  },
+  {
+    "id": "slide-catalog-3-27",
+    "mode": "slide",
+    "tier": "Schwer",
+    "n": 3,
+    "name": "Sanfter Strom",
+    "seed": 2320338,
+    "pieces": [
+      6,
+      10,
+      12,
+      5,
+      5,
+      3,
+      8,
+      1
+    ],
+    "sourceId": 4,
+    "solution": {
+      "positions": [
+        0,
+        1,
+        2,
+        4,
+        null,
+        3,
+        5,
+        6,
+        7
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "initial": {
+      "positions": [
+        3,
+        1,
+        7,
+        4,
+        6,
+        null,
+        0,
+        5,
+        2
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "minSlides": 19,
+    "fingerprint": "slide:5,10,1,5,8,0,6,3,12",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 3
+      }
+    ]
+  },
+  {
+    "id": "slide-catalog-3-28",
+    "mode": "slide",
+    "tier": "Schwer",
+    "n": 3,
+    "name": "Abendstern",
+    "seed": 2320351,
+    "pieces": [
+      6,
+      10,
+      12,
+      5,
+      5,
+      3,
+      8,
+      1
+    ],
+    "sourceId": 1,
+    "solution": {
+      "positions": [
+        0,
+        1,
+        2,
+        4,
+        null,
+        3,
+        5,
+        6,
+        7
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "initial": {
+      "positions": [
+        6,
+        3,
+        null,
+        4,
+        0,
+        2,
+        5,
+        7,
+        1
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "minSlides": 18,
+    "fingerprint": "slide:8,5,0,5,6,12,3,1,10",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 1
+      }
+    ]
+  },
+  {
+    "id": "slide-catalog-3-29",
+    "mode": "slide",
+    "tier": "Schwer",
+    "n": 3,
+    "name": "Goldene Wege",
+    "seed": 2320364,
+    "pieces": [
+      6,
+      10,
+      12,
+      5,
+      5,
+      1,
+      2,
+      9
+    ],
+    "sourceId": 6,
+    "solution": {
+      "positions": [
+        0,
+        1,
+        2,
+        3,
+        null,
+        4,
+        5,
+        6,
+        7
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "initial": {
+      "positions": [
+        1,
+        0,
+        5,
+        null,
+        2,
+        3,
+        6,
+        7,
+        4
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "minSlides": 21,
+    "fingerprint": "slide:10,6,1,0,12,5,2,9,5",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 3
+      }
+    ]
+  },
+  {
+    "id": "slide-catalog-3-30",
+    "mode": "slide",
+    "tier": "Schwer",
+    "n": 3,
+    "name": "Neuer Horizont",
+    "seed": 2320377,
+    "pieces": [
+      6,
+      10,
+      12,
+      5,
+      5,
+      1,
+      2,
+      9
+    ],
+    "sourceId": 3,
+    "solution": {
+      "positions": [
+        0,
+        1,
+        2,
+        3,
+        null,
+        4,
+        5,
+        6,
+        7
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "initial": {
+      "positions": [
+        null,
+        1,
+        5,
+        7,
+        6,
+        2,
+        3,
+        0,
+        4
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    "minSlides": 20,
+    "fingerprint": "slide:0,10,1,9,2,12,5,6,5",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 6
+      }
+    ]
+  },
+  {
+    "id": "rotate-catalog-1-21",
+    "mode": "rotate",
+    "tier": "Leicht",
+    "n": 3,
+    "name": "Lichtgarten",
+    "seed": 2400260,
+    "pieces": [
+      6,
+      8,
+      4,
+      5,
+      5,
+      3,
+      10,
+      9
+    ],
+    "sourceId": 0,
+    "solution": {
+      "positions": [
+        1,
+        2,
+        0,
+        4,
+        null,
+        3,
+        7,
+        6,
+        5
+      ],
+      "turns": [
+        1,
+        3,
+        3,
+        0,
+        0,
+        3,
+        0,
+        1
+      ]
+    },
+    "initial": {
+      "positions": [
+        1,
+        0,
+        3,
+        4,
+        2,
+        null,
+        7,
+        6,
+        5
+      ],
+      "turns": [
+        3,
+        2,
+        2,
+        1,
+        0,
+        2,
+        0,
+        0
+      ]
+    },
+    "minSlides": 3,
+    "fingerprint": "rotate:8,6,5,5,4,0,9,10,3",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 3
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 7
+      }
+    ]
+  },
+  {
+    "id": "rotate-catalog-1-22",
+    "mode": "rotate",
+    "tier": "Leicht",
+    "n": 3,
+    "name": "Stiller Morgen",
+    "seed": 2400273,
+    "pieces": [
+      6,
+      10,
+      12,
+      1,
+      5,
+      2,
+      10,
+      9
+    ],
+    "sourceId": 5,
+    "solution": {
+      "positions": [
+        0,
+        6,
+        5,
+        4,
+        null,
+        3,
+        2,
+        1,
+        7
+      ],
+      "turns": [
+        0,
+        0,
+        2,
+        2,
+        0,
+        2,
+        0,
+        0
+      ]
+    },
+    "initial": {
+      "positions": [
+        0,
+        6,
+        5,
+        null,
+        1,
+        3,
+        4,
+        2,
+        7
+      ],
+      "turns": [
+        3,
+        1,
+        0,
+        1,
+        1,
+        2,
+        0,
+        0
+      ]
+    },
+    "minSlides": 3,
+    "fingerprint": "rotate:6,10,2,0,10,1,5,12,9",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 3
+      },
+      {
+        "type": "turn",
+        "id": 4
+      }
+    ]
+  },
+  {
+    "id": "rotate-catalog-1-23",
+    "mode": "rotate",
+    "tier": "Leicht",
+    "n": 3,
+    "name": "Sonnenpfad",
+    "seed": 2400286,
+    "pieces": [
+      6,
+      8,
+      2,
+      15,
+      8,
+      2,
+      11,
+      8
+    ],
+    "sourceId": 3,
+    "solution": {
+      "positions": [
+        7,
+        2,
+        null,
+        6,
+        3,
+        5,
+        1,
+        0,
+        4
+      ],
+      "turns": [
+        3,
+        1,
+        1,
+        0,
+        0,
+        2,
+        1,
+        3
+      ]
+    },
+    "initial": {
+      "positions": [
+        null,
+        7,
+        2,
+        6,
+        3,
+        5,
+        1,
+        0,
+        4
+      ],
+      "turns": [
+        1,
+        3,
+        2,
+        2,
+        0,
+        0,
+        0,
+        2
+      ]
+    },
+    "minSlides": 2,
+    "fingerprint": "rotate:0,8,2,11,15,2,8,6,8",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 6
+      },
+      {
+        "type": "turn",
+        "id": 7
+      }
+    ]
+  },
+  {
+    "id": "rotate-catalog-1-24",
+    "mode": "rotate",
+    "tier": "Leicht",
+    "n": 3,
+    "name": "Kleine Strahlen",
+    "seed": 2400299,
+    "pieces": [
+      6,
+      10,
+      12,
+      5,
+      5,
+      1,
+      2,
+      9
+    ],
+    "sourceId": 7,
+    "solution": {
+      "positions": [
+        0,
+        1,
+        2,
+        4,
+        null,
+        3,
+        7,
+        6,
+        5
+      ],
+      "turns": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2,
+        1
+      ]
+    },
+    "initial": {
+      "positions": [
+        0,
+        1,
+        null,
+        4,
+        3,
+        2,
+        7,
+        6,
+        5
+      ],
+      "turns": [
+        2,
+        2,
+        3,
+        1,
+        1,
+        2,
+        2,
+        3
+      ]
+    },
+    "minSlides": 2,
+    "fingerprint": "rotate:6,10,0,5,5,12,9,2,1",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 3
+      },
+      {
+        "type": "turn",
+        "id": 4
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 7
+      },
+      {
+        "type": "turn",
+        "id": 7
+      }
+    ]
+  },
+  {
+    "id": "rotate-catalog-1-25",
+    "mode": "rotate",
+    "tier": "Leicht",
+    "n": 3,
+    "name": "Weite Bögen",
+    "seed": 2400312,
+    "pieces": [
+      6,
+      10,
+      12,
+      5,
+      5,
+      1,
+      2,
+      9
+    ],
+    "sourceId": 4,
+    "solution": {
+      "positions": [
+        7,
+        4,
+        0,
+        6,
+        null,
+        3,
+        5,
+        1,
+        2
+      ],
+      "turns": [
+        1,
+        0,
+        1,
+        0,
+        1,
+        1,
+        3,
+        2
+      ]
+    },
+    "initial": {
+      "positions": [
+        7,
+        0,
+        3,
+        6,
+        4,
+        null,
+        5,
+        1,
+        2
+      ],
+      "turns": [
+        2,
+        1,
+        0,
+        1,
+        1,
+        2,
+        3,
+        2
+      ]
+    },
+    "minSlides": 3,
+    "fingerprint": "rotate:9,6,5,2,5,0,1,10,12",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 3
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 5
+      }
+    ]
+  },
+  {
+    "id": "rotate-catalog-1-26",
+    "mode": "rotate",
+    "tier": "Leicht",
+    "n": 3,
+    "name": "Lichtquelle im Wald",
+    "seed": 2400325,
+    "pieces": [
+      6,
+      10,
+      8,
+      5,
+      4,
+      3,
+      11,
+      8
+    ],
+    "sourceId": 2,
+    "solution": {
+      "positions": [
+        null,
+        7,
+        5,
+        4,
+        3,
+        6,
+        2,
+        1,
+        0
+      ],
+      "turns": [
+        2,
+        0,
+        2,
+        1,
+        3,
+        2,
+        3,
+        2
+      ]
+    },
+    "initial": {
+      "positions": [
+        4,
+        7,
+        5,
+        2,
+        3,
+        6,
+        1,
+        null,
+        0
+      ],
+      "turns": [
+        1,
+        3,
+        1,
+        1,
+        2,
+        0,
+        2,
+        2
+      ]
+    },
+    "minSlides": 3,
+    "fingerprint": "rotate:4,8,3,8,5,11,10,0,6",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 4
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 6
+      }
+    ]
+  },
+  {
+    "id": "rotate-catalog-1-27",
+    "mode": "rotate",
+    "tier": "Leicht",
+    "n": 3,
+    "name": "Sanfter Strom",
+    "seed": 2400338,
+    "pieces": [
+      6,
+      10,
+      12,
+      5,
+      1,
+      3,
+      10,
+      8
+    ],
+    "sourceId": 6,
+    "solution": {
+      "positions": [
+        5,
+        3,
+        0,
+        1,
+        null,
+        6,
+        7,
+        4,
+        2
+      ],
+      "turns": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    },
+    "initial": {
+      "positions": [
+        5,
+        3,
+        0,
+        1,
+        4,
+        6,
+        7,
+        2,
+        null
+      ],
+      "turns": [
+        1,
+        3,
+        3,
+        0,
+        2,
+        2,
+        0,
+        1
+      ]
+    },
+    "minSlides": 2,
+    "fingerprint": "rotate:3,5,6,10,1,10,8,12,0",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 3
+      },
+      {
+        "type": "turn",
+        "id": 4
+      },
+      {
+        "type": "turn",
+        "id": 4
+      },
+      {
+        "type": "turn",
+        "id": 4
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 6
+      }
+    ]
+  },
+  {
+    "id": "rotate-catalog-1-28",
+    "mode": "rotate",
+    "tier": "Leicht",
+    "n": 3,
+    "name": "Abendstern",
+    "seed": 2400351,
+    "pieces": [
+      6,
+      10,
+      12,
+      5,
+      1,
+      3,
+      10,
+      8
+    ],
+    "sourceId": 3,
+    "solution": {
+      "positions": [
+        4,
+        7,
+        2,
+        6,
+        null,
+        3,
+        5,
+        1,
+        0
+      ],
+      "turns": [
+        2,
+        0,
+        0,
+        0,
+        2,
+        0,
+        1,
+        2
+      ]
+    },
+    "initial": {
+      "positions": [
+        4,
+        7,
+        2,
+        6,
+        1,
+        3,
+        null,
+        5,
+        0
+      ],
+      "turns": [
+        1,
+        1,
+        1,
+        0,
+        2,
+        2,
+        1,
+        1
+      ]
+    },
+    "minSlides": 2,
+    "fingerprint": "rotate:1,8,12,10,10,5,0,3,6",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 7
+      }
+    ]
+  },
+  {
+    "id": "rotate-catalog-1-29",
+    "mode": "rotate",
+    "tier": "Leicht",
+    "n": 3,
+    "name": "Goldene Wege",
+    "seed": 2400364,
+    "pieces": [
+      6,
+      10,
+      12,
+      5,
+      1,
+      3,
+      10,
+      8
+    ],
+    "sourceId": 0,
+    "solution": {
+      "positions": [
+        4,
+        1,
+        2,
+        7,
+        null,
+        3,
+        5,
+        6,
+        0
+      ],
+      "turns": [
+        2,
+        0,
+        0,
+        0,
+        1,
+        0,
+        0,
+        3
+      ]
+    },
+    "initial": {
+      "positions": [
+        4,
+        2,
+        3,
+        7,
+        1,
+        null,
+        5,
+        6,
+        0
+      ],
+      "turns": [
+        0,
+        0,
+        2,
+        0,
+        2,
+        2,
+        2,
+        0
+      ]
+    },
+    "minSlides": 3,
+    "fingerprint": "rotate:1,12,5,8,10,0,3,10,6",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 4
+      },
+      {
+        "type": "turn",
+        "id": 4
+      },
+      {
+        "type": "turn",
+        "id": 4
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 7
+      },
+      {
+        "type": "turn",
+        "id": 7
+      },
+      {
+        "type": "turn",
+        "id": 7
+      }
+    ]
+  },
+  {
+    "id": "rotate-catalog-1-30",
+    "mode": "rotate",
+    "tier": "Leicht",
+    "n": 3,
+    "name": "Neuer Horizont",
+    "seed": 2400377,
+    "pieces": [
+      6,
+      8,
+      4,
+      5,
+      5,
+      3,
+      10,
+      9
+    ],
+    "sourceId": 4,
+    "solution": {
+      "positions": [
+        2,
+        1,
+        5,
+        4,
+        null,
+        6,
+        0,
+        3,
+        7
+      ],
+      "turns": [
+        3,
+        2,
+        0,
+        1,
+        0,
+        2,
+        1,
+        0
+      ]
+    },
+    "initial": {
+      "positions": [
+        2,
+        1,
+        5,
+        4,
+        3,
+        null,
+        0,
+        7,
+        6
+      ],
+      "turns": [
+        0,
+        3,
+        0,
+        0,
+        3,
+        2,
+        3,
+        0
+      ]
+    },
+    "minSlides": 3,
+    "fingerprint": "rotate:4,8,3,5,5,0,6,9,10",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 3
+      },
+      {
+        "type": "turn",
+        "id": 4
+      }
+    ]
+  },
+  {
+    "id": "rotate-catalog-2-21",
+    "mode": "rotate",
+    "tier": "Mittel",
+    "n": 3,
+    "name": "Lichtgarten",
+    "seed": 2410260,
+    "pieces": [
+      2,
+      14,
+      8,
+      7,
+      8,
+      2,
+      11,
+      8
+    ],
+    "sourceId": 1,
+    "solution": {
+      "positions": [
+        4,
+        5,
+        0,
+        6,
+        1,
+        3,
+        2,
+        null,
+        7
+      ],
+      "turns": [
+        1,
+        2,
+        1,
+        2,
+        3,
+        1,
+        1,
+        1
+      ]
+    },
+    "initial": {
+      "positions": [
+        4,
+        null,
+        5,
+        6,
+        1,
+        0,
+        2,
+        7,
+        3
+      ],
+      "turns": [
+        0,
+        0,
+        3,
+        2,
+        0,
+        0,
+        0,
+        3
+      ]
+    },
+    "minSlides": 4,
+    "fingerprint": "rotate:8,0,2,11,14,2,8,8,7",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 4
+      },
+      {
+        "type": "turn",
+        "id": 4
+      },
+      {
+        "type": "turn",
+        "id": 4
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 6
+      },
+      {
+        "type": "turn",
+        "id": 7
+      },
+      {
+        "type": "turn",
+        "id": 7
+      }
+    ]
+  },
+  {
+    "id": "rotate-catalog-2-22",
+    "mode": "rotate",
+    "tier": "Mittel",
+    "n": 3,
+    "name": "Stiller Morgen",
+    "seed": 2410273,
+    "pieces": [
+      2,
+      14,
+      8,
+      7,
+      12,
+      2,
+      9,
+      1
+    ],
+    "sourceId": 6,
+    "solution": {
+      "positions": [
+        2,
+        6,
+        null,
+        0,
+        1,
+        7,
+        5,
+        3,
+        4
+      ],
+      "turns": [
+        0,
+        1,
+        2,
+        3,
+        1,
+        0,
+        3,
+        2
+      ]
+    },
+    "initial": {
+      "positions": [
+        2,
+        6,
+        7,
+        0,
+        null,
+        4,
+        5,
+        1,
+        3
+      ],
+      "turns": [
+        0,
+        3,
+        0,
+        2,
+        0,
+        0,
+        0,
+        3
+      ]
+    },
+    "minSlides": 4,
+    "fingerprint": "rotate:8,9,1,2,0,12,2,14,7",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 3
+      },
+      {
+        "type": "turn",
+        "id": 4
+      },
+      {
+        "type": "turn",
+        "id": 6
+      },
+      {
+        "type": "turn",
+        "id": 6
+      },
+      {
+        "type": "turn",
+        "id": 6
+      },
+      {
+        "type": "turn",
+        "id": 7
+      },
+      {
+        "type": "turn",
+        "id": 7
+      },
+      {
+        "type": "turn",
+        "id": 7
+      }
+    ]
+  },
+  {
+    "id": "rotate-catalog-2-23",
+    "mode": "rotate",
+    "tier": "Mittel",
+    "n": 3,
+    "name": "Sonnenpfad",
+    "seed": 2410286,
+    "pieces": [
+      2,
+      14,
+      8,
+      5,
+      4,
+      2,
+      11,
+      9
+    ],
+    "sourceId": 3,
+    "solution": {
+      "positions": [
+        2,
+        null,
+        5,
+        1,
+        3,
+        6,
+        7,
+        0,
+        4
+      ],
+      "turns": [
+        2,
+        3,
+        3,
+        1,
+        2,
+        1,
+        3,
+        1
+      ]
+    },
+    "initial": {
+      "positions": [
+        2,
+        3,
+        5,
+        7,
+        1,
+        6,
+        0,
+        4,
+        null
+      ],
+      "turns": [
+        3,
+        2,
+        2,
+        2,
+        1,
+        0,
+        1,
+        2
+      ]
+    },
+    "minSlides": 5,
+    "fingerprint": "rotate:8,5,2,9,14,11,2,4,0",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 3
+      },
+      {
+        "type": "turn",
+        "id": 4
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 6
+      },
+      {
+        "type": "turn",
+        "id": 6
+      },
+      {
+        "type": "turn",
+        "id": 7
+      },
+      {
+        "type": "turn",
+        "id": 7
+      },
+      {
+        "type": "turn",
+        "id": 7
+      }
+    ]
+  },
+  {
+    "id": "rotate-catalog-2-24",
+    "mode": "rotate",
+    "tier": "Mittel",
+    "n": 3,
+    "name": "Kleine Strahlen",
+    "seed": 2410299,
+    "pieces": [
+      2,
+      14,
+      8,
+      7,
+      8,
+      2,
+      11,
+      8
+    ],
+    "sourceId": 0,
+    "solution": {
+      "positions": [
+        2,
+        3,
+        7,
+        0,
+        1,
+        null,
+        4,
+        6,
+        5
+      ],
+      "turns": [
+        0,
+        1,
+        2,
+        1,
+        2,
+        2,
+        0,
+        0
+      ]
+    },
+    "initial": {
+      "positions": [
+        2,
+        3,
+        7,
+        4,
+        0,
+        1,
+        6,
+        5,
+        null
+      ],
+      "turns": [
+        3,
+        1,
+        3,
+        2,
+        1,
+        0,
+        2,
+        2
+      ]
+    },
+    "minSlides": 5,
+    "fingerprint": "rotate:8,7,8,8,2,14,11,2,0",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 3
+      },
+      {
+        "type": "turn",
+        "id": 3
+      },
+      {
+        "type": "turn",
+        "id": 3
+      },
+      {
+        "type": "turn",
+        "id": 4
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 6
+      },
+      {
+        "type": "turn",
+        "id": 6
+      },
+      {
+        "type": "turn",
+        "id": 7
+      },
+      {
+        "type": "turn",
+        "id": 7
+      }
+    ]
+  },
+  {
+    "id": "rotate-catalog-2-25",
+    "mode": "rotate",
+    "tier": "Mittel",
+    "n": 3,
+    "name": "Weite Bögen",
+    "seed": 2410312,
+    "pieces": [
+      2,
+      14,
+      12,
+      5,
+      5,
+      2,
+      9,
+      1
+    ],
+    "sourceId": 5,
+    "solution": {
+      "positions": [
+        0,
+        null,
+        5,
+        4,
+        7,
+        3,
+        2,
+        1,
+        6
+      ],
+      "turns": [
+        1,
+        2,
+        2,
+        0,
+        0,
+        1,
+        0,
+        2
+      ]
+    },
+    "initial": {
+      "positions": [
+        0,
+        null,
+        3,
+        4,
+        5,
+        7,
+        2,
+        1,
+        6
+      ],
+      "turns": [
+        2,
+        3,
+        1,
+        2,
+        1,
+        0,
+        3,
+        1
+      ]
+    },
+    "minSlides": 4,
+    "fingerprint": "rotate:2,0,5,5,2,1,12,14,9",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 4
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 6
+      },
+      {
+        "type": "turn",
+        "id": 7
+      }
+    ]
+  },
+  {
+    "id": "rotate-catalog-2-26",
+    "mode": "rotate",
+    "tier": "Mittel",
+    "n": 3,
+    "name": "Lichtquelle im Wald",
+    "seed": 2410325,
+    "pieces": [
+      2,
+      14,
+      12,
+      5,
+      1,
+      2,
+      11,
+      8
+    ],
+    "sourceId": 2,
+    "solution": {
+      "positions": [
+        null,
+        5,
+        0,
+        4,
+        6,
+        1,
+        7,
+        3,
+        2
+      ],
+      "turns": [
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        0,
+        2
+      ]
+    },
+    "initial": {
+      "positions": [
+        5,
+        6,
+        0,
+        7,
+        4,
+        1,
+        null,
+        3,
+        2
+      ],
+      "turns": [
+        2,
+        2,
+        2,
+        2,
+        1,
+        0,
+        0,
+        1
+      ]
+    },
+    "minSlides": 4,
+    "fingerprint": "rotate:2,11,2,8,1,14,0,5,12",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 3
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 7
+      }
+    ]
+  },
+  {
+    "id": "rotate-catalog-2-27",
+    "mode": "rotate",
+    "tier": "Mittel",
+    "n": 3,
+    "name": "Sanfter Strom",
+    "seed": 2410338,
+    "pieces": [
+      2,
+      14,
+      12,
+      5,
+      5,
+      2,
+      9,
+      1
+    ],
+    "sourceId": 7,
+    "solution": {
+      "positions": [
+        7,
+        null,
+        5,
+        3,
+        0,
+        4,
+        6,
+        1,
+        2
+      ],
+      "turns": [
+        1,
+        2,
+        1,
+        0,
+        0,
+        1,
+        1,
+        2
+      ]
+    },
+    "initial": {
+      "positions": [
+        3,
+        7,
+        5,
+        0,
+        1,
+        4,
+        null,
+        6,
+        2
+      ],
+      "turns": [
+        2,
+        1,
+        0,
+        1,
+        2,
+        0,
+        0,
+        1
+      ]
+    },
+    "minSlides": 5,
+    "fingerprint": "rotate:5,1,2,2,14,5,0,9,12",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 3
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 6
+      },
+      {
+        "type": "turn",
+        "id": 7
+      }
+    ]
+  },
+  {
+    "id": "rotate-catalog-2-28",
+    "mode": "rotate",
+    "tier": "Mittel",
+    "n": 3,
+    "name": "Abendstern",
+    "seed": 2410351,
+    "pieces": [
+      2,
+      14,
+      8,
+      7,
+      12,
+      2,
+      9,
+      1
+    ],
+    "sourceId": 4,
+    "solution": {
+      "positions": [
+        7,
+        1,
+        2,
+        4,
+        3,
+        null,
+        5,
+        6,
+        0
+      ],
+      "turns": [
+        2,
+        0,
+        0,
+        2,
+        3,
+        3,
+        1,
+        1
+      ]
+    },
+    "initial": {
+      "positions": [
+        4,
+        7,
+        1,
+        5,
+        3,
+        2,
+        null,
+        6,
+        0
+      ],
+      "turns": [
+        1,
+        0,
+        1,
+        1,
+        2,
+        0,
+        1,
+        0
+      ]
+    },
+    "minSlides": 5,
+    "fingerprint": "rotate:12,1,14,2,7,8,0,9,2",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 3
+      },
+      {
+        "type": "turn",
+        "id": 4
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 7
+      }
+    ]
+  },
+  {
+    "id": "rotate-catalog-2-29",
+    "mode": "rotate",
+    "tier": "Mittel",
+    "n": 3,
+    "name": "Goldene Wege",
+    "seed": 2410364,
+    "pieces": [
+      2,
+      12,
+      4,
+      7,
+      13,
+      2,
+      9,
+      1
+    ],
+    "sourceId": 1,
+    "solution": {
+      "positions": [
+        5,
+        6,
+        7,
+        4,
+        3,
+        2,
+        1,
+        0,
+        null
+      ],
+      "turns": [
+        2,
+        2,
+        1,
+        3,
+        2,
+        1,
+        2,
+        3
+      ]
+    },
+    "initial": {
+      "positions": [
+        null,
+        5,
+        6,
+        4,
+        3,
+        7,
+        1,
+        0,
+        2
+      ],
+      "turns": [
+        1,
+        3,
+        3,
+        1,
+        2,
+        0,
+        2,
+        0
+      ]
+    },
+    "minSlides": 4,
+    "fingerprint": "rotate:0,2,9,13,7,1,12,2,4",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 3
+      },
+      {
+        "type": "turn",
+        "id": 3
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 7
+      },
+      {
+        "type": "turn",
+        "id": 7
+      },
+      {
+        "type": "turn",
+        "id": 7
+      }
+    ]
+  },
+  {
+    "id": "rotate-catalog-2-30",
+    "mode": "rotate",
+    "tier": "Mittel",
+    "n": 3,
+    "name": "Neuer Horizont",
+    "seed": 2410377,
+    "pieces": [
+      2,
+      14,
+      8,
+      7,
+      12,
+      2,
+      9,
+      1
+    ],
+    "sourceId": 6,
+    "solution": {
+      "positions": [
+        5,
+        1,
+        7,
+        2,
+        3,
+        4,
+        null,
+        0,
+        6
+      ],
+      "turns": [
+        0,
+        0,
+        2,
+        3,
+        0,
+        0,
+        0,
+        3
+      ]
+    },
+    "initial": {
+      "positions": [
+        5,
+        1,
+        7,
+        0,
+        2,
+        4,
+        null,
+        3,
+        6
+      ],
+      "turns": [
+        0,
+        1,
+        0,
+        1,
+        2,
+        0,
+        3,
+        3
+      ]
+    },
+    "minSlides": 4,
+    "fingerprint": "rotate:2,14,1,2,8,12,0,7,9",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 3
+      },
+      {
+        "type": "turn",
+        "id": 3
+      },
+      {
+        "type": "turn",
+        "id": 4
+      },
+      {
+        "type": "turn",
+        "id": 4
+      },
+      {
+        "type": "turn",
+        "id": 6
+      }
+    ]
+  },
+  {
+    "id": "rotate-catalog-3-21",
+    "mode": "rotate",
+    "tier": "Schwer",
+    "n": 3,
+    "name": "Lichtgarten",
+    "seed": 2420260,
+    "pieces": [
+      4,
+      4,
+      7,
+      10,
+      9,
+      3,
+      10,
+      8
+    ],
+    "sourceId": 3,
+    "solution": {
+      "positions": [
+        7,
+        2,
+        4,
+        null,
+        0,
+        6,
+        1,
+        3,
+        5
+      ],
+      "turns": [
+        2,
+        3,
+        1,
+        0,
+        3,
+        3,
+        1,
+        2
+      ]
+    },
+    "initial": {
+      "positions": [
+        2,
+        null,
+        4,
+        3,
+        0,
+        6,
+        7,
+        1,
+        5
+      ],
+      "turns": [
+        0,
+        3,
+        0,
+        3,
+        0,
+        2,
+        0,
+        3
+      ]
+    },
+    "minSlides": 8,
+    "fingerprint": "rotate:7,0,9,10,4,10,8,4,3",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 3
+      },
+      {
+        "type": "turn",
+        "id": 4
+      },
+      {
+        "type": "turn",
+        "id": 4
+      },
+      {
+        "type": "turn",
+        "id": 4
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 6
+      },
+      {
+        "type": "turn",
+        "id": 7
+      },
+      {
+        "type": "turn",
+        "id": 7
+      },
+      {
+        "type": "turn",
+        "id": 7
+      }
+    ]
+  },
+  {
+    "id": "rotate-catalog-3-22",
+    "mode": "rotate",
+    "tier": "Schwer",
+    "n": 3,
+    "name": "Stiller Morgen",
+    "seed": 2420273,
+    "pieces": [
+      4,
+      4,
+      7,
+      14,
+      13,
+      1,
+      1,
+      1
+    ],
+    "sourceId": 0,
+    "solution": {
+      "positions": [
+        6,
+        3,
+        5,
+        null,
+        2,
+        7,
+        1,
+        4,
+        0
+      ],
+      "turns": [
+        1,
+        3,
+        0,
+        0,
+        1,
+        3,
+        1,
+        3
+      ]
+    },
+    "initial": {
+      "positions": [
+        3,
+        2,
+        5,
+        6,
+        null,
+        0,
+        1,
+        7,
+        4
+      ],
+      "turns": [
+        0,
+        1,
+        1,
+        3,
+        0,
+        2,
+        0,
+        2
+      ]
+    },
+    "minSlides": 7,
+    "fingerprint": "rotate:14,7,1,1,0,4,4,1,13",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 3
+      },
+      {
+        "type": "turn",
+        "id": 4
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 6
+      },
+      {
+        "type": "turn",
+        "id": 7
+      }
+    ]
+  },
+  {
+    "id": "rotate-catalog-3-23",
+    "mode": "rotate",
+    "tier": "Schwer",
+    "n": 3,
+    "name": "Sonnenpfad",
+    "seed": 2420286,
+    "pieces": [
+      2,
+      12,
+      2,
+      15,
+      12,
+      2,
+      9,
+      1
+    ],
+    "sourceId": 4,
+    "solution": {
+      "positions": [
+        2,
+        6,
+        7,
+        0,
+        3,
+        1,
+        null,
+        4,
+        5
+      ],
+      "turns": [
+        0,
+        1,
+        0,
+        0,
+        2,
+        2,
+        3,
+        2
+      ]
+    },
+    "initial": {
+      "positions": [
+        2,
+        7,
+        1,
+        null,
+        0,
+        6,
+        4,
+        3,
+        5
+      ],
+      "turns": [
+        0,
+        0,
+        3,
+        3,
+        1,
+        2,
+        1,
+        2
+      ]
+    },
+    "minSlides": 7,
+    "fingerprint": "rotate:2,1,12,0,2,9,12,15,2",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 4
+      },
+      {
+        "type": "turn",
+        "id": 6
+      },
+      {
+        "type": "turn",
+        "id": 6
+      }
+    ]
+  },
+  {
+    "id": "rotate-catalog-3-24",
+    "mode": "rotate",
+    "tier": "Schwer",
+    "n": 3,
+    "name": "Kleine Strahlen",
+    "seed": 2420299,
+    "pieces": [
+      6,
+      8,
+      7,
+      12,
+      4,
+      1,
+      3,
+      9
+    ],
+    "sourceId": 1,
+    "solution": {
+      "positions": [
+        1,
+        7,
+        6,
+        2,
+        3,
+        5,
+        0,
+        4,
+        null
+      ],
+      "turns": [
+        3,
+        3,
+        0,
+        1,
+        1,
+        0,
+        2,
+        2
+      ]
+    },
+    "initial": {
+      "positions": [
+        1,
+        7,
+        6,
+        3,
+        5,
+        4,
+        2,
+        0,
+        null
+      ],
+      "turns": [
+        3,
+        3,
+        0,
+        3,
+        1,
+        2,
+        2,
+        1
+      ]
+    },
+    "minSlides": 6,
+    "fingerprint": "rotate:8,9,3,12,1,4,7,6,0",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "turn",
+        "id": 3
+      },
+      {
+        "type": "turn",
+        "id": 3
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 7
+      }
+    ]
+  },
+  {
+    "id": "rotate-catalog-3-25",
+    "mode": "rotate",
+    "tier": "Schwer",
+    "n": 3,
+    "name": "Weite Bögen",
+    "seed": 2420312,
+    "pieces": [
+      4,
+      4,
+      7,
+      15,
+      12,
+      1,
+      1,
+      1
+    ],
+    "sourceId": 6,
+    "solution": {
+      "positions": [
+        0,
+        2,
+        1,
+        5,
+        3,
+        6,
+        7,
+        4,
+        null
+      ],
+      "turns": [
+        3,
+        1,
+        1,
+        0,
+        1,
+        1,
+        3,
+        1
+      ]
+    },
+    "initial": {
+      "positions": [
+        0,
+        1,
+        3,
+        7,
+        5,
+        2,
+        null,
+        4,
+        6
+      ],
+      "turns": [
+        3,
+        2,
+        1,
+        3,
+        1,
+        2,
+        3,
+        1
+      ]
+    },
+    "minSlides": 8,
+    "fingerprint": "rotate:4,4,15,1,1,7,0,12,1",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 5
+      }
+    ]
+  },
+  {
+    "id": "rotate-catalog-3-26",
+    "mode": "rotate",
+    "tier": "Schwer",
+    "n": 3,
+    "name": "Lichtquelle im Wald",
+    "seed": 2420325,
+    "pieces": [
+      4,
+      4,
+      7,
+      11,
+      12,
+      3,
+      8,
+      1
+    ],
+    "sourceId": 3,
+    "solution": {
+      "positions": [
+        null,
+        6,
+        1,
+        0,
+        3,
+        5,
+        4,
+        2,
+        7
+      ],
+      "turns": [
+        0,
+        0,
+        3,
+        1,
+        2,
+        3,
+        3,
+        3
+      ]
+    },
+    "initial": {
+      "positions": [
+        3,
+        0,
+        1,
+        4,
+        6,
+        5,
+        2,
+        null,
+        7
+      ],
+      "turns": [
+        3,
+        1,
+        3,
+        3,
+        1,
+        2,
+        0,
+        0
+      ]
+    },
+    "minSlides": 7,
+    "fingerprint": "rotate:11,4,4,12,8,3,7,0,1",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 3
+      },
+      {
+        "type": "turn",
+        "id": 3
+      },
+      {
+        "type": "turn",
+        "id": 4
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 6
+      },
+      {
+        "type": "turn",
+        "id": 6
+      },
+      {
+        "type": "turn",
+        "id": 6
+      },
+      {
+        "type": "turn",
+        "id": 7
+      },
+      {
+        "type": "turn",
+        "id": 7
+      },
+      {
+        "type": "turn",
+        "id": 7
+      }
+    ]
+  },
+  {
+    "id": "rotate-catalog-3-27",
+    "mode": "rotate",
+    "tier": "Schwer",
+    "n": 3,
+    "name": "Sanfter Strom",
+    "seed": 2420338,
+    "pieces": [
+      6,
+      8,
+      5,
+      6,
+      8,
+      3,
+      11,
+      8
+    ],
+    "sourceId": 0,
+    "solution": {
+      "positions": [
+        null,
+        7,
+        1,
+        5,
+        6,
+        2,
+        4,
+        0,
+        3
+      ],
+      "turns": [
+        3,
+        3,
+        0,
+        2,
+        1,
+        1,
+        3,
+        3
+      ]
+    },
+    "initial": {
+      "positions": [
+        5,
+        7,
+        2,
+        null,
+        1,
+        6,
+        4,
+        0,
+        3
+      ],
+      "turns": [
+        2,
+        3,
+        0,
+        2,
+        1,
+        2,
+        0,
+        0
+      ]
+    },
+    "minSlides": 7,
+    "fingerprint": "rotate:3,8,5,0,8,11,8,6,6",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 6
+      },
+      {
+        "type": "turn",
+        "id": 6
+      },
+      {
+        "type": "turn",
+        "id": 6
+      },
+      {
+        "type": "turn",
+        "id": 7
+      },
+      {
+        "type": "turn",
+        "id": 7
+      },
+      {
+        "type": "turn",
+        "id": 7
+      }
+    ]
+  },
+  {
+    "id": "rotate-catalog-3-28",
+    "mode": "rotate",
+    "tier": "Schwer",
+    "n": 3,
+    "name": "Abendstern",
+    "seed": 2420351,
+    "pieces": [
+      6,
+      12,
+      5,
+      7,
+      12,
+      1,
+      1,
+      1
+    ],
+    "sourceId": 5,
+    "solution": {
+      "positions": [
+        null,
+        5,
+        6,
+        1,
+        3,
+        0,
+        4,
+        2,
+        7
+      ],
+      "turns": [
+        2,
+        3,
+        1,
+        3,
+        2,
+        2,
+        2,
+        3
+      ]
+    },
+    "initial": {
+      "positions": [
+        null,
+        1,
+        6,
+        4,
+        5,
+        0,
+        2,
+        3,
+        7
+      ],
+      "turns": [
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        1,
+        3
+      ]
+    },
+    "minSlides": 6,
+    "fingerprint": "rotate:0,12,1,12,1,6,5,7,1",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 4
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 1
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 3
+      },
+      {
+        "type": "turn",
+        "id": 6
+      }
+    ]
+  },
+  {
+    "id": "rotate-catalog-3-29",
+    "mode": "rotate",
+    "tier": "Schwer",
+    "n": 3,
+    "name": "Goldene Wege",
+    "seed": 2420364,
+    "pieces": [
+      6,
+      12,
+      5,
+      3,
+      8,
+      3,
+      10,
+      8
+    ],
+    "sourceId": 2,
+    "solution": {
+      "positions": [
+        null,
+        0,
+        3,
+        4,
+        5,
+        6,
+        7,
+        2,
+        1
+      ],
+      "turns": [
+        0,
+        1,
+        1,
+        2,
+        2,
+        3,
+        1,
+        2
+      ]
+    },
+    "initial": {
+      "positions": [
+        null,
+        0,
+        3,
+        4,
+        5,
+        1,
+        7,
+        6,
+        2
+      ],
+      "turns": [
+        1,
+        1,
+        3,
+        2,
+        2,
+        2,
+        2,
+        3
+      ]
+    },
+    "minSlides": 8,
+    "fingerprint": "rotate:0,6,3,8,3,12,8,10,5",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 6
+      },
+      {
+        "type": "turn",
+        "id": 7
+      },
+      {
+        "type": "turn",
+        "id": 7
+      },
+      {
+        "type": "turn",
+        "id": 7
+      }
+    ]
+  },
+  {
+    "id": "rotate-catalog-3-30",
+    "mode": "rotate",
+    "tier": "Schwer",
+    "n": 3,
+    "name": "Neuer Horizont",
+    "seed": 2420377,
+    "pieces": [
+      6,
+      12,
+      5,
+      7,
+      8,
+      1,
+      3,
+      8
+    ],
+    "sourceId": 7,
+    "solution": {
+      "positions": [
+        7,
+        3,
+        1,
+        6,
+        0,
+        2,
+        4,
+        null,
+        5
+      ],
+      "turns": [
+        2,
+        0,
+        0,
+        1,
+        1,
+        0,
+        1,
+        2
+      ]
+    },
+    "initial": {
+      "positions": [
+        3,
+        1,
+        null,
+        7,
+        6,
+        0,
+        4,
+        5,
+        2
+      ],
+      "turns": [
+        1,
+        0,
+        1,
+        2,
+        2,
+        2,
+        3,
+        2
+      ]
+    },
+    "minSlides": 7,
+    "fingerprint": "rotate:7,12,0,8,3,6,8,1,5",
+    "witness": [
+      {
+        "type": "slide",
+        "id": 1
+      },
+      {
+        "type": "slide",
+        "id": 3
+      },
+      {
+        "type": "slide",
+        "id": 7
+      },
+      {
+        "type": "slide",
+        "id": 6
+      },
+      {
+        "type": "slide",
+        "id": 0
+      },
+      {
+        "type": "slide",
+        "id": 2
+      },
+      {
+        "type": "slide",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 0
+      },
+      {
+        "type": "turn",
+        "id": 2
+      },
+      {
+        "type": "turn",
+        "id": 3
+      },
+      {
+        "type": "turn",
+        "id": 3
+      },
+      {
+        "type": "turn",
+        "id": 3
+      },
+      {
+        "type": "turn",
+        "id": 4
+      },
+      {
+        "type": "turn",
+        "id": 4
+      },
+      {
+        "type": "turn",
+        "id": 4
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 5
+      },
+      {
+        "type": "turn",
+        "id": 6
+      },
+      {
+        "type": "turn",
+        "id": 6
+      }
+    ]
   }
 ]

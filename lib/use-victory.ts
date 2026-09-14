@@ -2,6 +2,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { victoryTimeline } from './victory-timing.mjs';
 import { readPreferences } from './preferences.mjs';
+import { haptic } from './haptics';
 
 export function useVictory(onSound: () => void, scope: string) {
   const [victory, show] = useState(false);
@@ -19,6 +20,7 @@ export function useVictory(onSound: () => void, scope: string) {
         glow: () => {
           glow(readPreferences().animations);
           sound.current();
+          haptic(true);
         },
         reveal: () => {
           glow(false);

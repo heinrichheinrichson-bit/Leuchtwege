@@ -1,9 +1,9 @@
 import type { Metadata } from 'next';
 import './globals.css';
 export const metadata: Metadata = {
-  title: 'Leuchtwege – ein ruhiges Drehpuzzle',
+  title: 'Leuchtwege',
   description:
-    'Drehe die Wege und verbinde das ganze Netz. Zwölf kleine Rätsel, ohne Zeitdruck.',
+    'Drehe und verschiebe die Wege. Verbinde das ganze Netz, ohne Zeitdruck.',
 };
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (

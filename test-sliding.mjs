@@ -13,8 +13,24 @@ import {
   restoreSliding,
 } from './lib/sliding.mjs';
 const levels = JSON.parse(readFileSync('lib/sliding-levels.json'));
-assert.equal(levels.length, 120);
-assert.equal(new Set(levels.map((l) => l.id)).size, 120);
+assert.equal(levels.length, 180);
+for (const l of levels.slice(120)) {
+  const ranges =
+    l.mode === 'slide'
+      ? [
+          [4, 7],
+          [10, 14],
+          [17, 21],
+        ]
+      : [
+          [2, 3],
+          [4, 5],
+          [6, 8],
+        ];
+  const [min, max] = ranges[['Leicht', 'Mittel', 'Schwer'].indexOf(l.tier)];
+  assert(l.minSlides >= min && l.minSlides <= max);
+}
+assert.equal(new Set(levels.map((l) => l.id)).size, 180);
 const legacy = levels.slice(0, 6).map(({ tier, minSlides, ...l }) => l);
 assert.equal(
   createHash('sha256').update(JSON.stringify(legacy)).digest('hex'),
@@ -23,12 +39,12 @@ assert.equal(
 );
 for (const mode of ['slide', 'rotate']) {
   const order = slidingOrder(levels, mode);
-  assert.equal(order.length, 60);
-  assert.equal(new Set(order).size, 60);
+  assert.equal(order.length, 90);
+  assert.equal(new Set(order).size, 90);
   for (const tier of ['Leicht', 'Mittel', 'Schwer'])
     assert.equal(
       levels.filter((l) => l.mode === mode && l.tier === tier).length,
-      20,
+      30,
     );
   for (let i = 1; i < order.length; i++)
     if (levels[order[i - 1]].tier === levels[order[i]].tier)
@@ -45,7 +61,7 @@ assert.equal(
           .join(','),
     ),
   ).size,
-  120,
+  180,
   'No repeated initial networks',
 );
 for (const l of levels) {
@@ -147,5 +163,5 @@ assert(slidingStatus(sourceFixture, moved).litIds.has(0));
 assert(slidingStatus(sourceFixture, start).open > 0);
 assert(!slidingStatus(sourceFixture, start).solved);
 console.log(
-  'PASS: 120 reachable puzzles; 60 per mode, 20 per tier; six legacy puzzles unchanged; unique starting networks; legal solutions; undo/reset; tap/swipe equivalence; saved sessions and ordering.',
+  'PASS: 180 reachable puzzles; 90 per mode, 30 per tier; six legacy puzzles unchanged; unique starting networks; legal solutions; undo/reset; tap/swipe equivalence; saved sessions and ordering.',
 );

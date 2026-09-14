@@ -1,4 +1,5 @@
 'use client';
+import { t as tr, locale } from '@/lib/i18n';
 import { useEffect, useRef, useState, type MutableRefObject } from 'react';
 import { Lightbulb, Wrench } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -190,38 +191,42 @@ export default function SolveControls({
             setMessage('');
             setPanel('hint');
           }}
-          aria-label={'Tipp verwenden, ' + remaining + ' verbleibend'}
+          aria-label={tr('Tipp verwenden, ' + remaining + ' verbleibend')}
         >
           <Lightbulb size={19} aria-hidden="true" />
-          {remaining} {remaining === 1 ? 'Tipp' : 'Tipps'}
+          {tr(remaining)} {tr(remaining === 1 ? 'Tipp' : 'Tipps')}
         </Button>
-        {__LEUCHTWEGE_DEVTOOLS__ && (
-          <>
-            <Button
-              variant="outline"
-              disabled={busy || solved}
-              onClick={() => solve('step', false, true)}
-            >
-              {busy ? 'Schritt wird geprüft …' : 'Test: Nächster Schritt'}
-            </Button>
-            <Button
-              variant="ghost"
-              disabled={busy}
-              onClick={() => {
-                setMessage('');
-                setPanel('test');
-              }}
-            >
-              <Wrench size={16} aria-hidden="true" />
-              Testhilfe
-            </Button>
-          </>
+        {tr(
+          __LEUCHTWEGE_DEVTOOLS__ && (
+            <>
+              <Button
+                variant="outline"
+                disabled={busy || solved}
+                onClick={() => solve('step', false, true)}
+              >
+                {tr(busy ? 'Schritt wird geprüft …' : 'Test: Nächster Schritt')}
+              </Button>
+              <Button
+                variant="ghost"
+                disabled={busy}
+                onClick={() => {
+                  setMessage('');
+                  setPanel('test');
+                }}
+              >
+                <Wrench size={16} aria-hidden="true" />
+                {tr('Testhilfe')}
+              </Button>
+            </>
+          ),
         )}
       </div>
-      {message && !panel && (
-        <p role="status" className="mode-help">
-          {message}
-        </p>
+      {tr(
+        message && !panel && (
+          <p role="status" className="mode-help">
+            {tr(message)}
+          </p>
+        ),
       )}
       <Dialog
         open={panel !== null}
@@ -231,71 +236,85 @@ export default function SolveControls({
       >
         <DialogContent className="game-dialog" showCloseButton={false}>
           <DialogTitle className="dialog-heading">
-            {panel === 'test'
-              ? 'Testhilfen'
-              : panel === 'reward'
-                ? 'Werbung simulieren'
-                : remaining
-                  ? 'Ein kleiner Lichtblick'
-                  : 'Keine Tipps mehr'}
+            {tr(
+              panel === 'test'
+                ? 'Testhilfen'
+                : panel === 'reward'
+                  ? 'Werbung simulieren'
+                  : remaining
+                    ? 'Ein kleiner Lichtblick'
+                    : 'Keine Tipps mehr',
+            )}
           </DialogTitle>
           <DialogDescription>
-            {panel === 'test'
-              ? 'Vom aktuellen Spielstand aus lösen. Jede Anwendung kannst du mit Rückgängig zurücknehmen. Testhilfen verbrauchen keine Tipps.'
-              : panel === 'reward'
-                ? 'Testsimulation: Hier wird später das freiwillige Werbevideo abgespielt. Abschließen schaltet genau einen weiteren Tipp frei; Abbrechen gibt keinen Tipp.'
-                : remaining
-                  ? 'Ein Tipp führt den nächsten Zug auf einem Lösungsweg aus. Noch ' +
-                    remaining +
-                    ' verfügbar.'
-                  : 'Sieh dir freiwillig ein Werbevideo an, um einen weiteren Tipp zu erhalten.'}
+            {tr(
+              panel === 'test'
+                ? 'Vom aktuellen Spielstand aus lösen. Jede Anwendung kannst du mit Rückgängig zurücknehmen. Testhilfen verbrauchen keine Tipps.'
+                : panel === 'reward'
+                  ? 'Testsimulation: Hier wird später das freiwillige Werbevideo abgespielt. Abschließen schaltet genau einen weiteren Tipp frei; Abbrechen gibt keinen Tipp.'
+                  : remaining
+                    ? 'Ein Tipp führt den nächsten Zug auf einem Lösungsweg aus. Noch ' +
+                      remaining +
+                      ' verfügbar.'
+                    : 'Sieh dir freiwillig ein Werbevideo an, um einen weiteren Tipp zu erhalten.',
+            )}
           </DialogDescription>
-          {!puzzle.pieces && (
-            <p className="lesson">
-              Falls nötig, wird eine zu korrigierende Kachel entsperrt.
-            </p>
+          {tr(
+            !puzzle.pieces && (
+              <p className="lesson">
+                {tr(
+                  'Falls nötig, wird eine zu korrigierende Kachel entsperrt.',
+                )}
+              </p>
+            ),
           )}
-          {panel === 'test' ? (
-            <>
-              <Button disabled={busy || solved} onClick={() => solve('all')}>
-                Komplett lösen
+          {tr(
+            panel === 'test' ? (
+              <>
+                <Button disabled={busy || solved} onClick={() => solve('all')}>
+                  {tr('Komplett lösen')}
+                </Button>
+                <Button
+                  variant="outline"
+                  disabled={busy || solved}
+                  onClick={() => solve('almost')}
+                >
+                  {tr('Fast lösen · noch ein Zug')}
+                </Button>
+                <p>
+                  {tr('„Test: Nächster Schritt“ liegt direkt am Spielfeld.')}
+                </p>
+              </>
+            ) : panel === 'reward' ? (
+              <Button onClick={completeReward}>
+                {tr('Simulation abschließen · +1 Tipp')}
               </Button>
+            ) : remaining ? (
               <Button
-                variant="outline"
-                disabled={busy || solved}
-                onClick={() => solve('almost')}
+                disabled={busy || !ready || solved}
+                onClick={() => solve('step', true)}
               >
-                Fast lösen · noch ein Zug
+                {tr('Einen Tipp verwenden')}
               </Button>
-              <p>„Test: Nächster Schritt“ liegt direkt am Spielfeld.</p>
-            </>
-          ) : panel === 'reward' ? (
-            <Button onClick={completeReward}>
-              Simulation abschließen · +1 Tipp
-            </Button>
-          ) : remaining ? (
-            <Button
-              disabled={busy || !ready || solved}
-              onClick={() => solve('step', true)}
-            >
-              Einen Tipp verwenden
-            </Button>
-          ) : __LEUCHTWEGE_DEVTOOLS__ ? (
-            <Button
-              onClick={() => {
-                rewardReceipt.current = crypto.randomUUID();
-                setPanel('reward');
-              }}
-            >
-              Werbung simulieren · +1 Tipp
-            </Button>
-          ) : (
-            <p>Werbevideos sind in dieser Version noch nicht verfügbar.</p>
+            ) : __LEUCHTWEGE_DEVTOOLS__ ? (
+              <Button
+                onClick={() => {
+                  rewardReceipt.current = crypto.randomUUID();
+                  setPanel('reward');
+                }}
+              >
+                {tr('Werbung simulieren · +1 Tipp')}
+              </Button>
+            ) : (
+              <p>
+                {tr('Werbevideos sind in dieser Version noch nicht verfügbar.')}
+              </p>
+            ),
           )}
-          {busy && <p role="status">Lösungsweg wird geprüft …</p>}
-          {message && <p role="alert">{message}</p>}
+          {tr(busy && <p role="status">{tr('Lösungsweg wird geprüft …')}</p>)}
+          {tr(message && <p role="alert">{tr(message)}</p>)}
           <Button variant="ghost" onClick={close}>
-            {busy ? 'Abbrechen' : 'Schließen'}
+            {tr(busy ? 'Abbrechen' : 'Schließen')}
           </Button>
         </DialogContent>
       </Dialog>

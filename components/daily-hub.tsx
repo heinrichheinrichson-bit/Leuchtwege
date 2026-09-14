@@ -1,4 +1,5 @@
 'use client';
+import { t as tr, locale } from '@/lib/i18n';
 import { useEffect, useRef, useState, type MutableRefObject } from 'react';
 import { Button } from '@/components/ui/button';
 import {
@@ -164,110 +165,128 @@ export default function DailyHub({
   if (entry)
     return (
       <>
-        {helpSolved(entry.puzzle, entry.session) &&
-          !dailyCompleted(history.attempts, entry.day, entry.mode) && (
+        {tr(
+          helpSolved(entry.puzzle, entry.session) &&
+            !dailyCompleted(history.attempts, entry.day, entry.mode) && (
+              <p role="status">
+                {tr(
+                  'Dieses Brett ist gelöst, zählt aber noch nicht als regulärer Abschluss. Starte es neu und löse es ohne Testhilfe, damit es im Kalender zählt.',
+                )}
+              </p>
+            ),
+        )}
+        {tr(
+          entry.mode === 'turn' ? (
+            <DailyRotation
+              key={entry.puzzle.id}
+              entry={entry}
+              onChange={change}
+              onExit={() => setEntry(null)}
+              back={childBack}
+              playSound={playSound}
+            />
+          ) : (
+            <SlidingGame
+              key={entry.puzzle.id}
+              daily={entry}
+              onDailyChange={change}
+              onDailyExit={() => setEntry(null)}
+              back={childBack}
+              playSound={playSound}
+              onLearn={onLearn}
+            />
+          ),
+        )}
+        {tr(' ')}
+        {tr(
+          saveError && (
             <p role="status">
-              Dieses Brett ist gelöst, zählt aber noch nicht als regulärer
-              Abschluss. Starte es neu und löse es ohne Testhilfe, damit es im
-              Kalender zählt.
+              {tr(
+                'Dein Tagesrätsel kann gerade nicht gespeichert werden. Lass die App geöffnet.',
+              )}
             </p>
-          )}
-        {entry.mode === 'turn' ? (
-          <DailyRotation
-            key={entry.puzzle.id}
-            entry={entry}
-            onChange={change}
-            onExit={() => setEntry(null)}
-            back={childBack}
-            playSound={playSound}
-          />
-        ) : (
-          <SlidingGame
-            key={entry.puzzle.id}
-            daily={entry}
-            onDailyChange={change}
-            onDailyExit={() => setEntry(null)}
-            back={childBack}
-            playSound={playSound}
-            onLearn={onLearn}
-          />
-        )}{' '}
-        {saveError && (
-          <p role="status">
-            Dein Tagesrätsel kann gerade nicht gespeichert werden. Lass die App
-            geöffnet.
-          </p>
+          ),
         )}
       </>
     );
   return (
     <section className="daily-screen">
-      <p className="level-label">Jeden Tag ein Lichtblick</p>
-      <h1>Tagesrätsel</h1>
+      <p className="level-label">{tr('Jeden Tag ein Lichtblick')}</p>
+      <h1>{tr('Tagesrätsel')}</h1>
       <p className="section-intro">
-        Drei Rätsel pro Tag. Löse sie und sammle XP.
+        {tr('Drei Rätsel pro Tag. Löse sie und sammle XP.')}
       </p>
       <details className="info-details daily-archive">
-        <summary>Kalender & frühere Rätsel</summary>
+        <summary>{tr('Kalender & frühere Rätsel')}</summary>
         <div className="calendar-heading">
           <Button
             variant="outline"
-            aria-label="Vorheriger Monat"
+            aria-label={tr('Vorheriger Monat')}
             disabled={month <= DAILY_START.slice(0, 7) || busy}
             onClick={() => setMonth(shiftDay(month + '-01', -1).slice(0, 7))}
           >
-            ←
+            {tr('←')}
           </Button>
           <h2>
-            {new Date(month + '-01T12:00:00').toLocaleDateString('de-DE', {
-              month: 'long',
-              year: 'numeric',
-            })}
+            {tr(
+              new Date(month + '-01T12:00:00').toLocaleDateString(locale(), {
+                month: 'long',
+                year: 'numeric',
+              }),
+            )}
           </h2>
           <Button
             variant="outline"
-            aria-label="Nächster Monat"
+            aria-label={tr('Nächster Monat')}
             disabled={month >= today.slice(0, 7) || busy}
             onClick={() =>
               setMonth(shiftDay(calendar.days.at(-1)!, 1).slice(0, 7))
             }
           >
-            →
+            {tr('→')}
           </Button>
         </div>
         <div className="daily-calendar">
-          {['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'].map((d) => (
-            <span className="weekday" key={d}>
-              {d}
-            </span>
-          ))}
-          {Array.from({ length: calendar.leading }, (_, i) => (
-            <span key={'blank' + i} />
-          ))}
-          {calendar.days.map((day) => {
-            const count = dailyModes.filter((m) =>
-              dailyCompleted(history.attempts, day, m),
-            ).length;
-            return (
-              <button
-                key={day}
-                className={
-                  'calendar-day ' + (day === selected ? 'chosen ' : '')
-                }
-                disabled={day < DAILY_START || day > today || busy}
-                aria-pressed={day === selected}
-                aria-current={day === today ? 'date' : undefined}
-                aria-label={`${day.split('-').reverse().join('.')}: ${count} von 3 Tagesrätseln gelöst`}
-                onClick={() => setSelected(day)}
-              >
-                <strong>{Number(day.slice(-2))}</strong>
-                <small>{count ? count + '/3' : '·'}</small>
-              </button>
-            );
-          })}
+          {tr(
+            ['Mo', 'Di', 'Mi', 'Do', 'Fr', 'Sa', 'So'].map((d) => (
+              <span className="weekday" key={d}>
+                {tr(d)}
+              </span>
+            )),
+          )}
+          {tr(
+            Array.from({ length: calendar.leading }, (_, i) => (
+              <span key={'blank' + i} />
+            )),
+          )}
+          {tr(
+            calendar.days.map((day) => {
+              const count = dailyModes.filter((m) =>
+                dailyCompleted(history.attempts, day, m),
+              ).length;
+              return (
+                <button
+                  key={day}
+                  className={
+                    'calendar-day ' + (day === selected ? 'chosen ' : '')
+                  }
+                  disabled={day < DAILY_START || day > today || busy}
+                  aria-pressed={day === selected}
+                  aria-current={day === today ? 'date' : undefined}
+                  aria-label={tr(
+                    `${new Date(day + 'T12:00:00').toLocaleDateString(locale())}: ${count} von 3 Tagesrätseln gelöst`,
+                  )}
+                  onClick={() => setSelected(day)}
+                >
+                  <strong>{tr(Number(day.slice(-2)))}</strong>
+                  <small>{tr(count ? count + '/3' : '·')}</small>
+                </button>
+              );
+            }),
+          )}
         </div>
         <p className="calendar-legend">
-          Die Zahl zeigt deine gelösten Tagesrätsel.
+          {tr('Die Zahl zeigt deine gelösten Tagesrätsel.')}
         </p>
         <Button
           variant="ghost"
@@ -277,62 +296,78 @@ export default function DailyHub({
             setMonth(today.slice(0, 7));
           }}
         >
-          Zu heute
+          {tr('Zu heute')}
         </Button>
       </details>
       <h2>
-        {selected === today
-          ? 'Heute'
-          : selected.split('-').reverse().join(' · ')}
+        {tr(
+          selected === today
+            ? 'Heute'
+            : new Date(selected + 'T12:00:00').toLocaleDateString(locale()),
+        )}
       </h2>
       <div className="puzzle-cards">
-        {dailyModes.map((mode) => {
-          const spec = dailySpec(selected, mode),
-            done = dailyCompleted(history.attempts, selected, mode);
-          const award = experienceSummary(history.attempts).awards.find(
-            (a) => a.id === spec.id,
-          );
-          return (
-            <button
-              className="puzzle-card"
-              key={mode}
-              disabled={busy}
-              onClick={() => open(mode)}
-            >
-              <span className="puzzle-number">{done ? '✓' : '✳'}</span>
-              <span className="puzzle-copy">
-                <strong>{(modeNames as any)[mode]}</strong>
-                <small>
-                  {award
-                    ? `${award.points} XP gesammelt`
-                    : `${dailyXp(spec.tier)} XP + 10 XP ohne Tipps`}
-                </small>
-                <small>
-                  {spec.tier} · {spec.n} × {spec.n} ·{' '}
-                  {done ? 'Gelöst – Brett öffnen' : 'Spielen'}
-                </small>
-              </span>
-              <span>→</span>
-            </button>
-          );
-        })}
+        {tr(
+          dailyModes.map((mode) => {
+            const spec = dailySpec(selected, mode),
+              done = dailyCompleted(history.attempts, selected, mode);
+            const award = experienceSummary(history.attempts).awards.find(
+              (a) => a.id === spec.id,
+            );
+            return (
+              <button
+                className="puzzle-card"
+                key={mode}
+                disabled={busy}
+                onClick={() => open(mode)}
+              >
+                <span className="puzzle-number">{tr(done ? '✓' : '✳')}</span>
+                <span className="puzzle-copy">
+                  <strong>{tr((modeNames as any)[mode])}</strong>
+                  <small>
+                    {tr(
+                      award
+                        ? `${award.points} XP gesammelt`
+                        : `${dailyXp(spec.tier)} XP + 10 XP ohne Tipps`,
+                    )}
+                  </small>
+                  <small>
+                    {tr(spec.tier)}
+                    {tr(' · ')}
+                    {tr(spec.n)}
+                    {tr(' × ')}
+                    {tr(spec.n)}
+                    {tr(' ·')}
+                    {tr(' ')}
+                    {tr(done ? 'Gelöst – Brett öffnen' : 'Spielen')}
+                  </small>
+                </span>
+                <span>{tr('→')}</span>
+              </button>
+            );
+          }),
+        )}
       </div>
-      {busy && (
-        <p role="status">
-          Tageslicht entsteht …{' '}
-          <Button variant="outline" onClick={cancel}>
-            Abbrechen
-          </Button>
-        </p>
+      {tr(
+        busy && (
+          <p role="status">
+            {tr('Tageslicht entsteht …')}
+            {tr(' ')}
+            <Button variant="outline" onClick={cancel}>
+              {tr('Abbrechen')}
+            </Button>
+          </p>
+        ),
       )}
-      {error && <p role="alert">{error}</p>}
+      {tr(error && <p role="alert">{tr(error)}</p>)}
       <details className="info-details">
-        <summary>Nachholen & Streak</summary>
+        <summary>{tr('Nachholen & Streak')}</summary>
         <p>
-          Archiv ab {DAILY_START.split('-').reverse().join('.')}. Nachholen ist
-          jederzeit möglich. Für deine Serie zählt der tatsächliche Spieltag,
-          auch bei Katalog- und freien Rätseln. Bereits abgeschlossene Rätsel
-          erneut anzusehen zählt nicht.
+          {tr('Archiv ab ')}
+          {tr(new Date(DAILY_START + 'T12:00:00').toLocaleDateString(locale()))}
+          {tr(
+            '. Nachholen ist jederzeit möglich. Für deine Serie zählt der tatsächliche Spieltag, auch bei Katalog- und freien Rätseln. Bereits abgeschlossene Rätsel erneut anzusehen zählt nicht.',
+          )}
         </p>
       </details>
     </section>

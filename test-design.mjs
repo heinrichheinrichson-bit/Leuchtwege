@@ -24,7 +24,13 @@ const ls = JSON.parse(readFileSync('lib/levels.json', 'utf8')),
   old = JSON.parse(
     readFileSync('test-data/legacy-puzzle-fingerprints.json', 'utf8'),
   );
-assert.equal(ls.length, 60);
+assert.equal(ls.length, 90);
+for (const tier of ['Leicht', 'Mittel', 'Schwer'])
+  assert.equal(ls.filter((l) => l.difficulty.tier === tier).length, 30);
+for (const l of ls.slice(60)) {
+  assert.equal(difficulty(l).tier, l.difficulty.tier);
+  assert.notEqual(l.difficulty.method, 'search');
+}
 assert.equal(old.length, 30);
 for (const f of old) {
   const l = ls[f.index];
@@ -43,10 +49,10 @@ for (const f of old) {
     'Existing puzzle changed: ' + f.index,
   );
 }
-assert.equal(new Set(ls.map((l) => l.id)).size, 60);
+assert.equal(new Set(ls.map((l) => l.id)).size, 90);
 assert.deepEqual(
   [...ls.map((l) => l.order)].sort((a, b) => a - b),
-  Array.from({ length: 60 }, (_, i) => i),
+  Array.from({ length: 90 }, (_, i) => i),
 );
 const order = recommendedOrder(ls);
 assert(
@@ -141,5 +147,5 @@ assert.throws(() =>
 assert(ls.some((l) => l.n === 4 && l.difficulty.tier === 'Schwer'));
 assert(ls.some((l) => l.n === 6 && l.difficulty.tier === 'Mittel'));
 console.log(
-  'PASS: stable 30 legacy puzzles; 60 unique IDs; progression; rotation-invariant difficulty; safe direct deductions; legal loops; similarity filter; manual overrides; size separate from difficulty.',
+  'PASS: stable 30 legacy puzzles; 90 unique IDs; progression; rotation-invariant difficulty; safe direct deductions; legal loops; similarity filter; manual overrides; size separate from difficulty.',
 );

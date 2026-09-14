@@ -1,0 +1,602 @@
+[
+  {
+    "id": "lw-061",
+    "mode": "turn",
+    "tier": "Leicht",
+    "n": 3,
+    "method": "local",
+    "score": 3.97
+  },
+  {
+    "id": "lw-062",
+    "mode": "turn",
+    "tier": "Leicht",
+    "n": 4,
+    "method": "local",
+    "score": 2.94
+  },
+  {
+    "id": "lw-063",
+    "mode": "turn",
+    "tier": "Leicht",
+    "n": 3,
+    "method": "local",
+    "score": 2.74
+  },
+  {
+    "id": "lw-064",
+    "mode": "turn",
+    "tier": "Leicht",
+    "n": 4,
+    "method": "local",
+    "score": 4.38
+  },
+  {
+    "id": "lw-065",
+    "mode": "turn",
+    "tier": "Leicht",
+    "n": 4,
+    "method": "local",
+    "score": 3.88
+  },
+  {
+    "id": "lw-066",
+    "mode": "turn",
+    "tier": "Leicht",
+    "n": 3,
+    "method": "local",
+    "score": 3.97
+  },
+  {
+    "id": "lw-067",
+    "mode": "turn",
+    "tier": "Leicht",
+    "n": 5,
+    "method": "local",
+    "score": 4.86
+  },
+  {
+    "id": "lw-068",
+    "mode": "turn",
+    "tier": "Leicht",
+    "n": 3,
+    "method": "local",
+    "score": 3.3
+  },
+  {
+    "id": "lw-069",
+    "mode": "turn",
+    "tier": "Leicht",
+    "n": 4,
+    "method": "local",
+    "score": 3.69
+  },
+  {
+    "id": "lw-070",
+    "mode": "turn",
+    "tier": "Leicht",
+    "n": 4,
+    "method": "local",
+    "score": 2.75
+  },
+  {
+    "id": "lw-071",
+    "mode": "turn",
+    "tier": "Mittel",
+    "n": 4,
+    "method": "local",
+    "score": 6.88
+  },
+  {
+    "id": "lw-072",
+    "mode": "turn",
+    "tier": "Mittel",
+    "n": 5,
+    "method": "local",
+    "score": 6.94
+  },
+  {
+    "id": "lw-073",
+    "mode": "turn",
+    "tier": "Mittel",
+    "n": 6,
+    "method": "local",
+    "score": 6.72
+  },
+  {
+    "id": "lw-074",
+    "mode": "turn",
+    "tier": "Mittel",
+    "n": 5,
+    "method": "local",
+    "score": 5.54
+  },
+  {
+    "id": "lw-075",
+    "mode": "turn",
+    "tier": "Mittel",
+    "n": 6,
+    "method": "local",
+    "score": 7.58
+  },
+  {
+    "id": "lw-076",
+    "mode": "turn",
+    "tier": "Mittel",
+    "n": 5,
+    "method": "local",
+    "score": 6.54
+  },
+  {
+    "id": "lw-077",
+    "mode": "turn",
+    "tier": "Mittel",
+    "n": 6,
+    "method": "local",
+    "score": 5.69
+  },
+  {
+    "id": "lw-078",
+    "mode": "turn",
+    "tier": "Mittel",
+    "n": 6,
+    "method": "local",
+    "score": 6.27
+  },
+  {
+    "id": "lw-079",
+    "mode": "turn",
+    "tier": "Mittel",
+    "n": 5,
+    "method": "local",
+    "score": 6.79
+  },
+  {
+    "id": "lw-080",
+    "mode": "turn",
+    "tier": "Mittel",
+    "n": 5,
+    "method": "local",
+    "score": 6.74
+  },
+  {
+    "id": "lw-081",
+    "mode": "turn",
+    "tier": "Schwer",
+    "n": 5,
+    "method": "lookahead",
+    "score": 18.96
+  },
+  {
+    "id": "lw-082",
+    "mode": "turn",
+    "tier": "Schwer",
+    "n": 6,
+    "method": "lookahead",
+    "score": 18.67
+  },
+  {
+    "id": "lw-083",
+    "mode": "turn",
+    "tier": "Schwer",
+    "n": 5,
+    "method": "lookahead",
+    "score": 19.28
+  },
+  {
+    "id": "lw-084",
+    "mode": "turn",
+    "tier": "Schwer",
+    "n": 4,
+    "method": "lookahead",
+    "score": 20.5
+  },
+  {
+    "id": "lw-085",
+    "mode": "turn",
+    "tier": "Schwer",
+    "n": 5,
+    "method": "lookahead",
+    "score": 18.64
+  },
+  {
+    "id": "lw-086",
+    "mode": "turn",
+    "tier": "Schwer",
+    "n": 6,
+    "method": "lookahead",
+    "score": 18.44
+  },
+  {
+    "id": "lw-087",
+    "mode": "turn",
+    "tier": "Schwer",
+    "n": 4,
+    "method": "lookahead",
+    "score": 19.5
+  },
+  {
+    "id": "lw-088",
+    "mode": "turn",
+    "tier": "Schwer",
+    "n": 6,
+    "method": "lookahead",
+    "score": 20.44
+  },
+  {
+    "id": "lw-089",
+    "mode": "turn",
+    "tier": "Schwer",
+    "n": 4,
+    "method": "lookahead",
+    "score": 19.5
+  },
+  {
+    "id": "lw-090",
+    "mode": "turn",
+    "tier": "Schwer",
+    "n": 6,
+    "method": "lookahead",
+    "score": 19.67
+  },
+  {
+    "id": "slide-catalog-1-21",
+    "mode": "slide",
+    "tier": "Leicht",
+    "minSlides": 4
+  },
+  {
+    "id": "slide-catalog-1-22",
+    "mode": "slide",
+    "tier": "Leicht",
+    "minSlides": 7
+  },
+  {
+    "id": "slide-catalog-1-23",
+    "mode": "slide",
+    "tier": "Leicht",
+    "minSlides": 6
+  },
+  {
+    "id": "slide-catalog-1-24",
+    "mode": "slide",
+    "tier": "Leicht",
+    "minSlides": 5
+  },
+  {
+    "id": "slide-catalog-1-25",
+    "mode": "slide",
+    "tier": "Leicht",
+    "minSlides": 4
+  },
+  {
+    "id": "slide-catalog-1-26",
+    "mode": "slide",
+    "tier": "Leicht",
+    "minSlides": 7
+  },
+  {
+    "id": "slide-catalog-1-27",
+    "mode": "slide",
+    "tier": "Leicht",
+    "minSlides": 6
+  },
+  {
+    "id": "slide-catalog-1-28",
+    "mode": "slide",
+    "tier": "Leicht",
+    "minSlides": 5
+  },
+  {
+    "id": "slide-catalog-1-29",
+    "mode": "slide",
+    "tier": "Leicht",
+    "minSlides": 4
+  },
+  {
+    "id": "slide-catalog-1-30",
+    "mode": "slide",
+    "tier": "Leicht",
+    "minSlides": 7
+  },
+  {
+    "id": "slide-catalog-2-21",
+    "mode": "slide",
+    "tier": "Mittel",
+    "minSlides": 12
+  },
+  {
+    "id": "slide-catalog-2-22",
+    "mode": "slide",
+    "tier": "Mittel",
+    "minSlides": 11
+  },
+  {
+    "id": "slide-catalog-2-23",
+    "mode": "slide",
+    "tier": "Mittel",
+    "minSlides": 10
+  },
+  {
+    "id": "slide-catalog-2-24",
+    "mode": "slide",
+    "tier": "Mittel",
+    "minSlides": 13
+  },
+  {
+    "id": "slide-catalog-2-25",
+    "mode": "slide",
+    "tier": "Mittel",
+    "minSlides": 12
+  },
+  {
+    "id": "slide-catalog-2-26",
+    "mode": "slide",
+    "tier": "Mittel",
+    "minSlides": 11
+  },
+  {
+    "id": "slide-catalog-2-27",
+    "mode": "slide",
+    "tier": "Mittel",
+    "minSlides": 10
+  },
+  {
+    "id": "slide-catalog-2-28",
+    "mode": "slide",
+    "tier": "Mittel",
+    "minSlides": 13
+  },
+  {
+    "id": "slide-catalog-2-29",
+    "mode": "slide",
+    "tier": "Mittel",
+    "minSlides": 12
+  },
+  {
+    "id": "slide-catalog-2-30",
+    "mode": "slide",
+    "tier": "Mittel",
+    "minSlides": 11
+  },
+  {
+    "id": "slide-catalog-3-21",
+    "mode": "slide",
+    "tier": "Schwer",
+    "minSlides": 17
+  },
+  {
+    "id": "slide-catalog-3-22",
+    "mode": "slide",
+    "tier": "Schwer",
+    "minSlides": 20
+  },
+  {
+    "id": "slide-catalog-3-23",
+    "mode": "slide",
+    "tier": "Schwer",
+    "minSlides": 19
+  },
+  {
+    "id": "slide-catalog-3-24",
+    "mode": "slide",
+    "tier": "Schwer",
+    "minSlides": 18
+  },
+  {
+    "id": "slide-catalog-3-25",
+    "mode": "slide",
+    "tier": "Schwer",
+    "minSlides": 17
+  },
+  {
+    "id": "slide-catalog-3-26",
+    "mode": "slide",
+    "tier": "Schwer",
+    "minSlides": 20
+  },
+  {
+    "id": "slide-catalog-3-27",
+    "mode": "slide",
+    "tier": "Schwer",
+    "minSlides": 19
+  },
+  {
+    "id": "slide-catalog-3-28",
+    "mode": "slide",
+    "tier": "Schwer",
+    "minSlides": 18
+  },
+  {
+    "id": "slide-catalog-3-29",
+    "mode": "slide",
+    "tier": "Schwer",
+    "minSlides": 21
+  },
+  {
+    "id": "slide-catalog-3-30",
+    "mode": "slide",
+    "tier": "Schwer",
+    "minSlides": 20
+  },
+  {
+    "id": "rotate-catalog-1-21",
+    "mode": "rotate",
+    "tier": "Leicht",
+    "minSlides": 3
+  },
+  {
+    "id": "rotate-catalog-1-22",
+    "mode": "rotate",
+    "tier": "Leicht",
+    "minSlides": 3
+  },
+  {
+    "id": "rotate-catalog-1-23",
+    "mode": "rotate",
+    "tier": "Leicht",
+    "minSlides": 2
+  },
+  {
+    "id": "rotate-catalog-1-24",
+    "mode": "rotate",
+    "tier": "Leicht",
+    "minSlides": 2
+  },
+  {
+    "id": "rotate-catalog-1-25",
+    "mode": "rotate",
+    "tier": "Leicht",
+    "minSlides": 3
+  },
+  {
+    "id": "rotate-catalog-1-26",
+    "mode": "rotate",
+    "tier": "Leicht",
+    "minSlides": 3
+  },
+  {
+    "id": "rotate-catalog-1-27",
+    "mode": "rotate",
+    "tier": "Leicht",
+    "minSlides": 2
+  },
+  {
+    "id": "rotate-catalog-1-28",
+    "mode": "rotate",
+    "tier": "Leicht",
+    "minSlides": 2
+  },
+  {
+    "id": "rotate-catalog-1-29",
+    "mode": "rotate",
+    "tier": "Leicht",
+    "minSlides": 3
+  },
+  {
+    "id": "rotate-catalog-1-30",
+    "mode": "rotate",
+    "tier": "Leicht",
+    "minSlides": 3
+  },
+  {
+    "id": "rotate-catalog-2-21",
+    "mode": "rotate",
+    "tier": "Mittel",
+    "minSlides": 4
+  },
+  {
+    "id": "rotate-catalog-2-22",
+    "mode": "rotate",
+    "tier": "Mittel",
+    "minSlides": 4
+  },
+  {
+    "id": "rotate-catalog-2-23",
+    "mode": "rotate",
+    "tier": "Mittel",
+    "minSlides": 5
+  },
+  {
+    "id": "rotate-catalog-2-24",
+    "mode": "rotate",
+    "tier": "Mittel",
+    "minSlides": 5
+  },
+  {
+    "id": "rotate-catalog-2-25",
+    "mode": "rotate",
+    "tier": "Mittel",
+    "minSlides": 4
+  },
+  {
+    "id": "rotate-catalog-2-26",
+    "mode": "rotate",
+    "tier": "Mittel",
+    "minSlides": 4
+  },
+  {
+    "id": "rotate-catalog-2-27",
+    "mode": "rotate",
+    "tier": "Mittel",
+    "minSlides": 5
+  },
+  {
+    "id": "rotate-catalog-2-28",
+    "mode": "rotate",
+    "tier": "Mittel",
+    "minSlides": 5
+  },
+  {
+    "id": "rotate-catalog-2-29",
+    "mode": "rotate",
+    "tier": "Mittel",
+    "minSlides": 4
+  },
+  {
+    "id": "rotate-catalog-2-30",
+    "mode": "rotate",
+    "tier": "Mittel",
+    "minSlides": 4
+  },
+  {
+    "id": "rotate-catalog-3-21",
+    "mode": "rotate",
+    "tier": "Schwer",
+    "minSlides": 8
+  },
+  {
+    "id": "rotate-catalog-3-22",
+    "mode": "rotate",
+    "tier": "Schwer",
+    "minSlides": 7
+  },
+  {
+    "id": "rotate-catalog-3-23",
+    "mode": "rotate",
+    "tier": "Schwer",
+    "minSlides": 7
+  },
+  {
+    "id": "rotate-catalog-3-24",
+    "mode": "rotate",
+    "tier": "Schwer",
+    "minSlides": 6
+  },
+  {
+    "id": "rotate-catalog-3-25",
+    "mode": "rotate",
+    "tier": "Schwer",
+    "minSlides": 8
+  },
+  {
+    "id": "rotate-catalog-3-26",
+    "mode": "rotate",
+    "tier": "Schwer",
+    "minSlides": 7
+  },
+  {
+    "id": "rotate-catalog-3-27",
+    "mode": "rotate",
+    "tier": "Schwer",
+    "minSlides": 7
+  },
+  {
+    "id": "rotate-catalog-3-28",
+    "mode": "rotate",
+    "tier": "Schwer",
+    "minSlides": 6
+  },
+  {
+    "id": "rotate-catalog-3-29",
+    "mode": "rotate",
+    "tier": "Schwer",
+    "minSlides": 8
+  },
+  {
+    "id": "rotate-catalog-3-30",
+    "mode": "rotate",
+    "tier": "Schwer",
+    "minSlides": 7
+  }
+]

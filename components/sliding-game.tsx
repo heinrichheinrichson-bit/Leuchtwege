@@ -1,6 +1,8 @@
 'use client';
+import { t as tr, locale } from '@/lib/i18n';
 import { useEffect, useRef, useState, type MutableRefObject } from 'react';
 import { useVictory } from '@/lib/use-victory';
+import { haptic } from '@/lib/haptics';
 import { PuzzleReward } from './experience';
 import SolveControls from '@/components/solve-controls';
 import { Button } from '@/components/ui/button';
@@ -341,6 +343,7 @@ export default function SlidingGame({
       action.type === 'reset',
     );
     storeSession(next);
+    if (action.type === 'slide' || action.type === 'turn') haptic();
     setHint('');
     if (action.type === 'reset' || action.type === 'undo') {
       setSelected(null);
@@ -376,428 +379,533 @@ export default function SlidingGame({
   }
   const ordered = slidingOrder(puzzles, l.mode);
   const catalogNumber = ordered.indexOf(saved.current);
+  const tierOrder = ordered.filter((i: number) => puzzles[i].tier === l.tier);
   const nextIndex = ordered[catalogNumber + 1] ?? -1;
   return (
     <>
-      {!playing ? (
-        <section className="catalog-screen">
-          <h1>Schiebepuzzles</h1>
-          <p className="section-intro">
-            60 Rätsel je Modus. Oder starte ein freies Spiel.
-          </p>
-          <Button variant="outline" onClick={() => onLearn(catalogMode)}>
-            Schieben lernen →
-          </Button>
-          <div className="stats-filters" aria-label="Schiebemodus auswählen">
-            {['slide', 'rotate'].map((mode) => (
-              <Button
-                key={mode}
-                variant={catalogMode === mode ? 'default' : 'outline'}
-                aria-pressed={catalogMode === mode}
-                disabled={generating}
-                onClick={() => setCatalogMode(mode)}
-              >
-                {mode === 'slide' ? 'Nur Schieben' : 'Schieben & Drehen'}
-              </Button>
-            ))}
-          </div>
-          {[catalogMode].map((mode) => (
-            <section className="catalog-group" key={mode}>
-              <h2>{mode === 'slide' ? 'Nur Schieben' : 'Schieben & Drehen'}</h2>
-              <p className="section-intro">
-                {mode === 'slide'
-                  ? 'Kacheln verschieben. Die Ausrichtung bleibt fest.'
-                  : 'Kacheln verschieben und zusätzlich drehen.'}
-              </p>
-              <div className="sliding-free-options">
-                <label htmlFor={'slide-tier-' + mode}>
-                  Freies Spiel · 3 × 3
-                </label>
-                <select
-                  id={'slide-tier-' + mode}
-                  value={free.tiers[mode]}
-                  disabled={generating || !ready}
-                  onChange={(e) =>
-                    setFree((v: any) => ({
-                      ...v,
-                      tiers: { ...v.tiers, [mode]: e.target.value },
-                    }))
-                  }
-                >
-                  {slidingTiers.map((t) => (
-                    <option key={t}>{t}</option>
-                  ))}
-                </select>
-                <Button
-                  disabled={!ready || generating}
-                  onClick={() => requestGeneration(mode)}
-                >
-                  Neues Rätsel
-                </Button>
-                {free[mode] && (
+      {tr(
+        !playing ? (
+          <section className="catalog-screen">
+            <h1>{tr('Schiebepuzzles')}</h1>
+            <p className="section-intro">
+              {tr(puzzles.filter((p) => p.mode === catalogMode).length)}
+              {tr(' Rätsel je Modus. Oder starte ein freies Spiel.')}
+            </p>
+            <Button variant="outline" onClick={() => onLearn(catalogMode)}>
+              {tr('Schieben lernen →')}
+            </Button>
+            <div
+              className="stats-filters"
+              aria-label={tr('Schiebemodus auswählen')}
+            >
+              {tr(
+                ['slide', 'rotate'].map((mode) => (
                   <Button
-                    variant="outline"
-                    disabled={generating || !ready}
-                    onClick={() => openFree(mode)}
+                    key={mode}
+                    variant={catalogMode === mode ? 'default' : 'outline'}
+                    aria-pressed={catalogMode === mode}
+                    disabled={generating}
+                    onClick={() => setCatalogMode(mode)}
                   >
-                    {slidingStatus(free[mode].puzzle, free[mode].session).solved
-                      ? 'Letztes Brett ansehen'
-                      : 'Freie Partie fortsetzen'}{' '}
-                    · {free[mode].puzzle.tier}
+                    {tr(
+                      mode === 'slide' ? 'Nur Schieben' : 'Schieben & Drehen',
+                    )}
                   </Button>
-                )}
-              </div>
-              {slidingTiers.map((tier) => (
-                <details className="slide-catalog-tier" key={tier}>
-                  <summary>
-                    {tier}
-                    <span>
-                      {
-                        puzzles.filter(
-                          (p) =>
-                            p.mode === mode &&
-                            p.tier === tier &&
-                            saved.sessions[p.id] &&
-                            slidingStatus(p, saved.sessions[p.id]).solved,
-                        ).length
-                      }{' '}
-                      / 20 gelöst
-                    </span>
-                  </summary>
-                  <div className="puzzle-cards">
-                    {slidingOrder(puzzles, mode).map(
-                      (i: number, number: number) => {
-                        const p = puzzles[i];
-                        return p.tier !== tier ? null : (
-                          <button
-                            className="puzzle-card"
-                            key={p.id}
-                            disabled={!ready}
-                            onClick={() => open(i)}
-                          >
-                            <span className="puzzle-number">{number + 1}</span>
-                            <span className="puzzle-copy">
-                              <strong>{p.name}</strong>
-                              <small>
-                                3 × 3 ·{' '}
-                                {saved.sessions[p.id]
-                                  ? slidingStatus(p, saved.sessions[p.id])
-                                      .solved
-                                    ? 'Gelöst'
-                                    : 'Fortsetzen'
-                                  : 'Noch offen'}
-                              </small>
-                            </span>
-                            <span>→</span>
-                          </button>
-                        );
-                      },
+                )),
+              )}
+            </div>
+            {tr(
+              [catalogMode].map((mode) => (
+                <section className="catalog-group" key={mode}>
+                  <h2>
+                    {tr(
+                      mode === 'slide' ? 'Nur Schieben' : 'Schieben & Drehen',
+                    )}
+                  </h2>
+                  <p className="section-intro">
+                    {tr(
+                      mode === 'slide'
+                        ? 'Kacheln verschieben. Die Ausrichtung bleibt fest.'
+                        : 'Kacheln verschieben und zusätzlich drehen.',
+                    )}
+                  </p>
+                  <div className="sliding-free-options">
+                    <label htmlFor={'slide-tier-' + mode}>
+                      {tr('Freies Spiel · 3 × 3')}
+                    </label>
+                    <select
+                      id={'slide-tier-' + mode}
+                      value={free.tiers[mode]}
+                      disabled={generating || !ready}
+                      onChange={(e) =>
+                        setFree((v: any) => ({
+                          ...v,
+                          tiers: { ...v.tiers, [mode]: e.target.value },
+                        }))
+                      }
+                    >
+                      {tr(
+                        slidingTiers.map((t) => (
+                          <option key={t}>{tr(t)}</option>
+                        )),
+                      )}
+                    </select>
+                    <Button
+                      disabled={!ready || generating}
+                      onClick={() => requestGeneration(mode)}
+                    >
+                      {tr('Neues Rätsel')}
+                    </Button>
+                    {tr(
+                      free[mode] && (
+                        <Button
+                          variant="outline"
+                          disabled={generating || !ready}
+                          onClick={() => openFree(mode)}
+                        >
+                          {tr(
+                            slidingStatus(free[mode].puzzle, free[mode].session)
+                              .solved
+                              ? 'Letztes Brett ansehen'
+                              : 'Freie Partie fortsetzen',
+                          )}
+                          {tr(' ')}
+                          {tr('· ')}
+                          {tr(free[mode].puzzle.tier)}
+                        </Button>
+                      ),
                     )}
                   </div>
-                </details>
-              ))}
-            </section>
-          ))}
-        </section>
-      ) : (
-        <section className="play-screen slide-screen">
-          <div className="play-heading">
-            <div>
-              <p className="level-label">
-                {l.mode === 'slide' ? 'Nur Schieben' : 'Schieben & Drehen'} ·
-                {daily
-                  ? 'Tagesrätsel · ' + l.tier
-                  : freeMode
-                    ? 'Freies Spiel · ' + l.tier
-                    : l.tier +
-                      ' · Rätsel ' +
-                      (catalogNumber + 1) +
-                      ' / ' +
-                      ordered.length}
-              </p>
-              <h1>{l.name}</h1>
+                  {tr(
+                    slidingTiers.map((tier) => (
+                      <details className="slide-catalog-tier" key={tier}>
+                        <summary>
+                          {tr(tier)}
+                          <span>
+                            {tr(
+                              puzzles.filter(
+                                (p) =>
+                                  p.mode === mode &&
+                                  p.tier === tier &&
+                                  saved.sessions[p.id] &&
+                                  slidingStatus(p, saved.sessions[p.id]).solved,
+                              ).length,
+                            )}
+                            {tr(' ')}
+                            {tr('/ ')}
+                            {tr(
+                              puzzles.filter(
+                                (p) => p.mode === mode && p.tier === tier,
+                              ).length,
+                            )}
+                            {tr(' gelöst')}
+                          </span>
+                        </summary>
+                        <div className="puzzle-cards">
+                          {tr(
+                            slidingOrder(puzzles, mode).map(
+                              (i: number, number: number) => {
+                                const p = puzzles[i];
+                                return p.tier !== tier ? null : (
+                                  <button
+                                    className="puzzle-card"
+                                    key={p.id}
+                                    disabled={!ready}
+                                    onClick={() => open(i)}
+                                  >
+                                    <span className="puzzle-number">
+                                      {tr(
+                                        slidingOrder(puzzles, mode)
+                                          .filter(
+                                            (i: number) =>
+                                              puzzles[i].tier === tier,
+                                          )
+                                          .indexOf(i) + 1,
+                                      )}
+                                    </span>
+                                    <span className="puzzle-copy">
+                                      <strong>{tr(p.name)}</strong>
+                                      <small>
+                                        {tr('3 × 3 ·')}
+                                        {tr(' ')}
+                                        {tr(
+                                          saved.sessions[p.id]
+                                            ? slidingStatus(
+                                                p,
+                                                saved.sessions[p.id],
+                                              ).solved
+                                              ? 'Gelöst'
+                                              : 'Fortsetzen'
+                                            : 'Noch offen',
+                                        )}
+                                      </small>
+                                    </span>
+                                    <span>{tr('→')}</span>
+                                  </button>
+                                );
+                              },
+                            ),
+                          )}
+                        </div>
+                      </details>
+                    )),
+                  )}
+                </section>
+              )),
+            )}
+          </section>
+        ) : (
+          <section className="play-screen slide-screen">
+            <div className="play-heading">
+              <div>
+                <p className="level-label">
+                  {tr(
+                    l.mode === 'slide' ? 'Nur Schieben' : 'Schieben & Drehen',
+                  )}
+                  {tr(' ·')}
+                  {tr(
+                    daily
+                      ? 'Tagesrätsel · ' + l.tier
+                      : freeMode
+                        ? 'Freies Spiel · ' + l.tier
+                        : l.tier +
+                          ' · Rätsel ' +
+                          (tierOrder.indexOf(saved.current) + 1) +
+                          ' / ' +
+                          tierOrder.length,
+                  )}
+                </p>
+                <h1>{tr(l.name)}</h1>
+              </div>
+              <span className="size">{tr('3 × 3')}</span>
             </div>
-            <span className="size">3 × 3</span>
-          </div>
-          <p className="lesson">
-            {l.mode === 'slide'
-              ? 'Wische zum Leerfeld. Oder tippe erst die Kachel, dann das Leerfeld an.'
-              : 'Wischen verschiebt. Antippen wählt aus; nochmals antippen dreht. Tippen aufs Leerfeld verschiebt die Auswahl.'}
-          </p>
-          <PlayClock clock={clock} />
-          <div className="meter">
-            <span>
-              <i />
-              {status.lit.size} / 8 verbunden
-            </span>
-            <span>
-              {s.slides} Schübe
-              {l.mode === 'rotate' ? ' · ' + s.rotations + ' Drehungen' : ''}
-            </span>
-          </div>
-          <div
-            className={
-              'board slide-board ' +
-              (status.solved ? 'complete ' : '') +
-              (celebrating ? 'celebrating' : '')
-            }
-          >
-            <div className="slide-grid">
-              <button
-                className={
-                  'slide-hole ' +
-                  ((selected !== null &&
-                    adjacent(s.positions.indexOf(selected), hole, l.n)) ||
-                  preview !== null
-                    ? 'target'
-                    : '')
-                }
-                style={{
-                  left: ((hole % 3) * 100) / 3 + '%',
-                  top: (Math.floor(hole / 3) * 100) / 3 + '%',
-                }}
-                disabled={!ready || status.solved}
-                onClick={() => tap(hole)}
-                aria-label="Leerfeld: ausgewählte benachbarte Kachel hierher schieben"
-              >
-                <span>Leerfeld</span>
-              </button>
-              {l.pieces.map((baseMask: number, id: number) => {
-                const pos = s.positions.indexOf(id),
-                  mask = board[pos];
-                return (
-                  <button
-                    key={l.id + '-' + id}
-                    className={
-                      'tile slide-tile ' +
-                      (status.lit.has(pos) ? 'lit ' : '') +
-                      (selected === id ? 'selected ' : '') +
-                      (preview === id ? 'swiping' : '')
-                    }
-                    style={{
-                      transform: `translate(${(pos % 3) * 100}%, ${Math.floor(pos / 3) * 100}%)`,
-                    }}
-                    disabled={!ready || status.solved}
-                    aria-pressed={selected === id}
-                    aria-label={
-                      'Kachel in Zeile ' +
-                      (Math.floor(pos / 3) + 1) +
-                      ', Spalte ' +
-                      ((pos % 3) + 1) +
-                      (id === l.sourceId ? ', Lichtquelle' : '') +
-                      '. Anschlüsse: ' +
-                      [0, 1, 2, 3]
-                        .filter((d) => mask & (1 << d))
-                        .map((d) => ['oben', 'rechts', 'unten', 'links'][d])
-                        .join(', ') +
-                      '. ' +
-                      (selected === id && l.mode === 'rotate'
-                        ? 'Erneut aktivieren zum Drehen.'
-                        : 'Aktivieren zum Auswählen.')
-                    }
-                    onPointerDown={(e) => {
-                      if (!e.isPrimary || e.button !== 0 || gesture.current)
-                        return;
-                      gesture.current = {
-                        pointer: e.pointerId,
-                        id,
-                        x: e.clientX,
-                        y: e.clientY,
-                        size: e.currentTarget.getBoundingClientRect().width,
-                      };
-                      e.currentTarget.setPointerCapture(e.pointerId);
-                    }}
-                    onPointerMove={(e) => {
-                      const g = gesture.current;
-                      if (!g || g.pointer !== e.pointerId) return;
-                      setPreview(
-                        swipeSliding(
-                          l,
-                          s,
-                          g.id,
-                          e.clientX - g.x,
-                          e.clientY - g.y,
-                          g.size,
-                        )
-                          ? g.id
-                          : null,
-                      );
-                    }}
-                    onPointerUp={(e) => {
-                      const g = gesture.current;
-                      if (!g || g.pointer !== e.pointerId) return;
-                      const dx = e.clientX - g.x,
-                        dy = e.clientY - g.y;
-                      clearGesture();
-                      if (Math.hypot(dx, dy) > 10) {
-                        suppressClick.current = Date.now() + 500;
-                        const action = swipeSliding(l, s, g.id, dx, dy, g.size);
-                        if (action) dispatch(action);
-                        else
-                          setHint(
-                            'Nur eine benachbarte Kachel gerade zum Leerfeld schieben.',
-                          );
-                      }
-                    }}
-                    onPointerCancel={() => {
-                      clearGesture();
-                      suppressClick.current = Date.now() + 500;
-                    }}
-                    onLostPointerCapture={() => {
-                      if (gesture.current) {
-                        clearGesture();
-                        suppressClick.current = Date.now() + 500;
-                      }
-                    }}
-                    onClick={(e) => {
-                      if (
-                        e.detail !== 0 &&
-                        Date.now() < suppressClick.current
-                      ) {
-                        suppressClick.current = 0;
-                        return;
-                      }
-                      tap(pos);
-                    }}
-                  >
-                    <svg viewBox="0 0 100 100" aria-hidden="true">
-                      <g
-                        className="rotor"
+            <p className="lesson">
+              {tr(
+                l.mode === 'slide'
+                  ? 'Wische zum Leerfeld. Oder tippe erst die Kachel, dann das Leerfeld an.'
+                  : 'Wischen verschiebt. Antippen wählt aus; nochmals antippen dreht. Tippen aufs Leerfeld verschiebt die Auswahl.',
+              )}
+            </p>
+            <PlayClock clock={clock} />
+            <div className="meter">
+              <span>
+                <i />
+                {tr(status.lit.size)}
+                {tr(' / 8 verbunden')}
+              </span>
+              <span>
+                {tr(s.slides)}
+                {tr(' Schübe')}
+                {tr(
+                  l.mode === 'rotate' ? ' · ' + s.rotations + ' Drehungen' : '',
+                )}
+              </span>
+            </div>
+            <div
+              className={
+                'board slide-board ' +
+                (status.solved ? 'complete ' : '') +
+                (celebrating ? 'celebrating' : '')
+              }
+            >
+              <div className="slide-grid">
+                <button
+                  className={
+                    'slide-hole ' +
+                    ((selected !== null &&
+                      adjacent(s.positions.indexOf(selected), hole, l.n)) ||
+                    preview !== null
+                      ? 'target'
+                      : '')
+                  }
+                  style={{
+                    left: ((hole % 3) * 100) / 3 + '%',
+                    top: (Math.floor(hole / 3) * 100) / 3 + '%',
+                  }}
+                  disabled={!ready || status.solved}
+                  onClick={() => tap(hole)}
+                  aria-label={tr(
+                    'Leerfeld: ausgewählte benachbarte Kachel hierher schieben',
+                  )}
+                >
+                  <span>{tr('Leerfeld')}</span>
+                </button>
+                {tr(
+                  l.pieces.map((baseMask: number, id: number) => {
+                    const pos = s.positions.indexOf(id),
+                      mask = board[pos];
+                    return (
+                      <button
+                        key={l.id + '-' + id}
+                        className={
+                          'tile slide-tile ' +
+                          (status.lit.has(pos) ? 'lit ' : '') +
+                          (selected === id ? 'selected ' : '') +
+                          (preview === id ? 'swiping' : '')
+                        }
                         style={{
-                          transform: 'rotate(' + s.turns[id] * 90 + 'deg)',
+                          transform: `translate(${(pos % 3) * 100}%, ${Math.floor(pos / 3) * 100}%)`,
+                        }}
+                        disabled={!ready || status.solved}
+                        aria-pressed={selected === id}
+                        aria-label={tr(
+                          'Kachel in Zeile ' +
+                            (Math.floor(pos / 3) + 1) +
+                            ', Spalte ' +
+                            ((pos % 3) + 1) +
+                            (id === l.sourceId ? ', Lichtquelle' : '') +
+                            '. Anschlüsse: ' +
+                            [0, 1, 2, 3]
+                              .filter((d) => mask & (1 << d))
+                              .map(
+                                (d) => ['oben', 'rechts', 'unten', 'links'][d],
+                              )
+                              .join(', ') +
+                            '. ' +
+                            (selected === id && l.mode === 'rotate'
+                              ? 'Erneut aktivieren zum Drehen.'
+                              : 'Aktivieren zum Auswählen.'),
+                        )}
+                        onPointerDown={(e) => {
+                          if (!e.isPrimary || e.button !== 0 || gesture.current)
+                            return;
+                          gesture.current = {
+                            pointer: e.pointerId,
+                            id,
+                            x: e.clientX,
+                            y: e.clientY,
+                            size: e.currentTarget.getBoundingClientRect().width,
+                          };
+                          e.currentTarget.setPointerCapture(e.pointerId);
+                        }}
+                        onPointerMove={(e) => {
+                          const g = gesture.current;
+                          if (!g || g.pointer !== e.pointerId) return;
+                          setPreview(
+                            swipeSliding(
+                              l,
+                              s,
+                              g.id,
+                              e.clientX - g.x,
+                              e.clientY - g.y,
+                              g.size,
+                            )
+                              ? g.id
+                              : null,
+                          );
+                        }}
+                        onPointerUp={(e) => {
+                          const g = gesture.current;
+                          if (!g || g.pointer !== e.pointerId) return;
+                          const dx = e.clientX - g.x,
+                            dy = e.clientY - g.y;
+                          clearGesture();
+                          if (Math.hypot(dx, dy) > 10) {
+                            suppressClick.current = Date.now() + 500;
+                            const action = swipeSliding(
+                              l,
+                              s,
+                              g.id,
+                              dx,
+                              dy,
+                              g.size,
+                            );
+                            if (action) dispatch(action);
+                            else
+                              setHint(
+                                'Nur eine benachbarte Kachel gerade zum Leerfeld schieben.',
+                              );
+                          }
+                        }}
+                        onPointerCancel={() => {
+                          clearGesture();
+                          suppressClick.current = Date.now() + 500;
+                        }}
+                        onLostPointerCapture={() => {
+                          if (gesture.current) {
+                            clearGesture();
+                            suppressClick.current = Date.now() + 500;
+                          }
+                        }}
+                        onClick={(e) => {
+                          if (
+                            e.detail !== 0 &&
+                            Date.now() < suppressClick.current
+                          ) {
+                            suppressClick.current = 0;
+                            return;
+                          }
+                          tap(pos);
                         }}
                       >
-                        {[0, 1, 2, 3]
-                          .filter((d) => baseMask & (1 << d))
-                          .map((d) => (
-                            <path
-                              key={d}
-                              className="wire"
-                              d={
-                                [
-                                  'M50 50V0',
-                                  'M50 50H100',
-                                  'M50 50V100',
-                                  'M50 50H0',
-                                ][d]
-                              }
+                        <svg viewBox="0 0 100 100" aria-hidden="true">
+                          <g
+                            className="rotor"
+                            style={{
+                              transform: 'rotate(' + s.turns[id] * 90 + 'deg)',
+                            }}
+                          >
+                            {tr(
+                              [0, 1, 2, 3]
+                                .filter((d) => baseMask & (1 << d))
+                                .map((d) => (
+                                  <path
+                                    key={d}
+                                    className="wire"
+                                    d={
+                                      [
+                                        'M50 50V0',
+                                        'M50 50H100',
+                                        'M50 50V100',
+                                        'M50 50H0',
+                                      ][d]
+                                    }
+                                  />
+                                )),
+                            )}
+                            <circle
+                              cx="50"
+                              cy="50"
+                              r={id === l.sourceId ? 13 : 5}
+                              className={id === l.sourceId ? 'source' : 'joint'}
                             />
-                          ))}
-                        <circle
-                          cx="50"
-                          cy="50"
-                          r={id === l.sourceId ? 13 : 5}
-                          className={id === l.sourceId ? 'source' : 'joint'}
-                        />
-                        {id === l.sourceId && (
-                          <circle cx="50" cy="50" r="5" fill="#142235" />
-                        )}
-                      </g>
-                      {[0, 1, 2, 3]
-                        .filter((d) => {
-                          const j = neighbor(pos, d, l.n);
-                          return (
-                            mask & (1 << d) &&
-                            (j < 0 || !(board[j] & (1 << ((d + 2) % 4))))
-                          );
-                        })
-                        .map((d) => (
-                          <circle
-                            key={d}
-                            cx={[50, 93, 50, 7][d]}
-                            cy={[7, 50, 93, 50][d]}
-                            r="3"
-                            className="open-end"
-                          />
-                        ))}
-                    </svg>
-                  </button>
-                );
-              })}
+                            {tr(
+                              id === l.sourceId && (
+                                <circle
+                                  cx="50"
+                                  cy="50"
+                                  r="5"
+                                  fill="var(--lw-142235)"
+                                />
+                              ),
+                            )}
+                          </g>
+                          {tr(
+                            [0, 1, 2, 3]
+                              .filter((d) => {
+                                const j = neighbor(pos, d, l.n);
+                                return (
+                                  mask & (1 << d) &&
+                                  (j < 0 || !(board[j] & (1 << ((d + 2) % 4))))
+                                );
+                              })
+                              .map((d) => (
+                                <circle
+                                  key={d}
+                                  cx={[50, 93, 50, 7][d]}
+                                  cy={[7, 50, 93, 50][d]}
+                                  r="3"
+                                  className="open-end"
+                                />
+                              )),
+                          )}
+                        </svg>
+                      </button>
+                    );
+                  }),
+                )}
+              </div>
             </div>
+            <p className="play-status" aria-live="polite">
+              {tr(
+                status.solved
+                  ? 'Alles verbunden. Schön gelöst.'
+                  : hint ||
+                      (selected !== null
+                        ? 'Kachel ausgewählt. ' +
+                          (adjacent(s.positions.indexOf(selected), hole, l.n)
+                            ? 'Tippe auf das Leerfeld.'
+                            : l.mode === 'rotate'
+                              ? 'Nochmals antippen zum Drehen.'
+                              : 'Sie liegt nicht neben dem Leerfeld.')
+                        : status.open +
+                          ' offene Anschlüsse · Das Leerfeld bleibt frei.'),
+              )}
+            </p>
+            <div className="play-actions">
+              <Button
+                variant="outline"
+                disabled={!s.history.length}
+                onClick={() => dispatch({ type: 'undo' })}
+              >
+                <span>{tr('↶')}</span>
+                {tr('Rückgängig')}
+              </Button>
+              <Button variant="outline" onClick={() => setRules(true)}>
+                <span>{tr('?')}</span>
+                {tr('Regeln')}
+              </Button>
+              <Button variant="outline" onClick={() => setRestart(true)}>
+                <span>{tr('↻')}</span>
+                {tr('Neustart')}
+              </Button>
+            </div>
+            <SolveControls
+              key={l.id}
+              onPauseChange={setHelpPaused}
+              puzzle={l}
+              session={s}
+              back={helpBack}
+              onApplied={(next, quiet, assistance) => {
+                clock.record(
+                  slidingStatus(l, next).solved,
+                  next.slides + next.rotations,
+                  assistance,
+                );
+                storeSession(next);
+                setSelected(null);
+                setHint('');
+                clearGesture();
+                const solved = slidingStatus(l, next).solved;
+                setVictory(solved, !quiet);
+              }}
+            />
+            {tr(
+              status.solved && (
+                <Button
+                  className="next-inline"
+                  disabled={generating}
+                  onClick={nextGame}
+                >
+                  {tr(
+                    daily
+                      ? 'Zum Kalender →'
+                      : freeMode || nextIndex >= 0
+                        ? 'Nächstes Rätsel →'
+                        : 'Zur Modusauswahl →',
+                  )}
+                </Button>
+              ),
+            )}
+          </section>
+        ),
+      )}
+      {tr(
+        generating && (
+          <div className="mode-help" role="status">
+            {tr('Neue Wege entstehen …')}
+            {tr(' ')}
+            <Button variant="outline" onClick={cancelGeneration}>
+              {tr('Abbrechen')}
+            </Button>
           </div>
-          <p className="play-status" aria-live="polite">
-            {status.solved
-              ? 'Alles verbunden. Schön gelöst.'
-              : hint ||
-                (selected !== null
-                  ? 'Kachel ausgewählt. ' +
-                    (adjacent(s.positions.indexOf(selected), hole, l.n)
-                      ? 'Tippe auf das Leerfeld.'
-                      : l.mode === 'rotate'
-                        ? 'Nochmals antippen zum Drehen.'
-                        : 'Sie liegt nicht neben dem Leerfeld.')
-                  : status.open +
-                    ' offene Anschlüsse · Das Leerfeld bleibt frei.')}
+        ),
+      )}
+      {tr(
+        generationError && (
+          <p className="mode-help" role="alert">
+            {tr(generationError)}
           </p>
-          <div className="play-actions">
-            <Button
-              variant="outline"
-              disabled={!s.history.length}
-              onClick={() => dispatch({ type: 'undo' })}
-            >
-              <span>↶</span>Rückgängig
-            </Button>
-            <Button variant="outline" onClick={() => setRules(true)}>
-              <span>?</span>Regeln
-            </Button>
-            <Button variant="outline" onClick={() => setRestart(true)}>
-              <span>↻</span>Neustart
-            </Button>
-          </div>
-          <SolveControls
-            key={l.id}
-            onPauseChange={setHelpPaused}
-            puzzle={l}
-            session={s}
-            back={helpBack}
-            onApplied={(next, quiet, assistance) => {
-              clock.record(
-                slidingStatus(l, next).solved,
-                next.slides + next.rotations,
-                assistance,
-              );
-              storeSession(next);
-              setSelected(null);
-              setHint('');
-              clearGesture();
-              const solved = slidingStatus(l, next).solved;
-              setVictory(solved, !quiet);
-            }}
-          />
-          {status.solved && (
-            <Button
-              className="next-inline"
-              disabled={generating}
-              onClick={nextGame}
-            >
-              {daily
-                ? 'Zum Kalender →'
-                : freeMode || nextIndex >= 0
-                  ? 'Nächstes Rätsel →'
-                  : 'Zur Modusauswahl →'}
-            </Button>
-          )}
-        </section>
+        ),
       )}
-      {generating && (
-        <div className="mode-help" role="status">
-          Neue Wege entstehen …{' '}
-          <Button variant="outline" onClick={cancelGeneration}>
-            Abbrechen
-          </Button>
-        </div>
-      )}
-      {generationError && (
-        <p className="mode-help" role="alert">
-          {generationError}
-        </p>
-      )}
-      {storageError && (
-        <p role="status" className="mode-help">
-          Die Schiebepartie kann gerade nicht gespeichert werden. Lass die App
-          geöffnet.
-        </p>
+      {tr(
+        storageError && (
+          <p role="status" className="mode-help">
+            {tr(
+              'Die Schiebepartie kann gerade nicht gespeichert werden. Lass die App geöffnet.',
+            )}
+          </p>
+        ),
       )}
       <Dialog open={victory} onOpenChange={(open) => setVictory(open)}>
         <DialogContent
@@ -805,15 +913,16 @@ export default function SlidingGame({
           showCloseButton={false}
         >
           <div className="success-symbol" aria-hidden="true">
-            ✳
+            {tr('✳')}
           </div>
           <DialogTitle className="dialog-heading">
-            Dein Netz leuchtet!
+            {tr('Dein Netz leuchtet!')}
           </DialogTitle>
           <DialogDescription>
-            {s.slides} Schübe
-            {l.mode === 'rotate' ? ' · ' + s.rotations + ' Drehungen' : ''}.
-            Alle acht Kacheln sind verbunden.
+            {tr(s.slides)}
+            {tr(' Schübe')}
+            {tr(l.mode === 'rotate' ? ' · ' + s.rotations + ' Drehungen' : '')}
+            {tr('. Alle acht Kacheln sind verbunden.')}
           </DialogDescription>
           <PuzzleReward puzzleId={l.id} attemptId={clock.entry?.id} />
           <Button
@@ -822,14 +931,16 @@ export default function SlidingGame({
               nextGame();
             }}
           >
-            {daily
-              ? 'Zum Kalender'
-              : freeMode || nextIndex >= 0
-                ? 'Nächstes Rätsel →'
-                : 'Zur Modusauswahl'}
+            {tr(
+              daily
+                ? 'Zum Kalender'
+                : freeMode || nextIndex >= 0
+                  ? 'Nächstes Rätsel →'
+                  : 'Zur Modusauswahl',
+            )}
           </Button>
           <Button variant="outline" onClick={() => setVictory(false)}>
-            Brett ansehen
+            {tr('Brett ansehen')}
           </Button>
         </DialogContent>
       </Dialog>
@@ -841,13 +952,14 @@ export default function SlidingGame({
       >
         <AlertDialogContent className="game-dialog">
           <AlertDialogTitle className="dialog-heading">
-            Neue freie Partie?
+            {tr('Neue freie Partie?')}
           </AlertDialogTitle>
           <AlertDialogDescription>
-            Deine noch offene freie Partie in diesem Modus wird ersetzt. Die
-            Proberätsel und der andere Modus bleiben gespeichert.
+            {tr(
+              'Deine noch offene freie Partie in diesem Modus wird ersetzt. Die Proberätsel und der andere Modus bleiben gespeichert.',
+            )}
           </AlertDialogDescription>
-          <AlertDialogCancel>Weiterspielen</AlertDialogCancel>
+          <AlertDialogCancel>{tr('Weiterspielen')}</AlertDialogCancel>
           <AlertDialogAction
             onClick={() => {
               const mode = replaceMode;
@@ -855,54 +967,58 @@ export default function SlidingGame({
               if (mode) generate(mode);
             }}
           >
-            Neue Partie
+            {tr('Neue Partie')}
           </AlertDialogAction>
         </AlertDialogContent>
       </AlertDialog>
       <Dialog open={rules} onOpenChange={setRules}>
         <DialogContent className="game-dialog">
           <DialogTitle className="dialog-heading">
-            So bewegst du das Licht
+            {tr('So bewegst du das Licht')}
           </DialogTitle>
           <DialogDescription>
-            Verbinde alle acht Kacheln mit der Quelle. Kein Anschluss darf ins
-            Leerfeld oder über den Rand zeigen. Die Quelle wandert mit ihrer
-            Kachel mit.
+            {tr(
+              'Verbinde alle acht Kacheln mit der Quelle. Kein Anschluss darf ins Leerfeld oder über den Rand zeigen. Die Quelle wandert mit ihrer Kachel mit.',
+            )}
           </DialogDescription>
           <p>
-            Wische eine direkt benachbarte Kachel zum Leerfeld. Oder tippe erst
-            die Kachel und anschließend das Leerfeld an. Diagonales Schieben
-            geht nicht.
+            {tr(
+              'Wische eine direkt benachbarte Kachel zum Leerfeld. Oder tippe erst die Kachel und anschließend das Leerfeld an. Diagonales Schieben geht nicht.',
+            )}
           </p>
           <p>
-            {l.mode === 'rotate'
-              ? 'Antippen wählt eine Kachel aus. Ein weiteres Antippen derselben Kachel dreht sie um 90 Grad. Eine andere Kachel antippen wechselt die Auswahl.'
-              : 'Die Kacheln behalten beim Schieben ihre Ausrichtung. Drehen ist in diesem Modus ausgeschaltet.'}
+            {tr(
+              l.mode === 'rotate'
+                ? 'Antippen wählt eine Kachel aus. Ein weiteres Antippen derselben Kachel dreht sie um 90 Grad. Eine andere Kachel antippen wechselt die Auswahl.'
+                : 'Die Kacheln behalten beim Schieben ihre Ausrichtung. Drehen ist in diesem Modus ausgeschaltet.',
+            )}
           </p>
           <p>
-            Jedes vollständig verbundene Netz ohne offene Anschlüsse zählt als
-            Lösung.
+            {tr(
+              'Jedes vollständig verbundene Netz ohne offene Anschlüsse zählt als Lösung.',
+            )}
           </p>
-          <Button onClick={() => setRules(false)}>Verstanden</Button>
+          <Button onClick={() => setRules(false)}>{tr('Verstanden')}</Button>
         </DialogContent>
       </Dialog>
       <AlertDialog open={restart} onOpenChange={setRestart}>
         <AlertDialogContent className="game-dialog">
           <AlertDialogTitle className="dialog-heading">
-            Schiebepartie neu starten?
+            {tr('Schiebepartie neu starten?')}
           </AlertDialogTitle>
           <AlertDialogDescription>
-            Diese Partie wird auf ihre Ausgangsstellung zurückgesetzt. Andere
-            Spielstände bleiben erhalten.
+            {tr(
+              'Diese Partie wird auf ihre Ausgangsstellung zurückgesetzt. Andere Spielstände bleiben erhalten.',
+            )}
           </AlertDialogDescription>
-          <AlertDialogCancel>Abbrechen</AlertDialogCancel>
+          <AlertDialogCancel>{tr('Abbrechen')}</AlertDialogCancel>
           <AlertDialogAction
             onClick={() => {
               dispatch({ type: 'reset' });
               setRestart(false);
             }}
           >
-            Neu starten
+            {tr('Neu starten')}
           </AlertDialogAction>
         </AlertDialogContent>
       </AlertDialog>

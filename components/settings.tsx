@@ -1,7 +1,10 @@
 'use client';
+import { t as tr, locale } from '@/lib/i18n';
 import { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
+import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
+import { haptic } from '@/lib/haptics';
 import {
   AlertDialog,
   AlertDialogContent,
@@ -30,6 +33,9 @@ export default function Settings({
   setSound: (value: boolean) => void;
 }) {
   const [animations, setAnimations] = useState(true);
+  const [language, setLanguage] = useState('de');
+  const [theme, setTheme] = useState('dark');
+  const [vibration, setVibration] = useState(true);
   const [clock, setClock] = useState(true);
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
@@ -41,6 +47,9 @@ export default function Settings({
   const [backupOpen, setBackupOpen] = useState(false);
   useEffect(() => {
     setAnimations(readPreferences().animations);
+    setLanguage(readPreferences().language);
+    setTheme(readPreferences().theme);
+    setVibration(readPreferences().haptics);
     setClock(readHistory().clockVisible);
     try {
       setCanUndo(!!localStorage.getItem(undoKey));
@@ -70,24 +79,104 @@ export default function Settings({
     : 0;
   return (
     <section className="settings-screen">
-      <h1>Einstellungen</h1>
-      <h2>Spielgefühl</h2>
+      <h1>{tr('Einstellungen')}</h1>
+      <h2>{tr('Sprache')}</h2>
+      <RadioGroup
+        className="settings-choice"
+        value={language}
+        onValueChange={(value) => {
+          try {
+            savePreferences({ language: value });
+            setLanguage(value);
+            setError('');
+          } catch (e) {
+            report(e);
+          }
+        }}
+        aria-label={tr('Sprache')}
+      >
+        <label>
+          <RadioGroupItem value="de" />
+          {'Deutsch'}
+        </label>
+        <label>
+          <RadioGroupItem value="en" />
+          {tr('English')}
+        </label>
+      </RadioGroup>
+      <h2>{tr('Darstellung')}</h2>
+      <RadioGroup
+        className="settings-choice"
+        value={theme}
+        onValueChange={(value) => {
+          try {
+            savePreferences({ theme: value });
+            setTheme(value);
+            setError('');
+          } catch (e) {
+            report(e);
+          }
+        }}
+        aria-label={tr('Farbschema')}
+      >
+        <label>
+          <RadioGroupItem value="dark" />
+          {tr('Dunkel')}
+        </label>
+        <label>
+          <RadioGroupItem value="light" />
+          {tr('Hell')}
+        </label>
+      </RadioGroup>
+      <h2>{tr('Spielgefühl')}</h2>
       <div className="settings-group">
         <label className="settings-row">
           <span>
-            <strong>Töne</strong>
-            <small>Verbindungen und Erfolge</small>
+            <strong>{tr('Haptisches Feedback')}</strong>
+            <small>
+              {tr(
+                'Kurze Vibrationen beim Spielen, soweit vom Gerät unterstützt.',
+              )}
+            </small>
+          </span>
+          <Switch
+            checked={vibration}
+            onCheckedChange={(value) => {
+              try {
+                savePreferences({ haptics: value });
+                setVibration(value);
+                setError('');
+                if (value) haptic();
+              } catch (e) {
+                report(e);
+              }
+            }}
+            aria-label={tr('Haptisches Feedback')}
+          />
+        </label>
+        <Button
+          variant="ghost"
+          className="settings-vibration-test"
+          disabled={!vibration}
+          onClick={() => haptic(true)}
+        >
+          {tr('Vibration testen')}
+        </Button>
+        <label className="settings-row">
+          <span>
+            <strong>{tr('Töne')}</strong>
+            <small>{tr('Verbindungen und Erfolge')}</small>
           </span>
           <Switch
             checked={sound}
             onCheckedChange={setSound}
-            aria-label="Töne"
+            aria-label={tr('Töne')}
           />
         </label>
         <label className="settings-row">
           <span>
-            <strong>Animationen</strong>
-            <small>Bewegungen und Aufleuchten</small>
+            <strong>{tr('Animationen')}</strong>
+            <small>{tr('Bewegungen und Aufleuchten')}</small>
           </span>
           <Switch
             checked={animations}
@@ -101,13 +190,15 @@ export default function Settings({
                 report(e);
               }
             }}
-            aria-label="Animationen"
+            aria-label={tr('Animationen')}
           />
         </label>
         <label className="settings-row">
           <span>
-            <strong>Spieluhr anzeigen</strong>
-            <small>Deine Spielzeit wird auch ohne Anzeige erfasst.</small>
+            <strong>{tr('Spieluhr anzeigen')}</strong>
+            <small>
+              {tr('Deine Spielzeit wird auch ohne Anzeige erfasst.')}
+            </small>
           </span>
           <Switch
             checked={clock}
@@ -123,14 +214,15 @@ export default function Settings({
                   : '',
               );
             }}
-            aria-label="Spieluhr anzeigen"
+            aria-label={tr('Spieluhr anzeigen')}
           />
         </label>
       </div>
-      <h2>Sicherung & Wiederherstellung</h2>
+      <h2>{tr('Sicherung & Wiederherstellung')}</h2>
       <p className="settings-note">
-        Sichere Rätselstände, XP, Kalender, Statistiken und Einstellungen.
-        Bewahre die Kopie außerhalb der App auf.
+        {tr(
+          'Sichere Rätselstände, XP, Kalender, Statistiken und Einstellungen. Bewahre die Kopie außerhalb der App auf.',
+        )}
       </p>
       <div className="settings-group settings-backup">
         <Button
@@ -157,14 +249,14 @@ export default function Settings({
             }
           }}
         >
-          Sicherung kopieren
+          {tr('Sicherung kopieren')}
         </Button>
         <details
           open={backupOpen}
           onToggle={(event) => setBackupOpen(event.currentTarget.open)}
         >
-          <summary>Sicherung einfügen oder ansehen</summary>
-          <label htmlFor="backup-text">Sicherungstext</label>
+          <summary>{tr('Sicherung einfügen oder ansehen')}</summary>
+          <label htmlFor="backup-text">{tr('Sicherungstext')}</label>
           <textarea
             id="backup-text"
             maxLength={8000000}
@@ -176,22 +268,26 @@ export default function Settings({
               setText(e.target.value);
               setExported(false);
             }}
-            placeholder="Leuchtwege-Sicherung hier einfügen"
+            placeholder={tr('Leuchtwege-Sicherung hier einfügen')}
           />
-          {exported && (
-            <Button
-              variant="outline"
-              onClick={() =>
-                (
-                  document.getElementById('backup-text') as HTMLTextAreaElement
-                )?.select()
-              }
-            >
-              Text markieren
-            </Button>
+          {tr(
+            exported && (
+              <Button
+                variant="outline"
+                onClick={() =>
+                  (
+                    document.getElementById(
+                      'backup-text',
+                    ) as HTMLTextAreaElement
+                  )?.select()
+                }
+              >
+                {tr('Text markieren')}
+              </Button>
+            ),
           )}
           <Button disabled={!text.trim()} onClick={() => check(text)}>
-            Sicherung prüfen
+            {tr('Sicherung prüfen')}
           </Button>
         </details>
         <Button
@@ -205,18 +301,22 @@ export default function Settings({
             }
           }}
         >
-          Letzten Import rückgängig machen
+          {tr('Letzten Import rückgängig machen')}
         </Button>
       </div>
-      {message && (
-        <p role="status" className="settings-note">
-          {message}
-        </p>
+      {tr(
+        message && (
+          <p role="status" className="settings-note">
+            {tr(message)}
+          </p>
+        ),
       )}
-      {error && (
-        <p role="alert" className="settings-error">
-          {error}
-        </p>
+      {tr(
+        error && (
+          <p role="alert" className="settings-error">
+            {tr(error)}
+          </p>
+        ),
       )}
       <AlertDialog
         open={!!pending}
@@ -226,21 +326,33 @@ export default function Settings({
       >
         <AlertDialogContent className="game-dialog">
           <AlertDialogTitle>
-            {undo
-              ? 'Vorherigen Stand wiederherstellen?'
-              : 'Sicherung wiederherstellen?'}
+            {tr(
+              undo
+                ? 'Vorherigen Stand wiederherstellen?'
+                : 'Sicherung wiederherstellen?',
+            )}
           </AlertDialogTitle>
           <AlertDialogDescription>
-            Sicherung vom{' '}
-            {pending && new Date(pending.createdAt).toLocaleString('de-DE')}:{' '}
-            {pending?.data['leuchtwege-v2']?.done.length || 0} gelöste
-            Drehpuzzles, {xp} XP. Dieser Stand ersetzt deine aktuellen Daten.{' '}
-            {undo
-              ? 'Auch Fortschritt seit dem Import wird ersetzt.'
-              : 'Den Import kannst du anschließend rückgängig machen.'}
+            {tr('Sicherung vom')}
+            {tr(' ')}
+            {tr(
+              pending && new Date(pending.createdAt).toLocaleString(locale()),
+            )}
+            {tr(':')}
+            {tr(' ')}
+            {tr(pending?.data['leuchtwege-v2']?.done.length || 0)}
+            {tr(' gelöste Drehpuzzles, ')}
+            {tr(xp)}
+            {tr(' XP. Dieser Stand ersetzt deine aktuellen Daten.')}
+            {tr(' ')}
+            {tr(
+              undo
+                ? 'Auch Fortschritt seit dem Import wird ersetzt.'
+                : 'Den Import kannst du anschließend rückgängig machen.',
+            )}
           </AlertDialogDescription>
           <div className="settings-confirm">
-            <AlertDialogCancel>Abbrechen</AlertDialogCancel>
+            <AlertDialogCancel>{tr('Abbrechen')}</AlertDialogCancel>
             <AlertDialogAction
               onClick={() => {
                 try {
@@ -252,7 +364,7 @@ export default function Settings({
                 }
               }}
             >
-              Wiederherstellen
+              {tr('Wiederherstellen')}
             </AlertDialogAction>
           </div>
         </AlertDialogContent>
