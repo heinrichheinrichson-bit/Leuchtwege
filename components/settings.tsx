@@ -33,7 +33,7 @@ export default function Settings({
   setSound: (value: boolean) => void;
 }) {
   const [animations, setAnimations] = useState(true);
-  const [language, setLanguage] = useState('de');
+  const [language, setLanguage] = useState('system');
   const [theme, setTheme] = useState('dark');
   const [vibration, setVibration] = useState(true);
   const [clock, setClock] = useState(true);
@@ -95,6 +95,10 @@ export default function Settings({
         }}
         aria-label={tr('Sprache')}
       >
+        <label style={{ gridColumn: '1 / -1' }}>
+          <RadioGroupItem value="system" />
+          {tr('Systemsprache')}
+        </label>
         <label>
           <RadioGroupItem value="de" />
           {'Deutsch'}

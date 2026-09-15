@@ -76,9 +76,13 @@ export default function Home() {
     };
     window.addEventListener('leuchtwege-preferences', refresh);
     window.addEventListener('storage', refresh);
+    window.addEventListener('languagechange', refresh);
+    window.addEventListener('focus', refresh);
     return () => {
       window.removeEventListener('leuchtwege-preferences', refresh);
       window.removeEventListener('storage', refresh);
+      window.removeEventListener('languagechange', refresh);
+      window.removeEventListener('focus', refresh);
     };
   }, []);
   const [learnMode, setLearnMode] = useState('turn');

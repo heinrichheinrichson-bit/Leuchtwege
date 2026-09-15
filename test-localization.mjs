@@ -2,7 +2,11 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import ts from 'typescript';
 import { english } from './lib/translations.mjs';
-import { preferences } from './lib/preferences.mjs';
+import {
+  preferences,
+  resolveLanguage,
+  applyPreferences,
+} from './lib/preferences.mjs';
 const source = fs
   .readFileSync('lib/i18n.ts', 'utf8')
   .replace(
@@ -22,7 +26,16 @@ const { t, locale } = await import(
 assert.equal(t('Einstellungen'), 'Einstellungen');
 assert.equal(preferences(null).theme, 'dark');
 assert.equal(preferences({ theme: 'auto' }).theme, 'dark');
-assert.equal(preferences(null).language, 'de');
+assert.equal(preferences(null).language, 'system');
+assert.equal(preferences({ language: 'de' }).language, 'de');
+assert.equal(preferences({ language: 'en' }).language, 'en');
+assert.equal(resolveLanguage('system', ['de-AT']), 'de');
+assert.equal(resolveLanguage('system', ['en-US', 'de-DE']), 'en');
+assert.equal(resolveLanguage('system', ['fr-FR', 'de-DE']), 'de');
+assert.equal(resolveLanguage('system', ['fr-FR']), 'en');
+assert.equal(resolveLanguage('system', []), 'en');
+assert.equal(resolveLanguage('de', ['en-US']), 'de');
+assert.equal(resolveLanguage('en', ['de-AT']), 'en');
 document.documentElement.lang = 'en';
 assert.equal(locale(), 'en-GB');
 assert.equal(t('Einstellungen'), 'Settings');
