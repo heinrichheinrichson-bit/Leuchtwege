@@ -16,6 +16,7 @@ import PlayStatistics from '@/components/play-statistics';
 import DailyHub from '@/components/daily-hub';
 import StreakCalendar from '@/components/streak-calendar';
 import ExperienceCard, { PuzzleReward } from '@/components/experience';
+import Milestones from '@/components/milestones';
 import { usePlayClock } from '@/lib/use-play-clock';
 import { Button } from '@/components/ui/button';
 import {
@@ -296,6 +297,7 @@ export default function Home() {
           'daily',
           'streak',
           'settings',
+          'milestones',
         ].includes(v)
           ? v
           : 'home',
@@ -666,7 +668,7 @@ export default function Home() {
               </Button>
             </div>
             <h2 className="home-section-title">{tr('Dein Fortschritt')}</h2>
-            <ExperienceCard />
+            <ExperienceCard onOpen={() => navigate('milestones')} />
             <div className="home-grid">
               <Button
                 variant="outline"
@@ -700,6 +702,7 @@ export default function Home() {
         ),
       )}
       {tr(view === 'statistics' && <PlayStatistics />)}
+      {view === 'milestones' && <Milestones />}
       {tr(view === 'streak' && <StreakCalendar />)}
       {tr(
         view === 'daily' && (

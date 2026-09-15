@@ -1710,6 +1710,55 @@ html[data-theme='light'] {
   --lw-fff3ce: #a96300;
 }
 
+.milestone-entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 44px;
+  font-size: 14px;
+  color: var(--lw-ffdc91);
+  cursor: pointer;
+  text-align: left;
+  gap: 8px;
+}
+.milestone-entry:focus-visible {
+  outline: 2px solid var(--lw-ffdc91);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+.milestone-list {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 24px;
+}
+.milestone {
+  padding: 14px;
+  border: 1px solid var(--lw-35485c);
+  border-radius: 14px;
+}
+.milestone.done {
+  border-color: var(--lw-ffdc91);
+}
+.milestone-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.milestone-heading span {
+  font-size: 14px;
+}
+.milestone p {
+  font-size: 14px;
+  margin: 8px 0;
+}
+.milestone progress {
+  width: 100%;
+  height: 6px;
+  accent-color: var(--lw-ffdc91);
+}
 .settings-choice {
   display: grid;
   grid-template-columns: 1fr 1fr;

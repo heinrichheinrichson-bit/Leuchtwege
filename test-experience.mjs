@@ -21,7 +21,7 @@ let h = updateAttempt(emptyHistory(), meta, {
   solved: true,
   assistance: 'test',
 });
-assert.equal(experienceSummary(h.attempts).total, 0);
+assert.equal(experienceSummary(h.attempts).puzzleTotal, 0);
 h = updateAttempt(h, meta, {
   id: 'first',
   now: '2026-09-15T12:00:00Z',
@@ -30,7 +30,7 @@ h = updateAttempt(h, meta, {
   assistance: 'hint',
 });
 const points = dailyXp(spec.tier);
-assert.equal(experienceSummary(h.attempts).total, points);
+assert.equal(experienceSummary(h.attempts).puzzleTotal, points);
 h = updateAttempt(h, meta, {
   id: 'repeat',
   now: '2026-09-16T12:00:00Z',
@@ -38,27 +38,27 @@ h = updateAttempt(h, meta, {
   solved: true,
 });
 assert.equal(
-  experienceSummary(h.attempts).total,
+  experienceSummary(h.attempts).puzzleTotal,
   points,
   'No repeat or improved-score reward',
 );
-assert.equal(experienceSummary([...h.attempts].reverse()).total, points);
+assert.equal(experienceSummary([...h.attempts].reverse()).puzzleTotal, points);
 assert.equal(
   experienceSummary(restoreHistory(JSON.parse(JSON.stringify(h))).attempts)
-    .total,
+    .puzzleTotal,
   points,
 );
 assert(!streakSummary(h.attempts, '2026-09-16').days.has('2026-09-12'));
 assert.equal(
-  experienceSummary(h.attempts.map((a) => ({ ...a, partialTime: true }))).total,
+  experienceSummary(h.attempts.map((a) => ({ ...a, partialTime: true }))).puzzleTotal,
   0,
 );
 assert.equal(
-  experienceSummary(h.attempts.map((a) => ({ ...a, origin: 'catalog' }))).total,
+  experienceSummary(h.attempts.map((a) => ({ ...a, origin: 'catalog' }))).puzzleTotal,
   puzzleXp('catalog', spec.tier) + 5,
 );
 assert.equal(
-  experienceSummary(h.attempts.map((a) => ({ ...a, puzzleId: 'wrong' }))).total,
+  experienceSummary(h.attempts.map((a) => ({ ...a, puzzleId: 'wrong' }))).puzzleTotal,
   0,
 );
 assert.equal(dailyXp('Leicht', true), 45);
@@ -77,9 +77,9 @@ const records = ['turn', 'slide', 'rotate'].map((mode, i) => {
   };
 });
 const xp = experienceSummary(records);
-assert.equal(xp.total, 170);
+assert.equal(xp.puzzleTotal, 170);
 assert.equal(xp.level, 2);
-assert.equal(xp.current, 70);
+assert.equal(xp.current, xp.total - 100);
 assert.equal(xp.required, 150);
 assert.equal(experienceSummary([]).level, 1);
 for (const origin of ['catalog', 'free'])
@@ -98,14 +98,14 @@ for (const origin of ['catalog', 'free'])
         solved: true,
       });
       const expected = puzzleXp(origin, tier, true);
-      assert.equal(experienceSummary(data.attempts).total, expected);
+      assert.equal(experienceSummary(data.attempts).puzzleTotal, expected);
       data = updateAttempt(data, m, {
         id: 'duplicate',
         now: '2026-09-15T12:00:01Z',
         solved: true,
       });
       assert.equal(
-        experienceSummary(data.attempts).total,
+        experienceSummary(data.attempts).puzzleTotal,
         expected,
         'Repeated completion event is not a new game',
       );
@@ -115,7 +115,7 @@ for (const origin of ['catalog', 'free'])
         restart: true,
         solved: true,
       });
-      assert.equal(experienceSummary(data.attempts).total, expected + 5);
+      assert.equal(experienceSummary(data.attempts).puzzleTotal, expected + 5);
       data = updateAttempt(data, m, {
         id: 'three',
         now: '2026-09-17T12:00:00Z',
@@ -126,7 +126,7 @@ for (const origin of ['catalog', 'free'])
       assert.equal(
         experienceSummary(
           restoreHistory(JSON.parse(JSON.stringify(data))).attempts,
-        ).total,
+        ).puzzleTotal,
         expected + 5,
       );
       data = updateAttempt(
@@ -140,7 +140,7 @@ for (const origin of ['catalog', 'free'])
         },
       );
       assert.equal(
-        experienceSummary(data.attempts).total,
+        experienceSummary(data.attempts).puzzleTotal,
         expected + 5 + puzzleXp(origin, tier),
       );
     }
