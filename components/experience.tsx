@@ -106,7 +106,8 @@ export function PuzzleReward({
         .filter((a) => a.attemptId === attemptId)
         .map((a) => (
           <p key={a.id}>
-            ★ {tr('Erfolg freigeschaltet')}: {tr(a.title)}
+            ★ {tr('Erfolg freigeschaltet')}: {tr(a.title)} ·{' '}
+            {a.target.toLocaleString(locale())}
           </p>
         ))}
     </div>

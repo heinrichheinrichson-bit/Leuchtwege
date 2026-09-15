@@ -1759,6 +1759,26 @@ html[data-theme='light'] {
   height: 6px;
   accent-color: var(--lw-ffdc91);
 }
+.achievement-stages summary {
+  min-height: 44px;
+  align-content: center;
+  cursor: pointer;
+  font-size: 14px;
+}
+.achievement-stages ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.achievement-stages li {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 10px 0;
+  border-top: 1px solid var(--lw-35485c);
+  font-size: 14px;
+}
 .settings-choice {
   display: grid;
   grid-template-columns: 1fr 1fr;

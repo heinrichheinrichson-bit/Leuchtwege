@@ -1,5 +1,6 @@
 'use client';
 import { t as tr, locale } from '@/lib/i18n';
+import { groupAchievements } from '@/lib/achievement-catalog.mjs';
 import ExperienceCard, { useExperience } from './experience';
 export default function Milestones() {
   const xp = useExperience();
@@ -41,20 +42,54 @@ export default function Milestones() {
       </h2>
       <p>{tr('Deine bisherigen regulären Abschlüsse zählen mit.')}</p>
       <div className="milestone-list">
-        {xp.achievements.map((a) => (
+        {groupAchievements(xp.achievements).map((track) => (
           <article
-            key={a.id}
-            className={a.done ? 'milestone done' : 'milestone'}
+            key={track.kind}
+            className={
+              track.earned === track.stages.length
+                ? 'milestone done'
+                : 'milestone'
+            }
           >
             <div className="milestone-heading">
-              <strong>
-                {a.done ? '★' : '☆'} {tr(a.title)}
-              </strong>
+              <strong>{tr(track.title)}</strong>
               <span>
-                {a.progress}/{a.target}
+                {track.earned}/{track.stages.length} {tr('Stufen')}
               </span>
             </div>
-            <p>{tr(a.detail)}</p>
+            <p>{tr(track.detail)}</p>
+            <div className="milestone-heading">
+              <span>
+                {tr(
+                  track.earned === track.stages.length
+                    ? 'Alle Stufen erreicht'
+                    : 'Nächstes Ziel',
+                )}
+              </span>
+              <span>
+                {track.next.progress.toLocaleString(locale())}/
+                {track.next.target.toLocaleString(locale())}
+              </span>
+            </div>
+            <progress
+              value={track.next.progress}
+              max={track.next.target}
+              aria-label={tr(track.title)}
+            />
+            <details className="achievement-stages">
+              <summary>{tr('Alle Stufen ansehen')}</summary>
+              <ul>
+                {track.stages.map((a: (typeof xp.achievements)[number]) => (
+                  <li key={a.id}>
+                    <span>
+                      {a.done ? '★' : '☆'} {tr(a.title)} ·{' '}
+                      {a.target.toLocaleString(locale())}
+                    </span>
+                    <span>{tr(a.done ? 'Erreicht' : 'Noch offen')}</span>
+                  </li>
+                ))}
+              </ul>
+            </details>
           </article>
         ))}
       </div>

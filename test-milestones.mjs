@@ -3,6 +3,11 @@ import { milestoneSummary, missionDefinitions } from './lib/milestones.mjs';
 import { experienceSummary } from './lib/experience.mjs';
 import { dailySpec, shiftDay } from './lib/daily.mjs';
 import { english } from './lib/translations.mjs';
+import {
+  achievementDefinitions,
+  achievementTracks,
+  groupAchievements,
+} from './lib/achievement-catalog.mjs';
 const today = '2026-09-15';
 const a = (id, more = {}) => ({
   id,
@@ -86,4 +91,70 @@ assert.equal(
 );
 console.log(
   'PASS: mission rewards once per day, unique puzzles, mode variety, exclusions, midnight, archive completion day, streak achievements and backup reconstruction.',
+);
+assert.equal(
+  new Set(achievementDefinitions.map((a) => a.id)).size,
+  achievementDefinitions.length,
+);
+for (const track of achievementTracks) {
+  assert(english[track.title]);
+  assert(english[track.detail]);
+}
+const many = Array.from({ length: 10000 }, (_, i) =>
+  a('long-' + String(i).padStart(5, '0'), {
+    origin: 'free',
+    mode: ['turn', 'slide', 'rotate'][i % 3],
+    tier: 'Schwer',
+  }),
+);
+const long = milestoneSummary(many, today);
+assert(long.achievements.find((a) => a.id === 'count-10000').done);
+assert(
+  !milestoneSummary(many.slice(0, -1), today).achievements.find(
+    (a) => a.id === 'count-10000',
+  ).done,
+);
+assert.equal(
+  long.achievements.find((a) => a.id === 'count-10000').attemptId,
+  'long-09999',
+);
+assert.equal(
+  long.bonuses.reduce((n, b) => n + b.points, 0),
+  60,
+);
+const groups = groupAchievements(long.achievements);
+assert.equal(groups.length, 11);
+assert.equal(groups.find((g) => g.kind === 'count').earned, 11);
+const repeat = milestoneSummary(
+  Array.from({ length: 100 }, (_, i) => a('repeat-' + i, { puzzleId: 'same' })),
+  today,
+);
+assert.equal(repeat.achievements.find((a) => a.id === 'count-25').progress, 1);
+const spaced = Array.from({ length: 30 }, (_, i) =>
+  a('spaced' + i, {
+    completedDay: shiftDay(today, -i * 2),
+    completedAt: shiftDay(today, -i * 2) + 'T12:00:00Z',
+  }),
+);
+const paused = milestoneSummary(spaced, today);
+assert(paused.achievements.find((a) => a.id === 'days-30').done);
+assert(!paused.achievements.find((a) => a.id === 'week').done);
+const years = Array.from({ length: 1000 }, (_, i) =>
+  a('years' + i, {
+    completedDay: shiftDay(today, -i),
+    completedAt: shiftDay(today, -i) + 'T12:00:00Z',
+  }),
+);
+assert(
+  milestoneSummary(years, today).achievements.find(
+    (a) => a.id === 'streak-1000',
+  ).done,
+);
+assert(
+  milestoneSummary(years, shiftDay(today, 3)).achievements.find(
+    (a) => a.id === 'streak-1000',
+  ).done,
+);
+console.log(
+  `PASS: ${achievementDefinitions.length} permanent achievements; 10,000 puzzles, 1,000-day streak, pauses, duplicates, exact thresholds and grouped progress.`,
 );
