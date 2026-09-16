@@ -9,10 +9,13 @@ export default function StreakCalendar() {
   const [today, setToday] = useState(dayKey);
   const [month, setMonth] = useState(() => dayKey().slice(0, 7));
   const [attempts, setAttempts] = useState<any[]>([]);
+  const [freeze, setFreeze] = useState<any>(null);
   useEffect(() => {
     const update = () => {
       setToday(dayKey());
-      setAttempts(readHistory().attempts);
+      const history = readHistory();
+      setAttempts(history.attempts);
+      setFreeze(history.freeze);
     };
     update();
     window.addEventListener('leuchtwege-history', update);
@@ -26,7 +29,7 @@ export default function StreakCalendar() {
       document.removeEventListener('visibilitychange', update);
     };
   }, []);
-  const streak = streakSummary(attempts, today),
+  const streak = streakSummary(attempts, today, freeze?.frozen || []),
     calendar = monthDays(month);
   const earliest = [...streak.days, today].sort()[0].slice(0, 7);
   return (
@@ -47,6 +50,17 @@ export default function StreakCalendar() {
         <p className="streak-today">
           {tr(streak.today ? '✓ Tagesstreak geschafft' : '○ Heute noch offen')}
         </p>
+      </div>
+      <div className="streak-card">
+        <strong>
+          ❄ {tr('Streak-Schutz')} · {freeze?.balance ?? 2}/2
+        </strong>
+        <p>
+          {tr('Automatisch aktiv. Ein Schutz überbrückt einen verpassten Tag.')}
+        </p>
+        <span>
+          {freeze?.progress ?? 0}/7 · {tr('Spieltage bis zum nächsten Schutz')}
+        </span>
       </div>
       <p className="section-intro">
         {tr('Ein gelöstes Rätsel pro Tag. Jeder Modus zählt.')}
@@ -98,20 +112,29 @@ export default function StreakCalendar() {
         {tr(
           calendar.days.map((day) => {
             const done = streak.days.has(day),
+              frozen = streak.frozen.has(day),
               future = day > today;
             const status = done
               ? 'Tagesstreak geschafft'
-              : future
-                ? 'Zukünftiger Tag'
-                : day === today
-                  ? 'Heute noch offen'
-                  : 'Kein gewerteter Abschluss';
+              : frozen
+                ? 'Streak auf Eis'
+                : future
+                  ? 'Zukünftiger Tag'
+                  : day === today
+                    ? 'Heute noch offen'
+                    : 'Kein gewerteter Abschluss';
             return (
               <div
                 key={day}
                 className={
                   'calendar-day streak-day ' +
-                  (done ? 'completed' : future ? 'future' : '')
+                  (done
+                    ? 'completed'
+                    : frozen
+                      ? 'frozen'
+                      : future
+                        ? 'future'
+                        : '')
                 }
                 aria-current={day === today ? 'date' : undefined}
                 aria-label={tr(
@@ -120,7 +143,17 @@ export default function StreakCalendar() {
               >
                 <strong>{tr(Number(day.slice(-2)))}</strong>
                 <span className="streak-check" aria-hidden="true">
-                  {tr(done ? '✓' : future ? '·' : day === today ? '○' : '–')}
+                  {tr(
+                    done
+                      ? '✓'
+                      : frozen
+                        ? '❄'
+                        : future
+                          ? '·'
+                          : day === today
+                            ? '○'
+                            : '–',
+                  )}
                 </span>
               </div>
             );
@@ -128,9 +161,7 @@ export default function StreakCalendar() {
         )}
       </div>
       <p className="calendar-legend">
-        {tr(
-          '✓ Mindestens ein Rätsel abgeschlossen · ○ Heute noch offen · – Kein gewerteter Abschluss',
-        )}
+        {tr('✓ Gespielt · ❄ Geschützt · ○ Heute offen · – Kein Abschluss')}
       </p>
       <Button variant="ghost" onClick={() => setMonth(today.slice(0, 7))}>
         {tr('Zum aktuellen Monat')}
@@ -139,7 +170,7 @@ export default function StreakCalendar() {
         <summary>{tr('Streak-Regeln')}</summary>
         <p>
           {tr(
-            'Tipps sind erlaubt. Testlösungen zählen nicht. Für den Haken zählt ausschließlich der tatsächliche Abschlusstag. Ein nachgeholtes Tagesrätsel schließt keine frühere Streak-Lücke. Streak-Freeze ist noch nicht verfügbar.',
+            'Zwei Schutz-Tage zum Start, maximal zwei im Vorrat. Nach sieben gespielten Tagen kommt einer zurück. Geschützte Tage halten die Serie, erhöhen sie aber nicht und geben keine XP. Alte Lücken vor der Aktivierung bleiben offen. Nachgeholte Tagesrätsel zählen nur am tatsächlichen Spieltag. Testlösungen zählen nicht.',
           )}
         </p>
       </details>

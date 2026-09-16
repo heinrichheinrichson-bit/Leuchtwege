@@ -1779,6 +1779,11 @@ html[data-theme='light'] {
   border-top: 1px solid var(--lw-35485c);
   font-size: 14px;
 }
+.streak-day.frozen {
+  border-color: var(--lw-afc2d5);
+  color: var(--lw-afc2d5);
+  background: var(--lw-142235);
+}
 .settings-choice {
   display: grid;
   grid-template-columns: 1fr 1fr;

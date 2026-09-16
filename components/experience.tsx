@@ -6,7 +6,10 @@ import { readHistory } from '@/lib/history-store';
 export function useExperience() {
   const [xp, setXp] = useState(() => experienceSummary([]));
   useEffect(() => {
-    const update = () => setXp(experienceSummary(readHistory().attempts));
+    const update = () => {
+      const history = readHistory();
+      setXp(experienceSummary(history.attempts, history.freeze));
+    };
     update();
     window.addEventListener('leuchtwege-history', update);
     window.addEventListener('storage', update);
