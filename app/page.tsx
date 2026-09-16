@@ -7,6 +7,7 @@ import SlidingGame from '@/components/sliding-game';
 import TutorialGame from '@/components/tutorial-game';
 import Settings from '@/components/settings';
 import { haptic } from '@/lib/haptics';
+import { syncReminders } from '@/lib/reminders';
 import { Settings as SettingsIcon } from 'lucide-react';
 import { applyPreferences, readPreferences } from '@/lib/preferences.mjs';
 import { recoverBackup } from '@/lib/backup.mjs';
@@ -126,6 +127,25 @@ export default function Home() {
   const [sessions, setSessions] = useState<Record<number, any>>({});
   const [done, setDone] = useState<number[]>([]);
   const [ready, setReady] = useState(false);
+  useEffect(() => {
+    if (!ready) return;
+    const update = () => {
+      void syncReminders().catch(() => {});
+    };
+    update();
+    window.addEventListener('leuchtwege-history', update);
+    window.addEventListener('leuchtwege-preferences', update);
+    window.addEventListener('storage', update);
+    window.addEventListener('focus', update);
+    document.addEventListener('visibilitychange', update);
+    return () => {
+      window.removeEventListener('leuchtwege-history', update);
+      window.removeEventListener('leuchtwege-preferences', update);
+      window.removeEventListener('storage', update);
+      window.removeEventListener('focus', update);
+      document.removeEventListener('visibilitychange', update);
+    };
+  }, [ready]);
   const [sound, setSound] = useState(false);
   const [helpPaused, setHelpPaused] = useState(false);
   const { victory, celebrating, setVictory } = useVictory(() => {

@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { haptic } from '@/lib/haptics';
+import Reminders from './reminders';
 import {
   AlertDialog,
   AlertDialogContent,
@@ -222,6 +223,7 @@ export default function Settings({
           />
         </label>
       </div>
+      <Reminders />
       <h2>{tr('Sicherung & Wiederherstellung')}</h2>
       <p className="settings-note">
         {tr(

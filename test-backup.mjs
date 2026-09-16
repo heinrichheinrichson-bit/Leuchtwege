@@ -154,5 +154,9 @@ put('leuchtwege-preferences-v1', {
   language: 'en',
   theme: 'light',
   haptics: false,
+  reminderEnabled: true,
+  reminderTime: '18:45',
+  streakReminderEnabled: true,
+  streakReminderTime: '21:15',
 });
 assert.ok(validateBackup(createBackup(s, levels, sliding), levels, sliding));
