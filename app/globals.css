@@ -1784,6 +1784,20 @@ html[data-theme='light'] {
   color: var(--lw-afc2d5);
   background: var(--lw-142235);
 }
+.backup-preview {
+  margin: 12px 0;
+  font-size: 14px;
+}
+.backup-preview > div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 5px 0;
+}
+.backup-preview dd {
+  margin: 0;
+  font-weight: 600;
+}
 .settings-choice {
   display: grid;
   grid-template-columns: 1fr 1fr;

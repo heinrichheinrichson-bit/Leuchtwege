@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<full-backup-content>
+    <!-- WebView local storage contains all versioned game state. Do not restore
+         native notification schedules; the app recreates those from preferences. -->
+    <include domain="root" path="app_webview/" />
+    <exclude domain="root" path="app_webview/Default/Cache/" />
+    <exclude domain="root" path="app_webview/Default/Code Cache/" />
+    <exclude domain="root" path="app_webview/Default/GPUCache/" />
+    <exclude domain="root" path="app_webview/Default/Service Worker/CacheStorage/" />
+</full-backup-content>

@@ -1,6 +1,6 @@
 'use client';
 import { t as tr, locale } from '@/lib/i18n';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
@@ -22,7 +22,13 @@ import {
   importBackup,
   undoKey,
 } from '@/lib/backup.mjs';
-import { experienceSummary } from '@/lib/experience.mjs';
+import { backupSummary } from '@/lib/backup-summary.mjs';
+import {
+  saveBackupFile,
+  openBackupFile,
+  nativeBackupFiles,
+  MAX_BACKUP_BYTES,
+} from '@/lib/backup-files';
 import levels from '@/lib/levels.json';
 import sliding from '@/lib/sliding-levels.json';
 
@@ -46,7 +52,11 @@ export default function Settings({
   const [undo, setUndo] = useState(false);
   const [canUndo, setCanUndo] = useState(false);
   const [backupOpen, setBackupOpen] = useState(false);
+  const [fileBusy, setFileBusy] = useState(false);
+  const [nativeFiles, setNativeFiles] = useState(false);
+  const fileInput = useRef<HTMLInputElement>(null);
   useEffect(() => {
+    setNativeFiles(nativeBackupFiles());
     setAnimations(readPreferences().animations);
     setLanguage(readPreferences().language);
     setTheme(readPreferences().theme);
@@ -66,18 +76,16 @@ export default function Settings({
   }
   function check(value: string, asUndo = false) {
     try {
-      setPending(validateBackup(value, levels, sliding));
+      setPending(validateBackup(value.replace(/^\uFEFF/, ''), levels, sliding));
       setUndo(asUndo);
       setError('');
       setMessage('');
     } catch (e) {
+      setPending(null);
       report(e);
     }
   }
-  const xp = pending
-    ? experienceSummary(pending.data['leuchtwege-history-v1']?.attempts || [])
-        .total
-    : 0;
+  const summary = pending ? backupSummary(pending, sliding) : null;
   return (
     <section className="settings-screen">
       <h1>{tr('Einstellungen')}</h1>
@@ -233,6 +241,75 @@ export default function Settings({
       <div className="settings-group settings-backup">
         <Button
           variant="outline"
+          disabled={fileBusy}
+          onClick={async () => {
+            setFileBusy(true);
+            setError('');
+            setMessage('');
+            try {
+              readHistory();
+              const value = createBackup(localStorage, levels, sliding);
+              if (await saveBackupFile(value))
+                setMessage(
+                  nativeFiles
+                    ? 'Sicherungsdatei gespeichert.'
+                    : 'Download der Sicherungsdatei gestartet.',
+                );
+            } catch (e) {
+              report(e);
+            } finally {
+              setFileBusy(false);
+            }
+          }}
+        >
+          {tr('Als Datei speichern')}
+        </Button>
+        <Button
+          variant="outline"
+          disabled={fileBusy}
+          onClick={async () => {
+            setError('');
+            setMessage('');
+            if (!nativeFiles) {
+              fileInput.current?.click();
+              return;
+            }
+            setFileBusy(true);
+            try {
+              const value = await openBackupFile();
+              if (value !== null) check(value);
+            } catch (e) {
+              report(e);
+            } finally {
+              setFileBusy(false);
+            }
+          }}
+        >
+          {tr('Sicherungsdatei öffnen')}
+        </Button>
+        <input
+          ref={fileInput}
+          type="file"
+          hidden
+          accept=".json,application/json,text/plain"
+          onChange={async (e) => {
+            const file = e.target.files?.[0];
+            e.target.value = '';
+            if (!file) return;
+            setFileBusy(true);
+            try {
+              if (file.size > MAX_BACKUP_BYTES)
+                throw Error('Die Sicherungsdatei ist zu groß.');
+              check(await file.text());
+            } catch (e) {
+              report(e);
+            } finally {
+              setFileBusy(false);
+            }
+          }}
+        />
+        <Button
+          variant="outline"
           onClick={async () => {
             try {
               const value = createBackup(localStorage, levels, sliding);
@@ -310,6 +387,13 @@ export default function Settings({
           {tr('Letzten Import rückgängig machen')}
         </Button>
       </div>
+      {nativeFiles && (
+        <p className="settings-note">
+          {tr(
+            'Für Android-Gerätesicherung und Gerätewechsel vorbereitet. Ob Android eine Sicherung erstellt, hängt von deinen Geräteeinstellungen und dem Sicherungsdienst ab. Eine eigene Dateisicherung bleibt empfehlenswert.',
+          )}
+        </p>
+      )}
       {tr(
         message && (
           <p role="status" className="settings-note">
@@ -344,12 +428,7 @@ export default function Settings({
             {tr(
               pending && new Date(pending.createdAt).toLocaleString(locale()),
             )}
-            {tr(':')}
-            {tr(' ')}
-            {tr(pending?.data['leuchtwege-v2']?.done.length || 0)}
-            {tr(' gelöste Drehpuzzles, ')}
-            {tr(xp)}
-            {tr(' XP. Dieser Stand ersetzt deine aktuellen Daten.')}
+            {tr('. Dieser Stand ersetzt deine aktuellen Daten.')}
             {tr(' ')}
             {tr(
               undo
@@ -357,6 +436,36 @@ export default function Settings({
                 : 'Den Import kannst du anschließend rückgängig machen.',
             )}
           </AlertDialogDescription>
+          {summary && (
+            <dl className="backup-preview">
+              <div>
+                <dt>{tr('Drehpuzzles')}</dt>
+                <dd>{summary.turn}</dd>
+              </div>
+              <div>
+                <dt>{tr('Nur Schieben')}</dt>
+                <dd>{summary.slide}</dd>
+              </div>
+              <div>
+                <dt>{tr('Schieben & Drehen')}</dt>
+                <dd>{summary.rotate}</dd>
+              </div>
+              <div>
+                <dt>{tr('Level')}</dt>
+                <dd>
+                  {summary.level} · {summary.xp} XP
+                </dd>
+              </div>
+              <div>
+                <dt>{tr('Erfolge')}</dt>
+                <dd>{summary.achievements}</dd>
+              </div>
+              <div>
+                <dt>{tr('Geschützte Tage')}</dt>
+                <dd>{summary.protectedDays}</dd>
+              </div>
+            </dl>
+          )}
           <div className="settings-confirm">
             <AlertDialogCancel>{tr('Abbrechen')}</AlertDialogCancel>
             <AlertDialogAction

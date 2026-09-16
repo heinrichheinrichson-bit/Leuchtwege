@@ -17,6 +17,8 @@ import { emptyHistory, updateAttempt } from './lib/play-history.mjs';
 import { experienceSummary } from './lib/experience.mjs';
 import { streakSummary } from './lib/daily.mjs';
 import { generateDaily } from './lib/daily-generator.mjs';
+import { backupSummary } from './lib/backup-summary.mjs';
+import { advanceFreeze } from './lib/streak-freeze.mjs';
 const levels = JSON.parse(
   fs.readFileSync(new URL('./lib/levels.json', import.meta.url)),
 );
@@ -148,6 +150,28 @@ for (const mode of ['turn', 'slide', 'rotate']) {
 }
 assert.ok(validateBackup(createBackup(s, levels, sliding), levels, sliding));
 console.log('PASS: all three daily puzzle modes survive backup validation.');
+const preview = backupSummary(
+  validateBackup(original, levels, sliding),
+  sliding,
+);
+assert.equal(preview.turn, 2);
+assert.equal(preview.slide, 0);
+assert.equal(preview.rotate, 0);
+assert.equal(preview.xp, experienceSummary(history.attempts).total);
+history.freeze = advanceFreeze(null, history.attempts, '2026-09-13');
+history.freeze = advanceFreeze(history.freeze, history.attempts, '2026-09-14');
+put('leuchtwege-history-v1', history);
+const bytes = new TextEncoder().encode(createBackup(s, levels, sliding));
+const reopened = validateBackup(
+  new TextDecoder('utf-8', { fatal: true }).decode(bytes),
+  levels,
+  sliding,
+);
+assert.deepEqual(reopened.data['leuchtwege-history-v1'].freeze, history.freeze);
+assert.equal(backupSummary(reopened, sliding).protectedDays, 1);
+console.log(
+  'PASS: UTF-8 file round-trip, preview counts and protected-day persistence.',
+);
 put('leuchtwege-preferences-v1', {
   version: 1,
   animations: false,
