@@ -201,6 +201,7 @@ export default function SolveControls({
             <>
               <Button
                 variant="outline"
+                className="developer-solve"
                 disabled={busy || solved}
                 onClick={() => solve('step', false, true)}
               >
@@ -208,6 +209,7 @@ export default function SolveControls({
               </Button>
               <Button
                 variant="ghost"
+                className="developer-solve"
                 disabled={busy}
                 onClick={() => {
                   setMessage('');

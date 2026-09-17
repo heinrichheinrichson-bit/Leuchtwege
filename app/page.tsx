@@ -12,6 +12,7 @@ import { Settings as SettingsIcon } from 'lucide-react';
 import { applyPreferences, readPreferences } from '@/lib/preferences.mjs';
 import { recoverBackup } from '@/lib/backup.mjs';
 import { tutorialProgress } from '@/lib/tutorial.mjs';
+import PlayScreen from '@/components/play-screen';
 import PlayClock from '@/components/play-clock';
 import PlayStatistics from '@/components/play-statistics';
 import DailyHub from '@/components/daily-hub';
@@ -1059,7 +1060,7 @@ export default function Home() {
       )}
       {tr(
         view === 'game' && (
-          <section className="play-screen">
+          <PlayScreen columns={l.n}>
             <div className="play-heading">
               <div>
                 <p className="level-label">
@@ -1216,57 +1217,60 @@ export default function Home() {
                     : status.open + ' offene Anschlüsse',
               )}
             </p>
-            <div className="play-actions">
-              <Button
-                variant="outline"
-                disabled={!ready || !session.history.length}
-                onClick={() => dispatch({ type: 'undo' })}
-              >
-                <span aria-hidden="true">{tr('↶')}</span>
-                {tr(' Rückgängig')}
-              </Button>
-              <Button
-                variant={lockMode ? 'default' : 'outline'}
-                aria-pressed={lockMode}
-                disabled={!ready || status.solved}
-                onClick={() => setLockMode((v) => !v)}
-              >
-                <span aria-hidden="true">{tr('◆')}</span>
-                {tr(' ')}
-                {tr(lockMode ? 'Sperren an' : 'Sperren')}
-              </Button>
-              <Button
-                variant="outline"
-                disabled={!ready}
-                onClick={() => setRestart(true)}
-              >
-                <span aria-hidden="true">{tr('↻')}</span>
-                {tr(' Neustart')}
-              </Button>
+            <div className="play-tools">
+              <div className="play-actions">
+                <Button
+                  variant="outline"
+                  disabled={!ready || !session.history.length}
+                  onClick={() => dispatch({ type: 'undo' })}
+                >
+                  <span aria-hidden="true">{tr('↶')}</span>
+                  {tr(' Rückgängig')}
+                </Button>
+                <Button
+                  variant={lockMode ? 'default' : 'outline'}
+                  aria-pressed={lockMode}
+                  disabled={!ready || status.solved}
+                  onClick={() => setLockMode((v) => !v)}
+                >
+                  <span aria-hidden="true">{tr('◆')}</span>
+                  {tr(' ')}
+                  {tr(lockMode ? 'Sperren an' : 'Sperren')}
+                </Button>
+                <Button
+                  variant="outline"
+                  disabled={!ready}
+                  onClick={() => setRestart(true)}
+                >
+                  <span aria-hidden="true">{tr('↻')}</span>
+                  {tr(' Neustart')}
+                </Button>
+              </div>
+              <SolveControls
+                key={l.id}
+                onPauseChange={setHelpPaused}
+                puzzle={l}
+                session={session}
+                back={helpBack}
+                onApplied={(nextState, quiet, assistance) => {
+                  clock.record(
+                    evaluate(boardOf(l, nextState), l.n, l.source).solved,
+                    nextState.moves,
+                    assistance,
+                  );
+                  if (isFree)
+                    setFree((v: any) => ({ ...v, session: nextState }));
+                  else setSessions((v) => ({ ...v, [level]: nextState }));
+                  setLockMode(false);
+                  const solved = evaluate(
+                    boardOf(l, nextState),
+                    l.n,
+                    l.source,
+                  ).solved;
+                  setVictory(solved, !quiet);
+                }}
+              />
             </div>
-            <SolveControls
-              key={l.id}
-              onPauseChange={setHelpPaused}
-              puzzle={l}
-              session={session}
-              back={helpBack}
-              onApplied={(nextState, quiet, assistance) => {
-                clock.record(
-                  evaluate(boardOf(l, nextState), l.n, l.source).solved,
-                  nextState.moves,
-                  assistance,
-                );
-                if (isFree) setFree((v: any) => ({ ...v, session: nextState }));
-                else setSessions((v) => ({ ...v, [level]: nextState }));
-                setLockMode(false);
-                const solved = evaluate(
-                  boardOf(l, nextState),
-                  l.n,
-                  l.source,
-                ).solved;
-                setVictory(solved, !quiet);
-              }}
-            />
             {tr(
               status.solved && (
                 <Button className="next-inline" onClick={nextGame}>
@@ -1280,7 +1284,7 @@ export default function Home() {
                 </Button>
               ),
             )}
-          </section>
+          </PlayScreen>
         ),
       )}
       {tr(

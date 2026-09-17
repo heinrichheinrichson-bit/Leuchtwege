@@ -36,6 +36,7 @@ import { connectionSound } from '@/lib/connection-sound.mjs';
 import { restoreFreeSliding, slidingTiers } from '@/lib/random-sliding.mjs';
 import RandomSlidingWorker from '@/lib/random-sliding.worker?worker';
 import { slidingOrder } from '@/lib/sliding-catalog.mjs';
+import PlayScreen from '@/components/play-screen';
 import PlayClock from '@/components/play-clock';
 import { usePlayClock } from '@/lib/use-play-clock';
 
@@ -555,7 +556,7 @@ export default function SlidingGame({
             )}
           </section>
         ) : (
-          <section className="play-screen slide-screen">
+          <PlayScreen columns={l.n} className="slide-screen">
             <div className="play-heading">
               <div>
                 <p className="level-label">
@@ -822,44 +823,46 @@ export default function SlidingGame({
                           ' offene Anschlüsse · Das Leerfeld bleibt frei.'),
               )}
             </p>
-            <div className="play-actions">
-              <Button
-                variant="outline"
-                disabled={!s.history.length}
-                onClick={() => dispatch({ type: 'undo' })}
-              >
-                <span>{tr('↶')}</span>
-                {tr('Rückgängig')}
-              </Button>
-              <Button variant="outline" onClick={() => setRules(true)}>
-                <span>{tr('?')}</span>
-                {tr('Regeln')}
-              </Button>
-              <Button variant="outline" onClick={() => setRestart(true)}>
-                <span>{tr('↻')}</span>
-                {tr('Neustart')}
-              </Button>
+            <div className="play-tools">
+              <div className="play-actions">
+                <Button
+                  variant="outline"
+                  disabled={!s.history.length}
+                  onClick={() => dispatch({ type: 'undo' })}
+                >
+                  <span>{tr('↶')}</span>
+                  {tr('Rückgängig')}
+                </Button>
+                <Button variant="outline" onClick={() => setRules(true)}>
+                  <span>{tr('?')}</span>
+                  {tr('Regeln')}
+                </Button>
+                <Button variant="outline" onClick={() => setRestart(true)}>
+                  <span>{tr('↻')}</span>
+                  {tr('Neustart')}
+                </Button>
+              </div>
+              <SolveControls
+                key={l.id}
+                onPauseChange={setHelpPaused}
+                puzzle={l}
+                session={s}
+                back={helpBack}
+                onApplied={(next, quiet, assistance) => {
+                  clock.record(
+                    slidingStatus(l, next).solved,
+                    next.slides + next.rotations,
+                    assistance,
+                  );
+                  storeSession(next);
+                  setSelected(null);
+                  setHint('');
+                  clearGesture();
+                  const solved = slidingStatus(l, next).solved;
+                  setVictory(solved, !quiet);
+                }}
+              />
             </div>
-            <SolveControls
-              key={l.id}
-              onPauseChange={setHelpPaused}
-              puzzle={l}
-              session={s}
-              back={helpBack}
-              onApplied={(next, quiet, assistance) => {
-                clock.record(
-                  slidingStatus(l, next).solved,
-                  next.slides + next.rotations,
-                  assistance,
-                );
-                storeSession(next);
-                setSelected(null);
-                setHint('');
-                clearGesture();
-                const solved = slidingStatus(l, next).solved;
-                setVictory(solved, !quiet);
-              }}
-            />
             {tr(
               status.solved && (
                 <Button
@@ -877,7 +880,7 @@ export default function SlidingGame({
                 </Button>
               ),
             )}
-          </section>
+          </PlayScreen>
         ),
       )}
       {tr(

@@ -17,6 +17,7 @@ import {
   AlertDialogAction,
 } from '@/components/ui/alert-dialog';
 import SolveControls from './solve-controls';
+import PlayScreen from '@/components/play-screen';
 import PlayClock from './play-clock';
 import { usePlayClock } from '@/lib/use-play-clock';
 import { useVictory } from '@/lib/use-victory';
@@ -99,7 +100,7 @@ export default function DailyRotation({
     }
   }
   return (
-    <section className="play-screen">
+    <PlayScreen columns={l.n}>
       <div className="play-heading">
         <div>
           <p className="level-label">
@@ -108,11 +109,20 @@ export default function DailyRotation({
           </p>
           <h1>{tr(l.name)}</h1>
         </div>
-        <span className="size">
-          {tr(l.n)}
-          {tr(' × ')}
-          {tr(l.n)}
-        </span>
+        <div className="play-heading-tools">
+          <span className="size">
+            {tr(l.n)}
+            {tr(' × ')}
+            {tr(l.n)}
+          </span>
+          <Button
+            variant="ghost"
+            aria-label={tr('Spielregeln öffnen')}
+            onClick={() => setRules(true)}
+          >
+            ?
+          </Button>
+        </div>
       </div>
       <PlayClock clock={clock} />
       <div className="meter">
@@ -222,39 +232,40 @@ export default function DailyRotation({
               : `${status.open} offene Anschlüsse`,
         )}
       </p>
-      <div className="play-actions">
-        <Button
-          variant="outline"
-          disabled={!s.history.length}
-          onClick={() => {
-            setVictory(false);
-            apply(act(l, s, { type: 'undo' }), 'none', true);
-          }}
-        >
-          {tr('↶ Rückgängig')}
-        </Button>
-        <Button
-          variant="outline"
-          aria-pressed={locks}
-          onClick={() => setLocks(!locks)}
-        >
-          {tr(locks ? 'Drehen' : 'Sperren')}
-        </Button>
-        <Button variant="outline" onClick={() => setRestart(true)}>
-          {tr('Neustart')}
-        </Button>
-        <Button variant="ghost" onClick={() => setRules(true)}>
-          {tr('Regeln')}
-        </Button>
+      <div className="play-tools">
+        <div className="play-actions">
+          <Button
+            variant="outline"
+            disabled={!s.history.length}
+            onClick={() => {
+              setVictory(false);
+              apply(act(l, s, { type: 'undo' }), 'none', true);
+            }}
+          >
+            {tr('↶ Rückgängig')}
+          </Button>
+          <Button
+            variant="outline"
+            aria-pressed={locks}
+            onClick={() => setLocks(!locks)}
+          >
+            {tr(locks ? 'Drehen' : 'Sperren')}
+          </Button>
+          <Button variant="outline" onClick={() => setRestart(true)}>
+            {tr('Neustart')}
+          </Button>
+        </div>
+        <SolveControls
+          key={l.id}
+          puzzle={l}
+          session={s}
+          back={help}
+          onPauseChange={setPaused}
+          onApplied={(next, quiet, assistance) =>
+            apply(next, assistance, quiet)
+          }
+        />
       </div>
-      <SolveControls
-        key={l.id}
-        puzzle={l}
-        session={s}
-        back={help}
-        onPauseChange={setPaused}
-        onApplied={(next, quiet, assistance) => apply(next, assistance, quiet)}
-      />
       {tr(
         status.solved && (
           <Button className="next-inline" onClick={onExit}>
@@ -315,6 +326,6 @@ export default function DailyRotation({
           </AlertDialogAction>
         </AlertDialogContent>
       </AlertDialog>
-    </section>
+    </PlayScreen>
   );
 }
