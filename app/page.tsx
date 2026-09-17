@@ -1,6 +1,6 @@
 'use client';
 import { t as tr, locale } from '@/lib/i18n';
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, useMemo } from 'react';
 import { useVictory } from '@/lib/use-victory';
 import SolveControls from '@/components/solve-controls';
 import SlidingGame from '@/components/sliding-game';
@@ -158,9 +158,11 @@ export default function Home() {
   const [lockMode, setLockMode] = useState(false);
   const [storageError, setStorageError] = useState(false);
   const [recoveryError, setRecoveryError] = useState(false);
-  const l = isFree && free.puzzle ? free.puzzle : levels[level],
-    session =
-      isFree && free.puzzle ? free.session : sessions[level] || fresh(l);
+  const l = isFree && free.puzzle ? free.puzzle : levels[level];
+  // Clock/help updates must not look like a board change to an in-flight solver.
+  const initialSession = useMemo(() => fresh(l), [l]);
+  const session =
+    isFree && free.puzzle ? free.session : sessions[level] || initialSession;
   const board: number[] = boardOf(l, session),
     moves = session.moves,
     status = evaluate(board, l.n, l.source);
