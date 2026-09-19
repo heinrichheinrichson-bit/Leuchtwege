@@ -203,3 +203,19 @@ Die vorhandene Kalender-Kachel auf der Startseite zeigt die aktuelle Streak-Län
 Die Sprachauswahl zeigt Systemsprache, Deutsch und Englisch. Systemsprache ist weiterhin der Standard ohne gespeicherte Auswahl; bewusste Sprachentscheidungen bleiben erhalten. Ergänzte englische Tages- und Streak-Beschriftungen.
 
 Geprüft: Audio-Unterbrechungen mit Lautstärkerampen, begrenzte schnelle Auslösung, Wiederverwendung des Kontextes und der Samples, Stummschalten während des Ladens und Aufräumen; Sprachvorgaben/-wechsel; bestehende Tages-/Freeze-Regeln. Browser: reguläres Drehpuzzle ohne Testhilfe abgeschlossen, XP/Erfolg und Startseitenstatus kontrolliert. Physische Audioausgabe noch auf Android zu prüfen.
+
+
+## Langzeitziele und drei Varianten (1.29-test)
+
+173 dauerhafte Erfolgsstufen in 21 Reihen: verschiedene Rätsel, sämtliche regulären Partien einschließlich Wiederholungen, einzelne Modi, Zufalls-/Tages-/Katalogrätsel, gespielte Tage, Streaks, aktive Spielstunden, schwere Rätsel ohne Tipp, große Bretter, ausgewogene Modusfortschritte und vollständige Tagestrios. Jede Stufe vergibt einmalig XP. Die Belohnung hängt vom unveränderlichen Schwellenwert ab, nicht von ihrer Position in einer später erweiterten Liste. Gespeicherte reguläre Abschlüsse werden nachträglich berücksichtigt. Aktive Zeit wird bei regulärem Abschluss gewertet; Testlösungen, Pausen und unvollständige Vorgeschichten zählen nicht. Drei nahe nächste Ziele stehen vor der vollständigen Erfolgsübersicht. Bestehende IDs und Rätsel-XP bleiben erhalten; doppelte Versuchseinträge vergeben auch keine Wiederholungs-XP.
+
+Unter Drehpuzzles → Neue Spielmodi ausprobieren liegen jeweils sechs Proberätsel und ein 3×3-/4×4-Zufallsgenerator:
+- Zwei Stromkreise: A- und B-Kacheln gehören zu getrennten Quellen, ohne offene Verbindungen.
+- Lichtweg: Alle Sternziele mit der Quelle verbinden; unbenutzte Kacheln dürfen dunkel bleiben.
+- Gekoppelte Drehungen: Benachbarte Kacheln mit gleicher Zahl drehen gemeinsam.
+
+Diese Varianten sind spielbare Prototypen mit vorläufiger Schwierigkeitseinstufung, keine fertig kuratierten Schwierigkeitskataloge. Erzeugung beginnt bei einem gültigen Zielnetz und mischt ausschließlich erreichbare Drehungen. Alternative gültige Lösungen zählen. Uhr, Sounds, Haptik, Rückgängig, Neustart, drei Spielertipps, direkte Testschritte und verzögerter Erfolg sind integriert. Reguläre Abschlüsse zählen für XP, Missionen, Erfolge, Statistik und tatsächlichen Streak-Tag; Testhilfe bleibt ausgeschlossen. Neue Spielstände werden mitgesichert. Die Startseite bekommt keine zusätzliche Karte.
+
+Geprüft: alle bestehenden automatisierten Prüfungen und TypeScript; 618 Varianten mit reproduzierbarer Erzeugung, Lösbarkeit nach legalen Zusatzdrehungen, vollständiger/fast vollständiger/schrittweiser Hilfe, Undo, getrennten Netzen, dunklen Restkacheln, Wiederherstellung, XP und Streak. Erfolgsgrenzen für 50/100 Spieltage, 100/200/500 Rätsel, 1/5/10 Stunden, 50/100 je Modus, Wiederholungen und Tagestrios; keine Doppelbelohnung bei Import oder doppelten Datensätzen. Browser: Zwei Stromkreise mit Testhilfe, Lichtweg regulär mit Tipp abgeschlossen (20 Puzzle-XP und 25 Erfolgs-XP), gekoppelte Bewegung/Undo/Testschritt, neuer Zufallsgenerator. 360×740 und 360×640 ohne Überlauf in geprüften Spielansichten, inklusive Testbuttons. Android-Testpaket gebaut und Signatur/Offline-Webassets geprüft; physischer Android-Test durch Nutzer steht aus.
+
+Streak auf Eis bleibt aktiv: zwei Schutzladungen, automatischer Verbrauch für einen verpassten Tag einer laufenden Serie, Nachfüllen nach sieben tatsächlichen Spieltagen bis maximal zwei. Geschützte Tage sind keine gespielten Tage. Alte Lücken werden durch nachgeholte Rätsel nicht geschlossen.

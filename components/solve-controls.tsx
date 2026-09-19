@@ -262,7 +262,7 @@ export default function SolveControls({
             )}
           </DialogDescription>
           {tr(
-            !puzzle.pieces && (
+            !puzzle.pieces && !puzzle.variant && (
               <p className="lesson">
                 {tr(
                   'Falls nötig, wird eine zu korrigierende Kachel entsperrt.',

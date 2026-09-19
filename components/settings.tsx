@@ -451,6 +451,10 @@ export default function Settings({
                 <dd>{summary.rotate}</dd>
               </div>
               <div>
+                <dt>{tr('Neue Spielmodi')}</dt>
+                <dd>{summary.variants}</dd>
+              </div>
+              <div>
                 <dt>{tr('Level')}</dt>
                 <dd>
                   {summary.level} · {summary.xp} XP

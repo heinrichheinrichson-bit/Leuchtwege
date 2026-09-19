@@ -1912,3 +1912,68 @@ html[data-theme='light'] {
 .home-streak small {
   line-height: 1.25;
 }
+
+/* Variant prototypes reuse the measured play layout and existing touch sizes. */
+.variant-entry {
+  width: 100%;
+  margin: 12px 0;
+}
+.variant-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 16px 0;
+}
+.variant-tabs button {
+  min-height: 44px;
+}
+.variant-rule {
+  margin: 16px 0;
+  line-height: 1.55;
+}
+.variant-hub h2 {
+  margin-top: 24px;
+}
+.variant-levels {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+.variant-levels button {
+  justify-content: space-between;
+  height: auto;
+  min-height: 72px;
+  text-align: left;
+  white-space: normal;
+  padding: 12px;
+}
+.variant-levels small {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted-foreground);
+}
+.variant-marker {
+  position: absolute;
+  left: 7%;
+  top: 5%;
+  font-size: clamp(12px, 2.8vw, 19px);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--foreground);
+  background: var(--lw-142235);
+  border-radius: 4px;
+  padding: 1px 4px;
+}
+.variant-board .circuit-b.lit {
+  color: #79dce8;
+}
+.variant-board .circuit-b.lit .wire {
+  stroke: #79dce8;
+}
+.variant-board .circuit-b.lit .joint,
+.variant-board .circuit-b.lit .source {
+  fill: #79dce8;
+}
+.variant-board .wrong-network {
+  box-shadow: inset 0 0 0 2px #e89787;
+}

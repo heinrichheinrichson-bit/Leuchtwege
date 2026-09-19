@@ -1,4 +1,5 @@
 'use client';
+import { achievementCounter } from '@/lib/achievement-catalog.mjs';
 import { t as tr, locale } from '@/lib/i18n';
 import { useEffect, useState } from 'react';
 import { experienceSummary } from '@/lib/experience.mjs';
@@ -69,7 +70,7 @@ export default function ExperienceCard({ onOpen }: { onOpen?: () => void }) {
           </p>
           <p>
             {tr(
-              'Tagesmissionen geben zusätzlich bis zu 60 XP pro Tag. Erfolge sind bleibende Auszeichnungen.',
+              'Tagesmissionen geben bis zu 60 XP pro Tag. Jede erreichte Erfolgsstufe gibt einmalig zusätzliche XP.',
             )}
           </p>
         </details>
@@ -110,7 +111,7 @@ export function PuzzleReward({
         .map((a) => (
           <p key={a.id}>
             ★ {tr('Erfolg freigeschaltet')}: {tr(a.title)} ·{' '}
-            {a.target.toLocaleString(locale())}
+            {achievementCounter(a.kind, a.target, locale())} · +{a.points} XP
           </p>
         ))}
     </div>

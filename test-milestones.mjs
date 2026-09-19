@@ -84,7 +84,8 @@ for (const item of [
   assert(english[item.detail]);
 }
 const xp = experienceSummary(attempts);
-assert.equal(xp.total, xp.puzzleTotal + 60);
+assert.equal(xp.total, xp.puzzleTotal + 60 + xp.achievementTotal);
+assert.equal(xp.achievementTotal, 25);
 assert.equal(
   experienceSummary(JSON.parse(JSON.stringify(attempts))).total,
   xp.total,
@@ -123,8 +124,8 @@ assert.equal(
   60,
 );
 const groups = groupAchievements(long.achievements);
-assert.equal(groups.length, 11);
-assert.equal(groups.find((g) => g.kind === 'count').earned, 11);
+assert.equal(groups.length, achievementTracks.length);
+assert.equal(groups.find((g) => g.kind === 'count').earned, 12);
 const repeat = milestoneSummary(
   Array.from({ length: 100 }, (_, i) => a('repeat-' + i, { puzzleId: 'same' })),
   today,
@@ -157,4 +158,101 @@ assert(
 );
 console.log(
   `PASS: ${achievementDefinitions.length} permanent achievements; 10,000 puzzles, 1,000-day streak, pauses, duplicates, exact thresholds and grouped progress.`,
+);
+
+const timed = Array.from({ length: 100 }, (_, i) =>
+  a('timed-' + String(i).padStart(3, '0'), {
+    elapsedMs: 360000,
+    n: 5,
+    tier: 'Schwer',
+    origin: 'free',
+    mode: ['turn', 'slide', 'rotate'][i % 3],
+    completedDay: shiftDay(today, -i),
+    completedAt: shiftDay(today, -i) + 'T12:00:00Z',
+  }),
+);
+const timedSummary = milestoneSummary(timed, today);
+for (const id of [
+  'days-50',
+  'days-100',
+  'time-3600',
+  'time-18000',
+  'time-36000',
+  'free-100',
+  'hardclear-100',
+  'big-100',
+  'balanced-25',
+])
+  assert(timedSummary.achievements.find((a) => a.id === id).done, id);
+assert(
+  !milestoneSummary(timed.slice(1), today).achievements.find(
+    (a) => a.id === 'time-36000',
+  ).done,
+);
+assert.equal(
+  milestoneSummary(
+    timed.map((a) => ({ ...a, assistance: 'test' })),
+    today,
+  ).achievements.filter((a) => a.done).length,
+  0,
+);
+assert.equal(
+  milestoneSummary(
+    timed.map((a) => ({ ...a, completedAt: null })),
+    today,
+  ).achievements.filter((a) => a.done).length,
+  0,
+);
+assert.equal(
+  milestoneSummary(
+    timed.map((a) => ({ ...a, partialTime: true })),
+    today,
+  ).achievements.filter((a) => a.done).length,
+  0,
+);
+assert(repeat.achievements.find((a) => a.id === 'finishes-100').done);
+for (const n of [100, 200, 500]) {
+  const result = milestoneSummary(many.slice(0, n), today);
+  assert(
+    result.achievements.find((a) => a.kind === 'count' && a.target === n).done,
+  );
+}
+for (const mode of ['turn', 'slide', 'rotate', 'dual', 'path', 'linked'])
+  for (const n of [50, 100])
+    assert(
+      milestoneSummary(
+        many.slice(0, n).map((a) => ({ ...a, mode })),
+        today,
+      ).achievements.find((a) => a.kind === mode && a.target === n).done,
+    );
+const trios = Array.from({ length: 3 }, (_, i) =>
+  a('trio-' + i, {
+    origin: 'daily',
+    mode: ['turn', 'slide', 'rotate'][i],
+    dailyDay: spec.day,
+    puzzleId: dailySpec(spec.day, ['turn', 'slide', 'rotate'][i]).id,
+  }),
+);
+assert(
+  milestoneSummary(trios, today).achievements.find((a) => a.id === 'trios-1')
+    .done,
+);
+const rich = experienceSummary(timed);
+assert.equal(
+  rich.achievementTotal,
+  rich.achievements.filter((a) => a.done).reduce((n, a) => n + a.points, 0),
+);
+assert.equal(
+  experienceSummary([...timed, ...timed]).total,
+  rich.total,
+  'Duplicate history does not re-award any XP',
+);
+assert.equal(
+  experienceSummary(JSON.parse(JSON.stringify(timed)).reverse()).total,
+  rich.total,
+  'Restore/order independent',
+);
+assert(achievementDefinitions.every((a) => a.points > 0));
+console.log(
+  'PASS: days, hours, total completions, repeats, per-mode milestones, daily trios, XP once per achievement, duplicate/restore handling and exclusions.',
 );

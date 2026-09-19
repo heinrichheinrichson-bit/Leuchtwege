@@ -1,3 +1,9 @@
+import {
+  emptyVariants,
+  variantCatalog,
+  variantKey,
+  variantAct,
+} from './lib/variants.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import {
@@ -63,6 +69,13 @@ put('leuchtwege-sliding-v1', {
   current: 0,
   sessions: { [sliding[0].id]: freshSliding(sliding[0]) },
 });
+const variants = emptyVariants();
+variants.sessions[variantCatalog[0].id] = variantAct(
+  variantCatalog[0],
+  fresh(variantCatalog[0]),
+  { type: 'turn', index: 0 },
+);
+put(variantKey, variants);
 put('leuchtwege-free-v1', emptyFree());
 put('leuchtwege-sliding-free-v1', restoreFreeSliding(null));
 put('leuchtwege-learn-v1', { turn: true });

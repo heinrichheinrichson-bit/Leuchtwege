@@ -1,6 +1,11 @@
 import assert from 'node:assert/strict';
 import { dailySpec, streakSummary } from './lib/daily.mjs';
-import { experienceSummary, dailyXp, puzzleXp } from './lib/experience.mjs';
+import {
+  experienceSummary,
+  dailyXp,
+  puzzleXp,
+  requiredXp,
+} from './lib/experience.mjs';
 import {
   emptyHistory,
   updateAttempt,
@@ -50,15 +55,18 @@ assert.equal(
 );
 assert(!streakSummary(h.attempts, '2026-09-16').days.has('2026-09-12'));
 assert.equal(
-  experienceSummary(h.attempts.map((a) => ({ ...a, partialTime: true }))).puzzleTotal,
+  experienceSummary(h.attempts.map((a) => ({ ...a, partialTime: true })))
+    .puzzleTotal,
   0,
 );
 assert.equal(
-  experienceSummary(h.attempts.map((a) => ({ ...a, origin: 'catalog' }))).puzzleTotal,
+  experienceSummary(h.attempts.map((a) => ({ ...a, origin: 'catalog' })))
+    .puzzleTotal,
   puzzleXp('catalog', spec.tier) + 5,
 );
 assert.equal(
-  experienceSummary(h.attempts.map((a) => ({ ...a, puzzleId: 'wrong' }))).puzzleTotal,
+  experienceSummary(h.attempts.map((a) => ({ ...a, puzzleId: 'wrong' })))
+    .puzzleTotal,
   0,
 );
 assert.equal(dailyXp('Leicht', true), 45);
@@ -78,9 +86,22 @@ const records = ['turn', 'slide', 'rotate'].map((mode, i) => {
 });
 const xp = experienceSummary(records);
 assert.equal(xp.puzzleTotal, 170);
-assert.equal(xp.level, 2);
-assert.equal(xp.current, xp.total - 100);
-assert.equal(xp.required, 150);
+assert(xp.achievementTotal > 0);
+assert.equal(
+  xp.total,
+  xp.puzzleTotal +
+    xp.achievementTotal +
+    xp.bonuses.reduce((n, a) => n + a.points, 0),
+);
+assert.equal(
+  xp.current,
+  xp.total -
+    Array.from({ length: xp.level - 1 }, (_, i) => requiredXp(i + 1)).reduce(
+      (n, x) => n + x,
+      0,
+    ),
+);
+assert.equal(xp.required, requiredXp(xp.level));
 assert.equal(experienceSummary([]).level, 1);
 for (const origin of ['catalog', 'free'])
   for (const mode of ['turn', 'slide', 'rotate'])

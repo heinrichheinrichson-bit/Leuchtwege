@@ -1,9 +1,20 @@
 'use client';
 import { t as tr, locale } from '@/lib/i18n';
-import { groupAchievements } from '@/lib/achievement-catalog.mjs';
+import {
+  groupAchievements,
+  achievementCounter,
+} from '@/lib/achievement-catalog.mjs';
 import ExperienceCard, { useExperience } from './experience';
 export default function Milestones() {
   const xp = useExperience();
+  const tracks = groupAchievements(xp.achievements);
+  const nextGoals = tracks
+    .filter((track) => track.earned < track.stages.length)
+    .sort(
+      (a, b) =>
+        b.next.progress / b.next.target - a.next.progress / a.next.target,
+    )
+    .slice(0, 3);
   return (
     <section className="milestones-screen">
       <h1>{tr('Missionen & Erfolge')}</h1>
@@ -36,13 +47,48 @@ export default function Milestones() {
           </article>
         ))}
       </div>
+      {nextGoals.length > 0 && (
+        <>
+          <h2>{tr('Deine nächsten Ziele')}</h2>
+          <div className="milestone-list">
+            {nextGoals.map((track) => (
+              <article className="milestone" key={track.kind}>
+                <div className="milestone-heading">
+                  <strong>{tr(track.title)}</strong>
+                  <span>+{track.next.points} XP</span>
+                </div>
+                <p>{tr(track.detail)}</p>
+                <span>
+                  {achievementCounter(
+                    track.kind,
+                    track.next.progress,
+                    locale(),
+                  )}{' '}
+                  /{' '}
+                  {achievementCounter(track.kind, track.next.target, locale())}
+                </span>
+                <progress
+                  value={track.next.progress}
+                  max={track.next.target}
+                  aria-label={tr(track.title)}
+                />
+              </article>
+            ))}
+          </div>
+        </>
+      )}
       <h2>
         {tr('Erfolge')} · {xp.achievements.filter((a) => a.done).length}/
         {xp.achievements.length}
       </h2>
       <p>{tr('Deine bisherigen regulären Abschlüsse zählen mit.')}</p>
+      <p>
+        {tr(
+          'Jede Stufe belohnt dich einmalig mit XP. Spielzeit zählt beim regulären Abschluss; Pausen und Testlösungen zählen nicht.',
+        )}
+      </p>
       <div className="milestone-list">
-        {groupAchievements(xp.achievements).map((track) => (
+        {tracks.map((track) => (
           <article
             key={track.kind}
             className={
@@ -67,8 +113,9 @@ export default function Milestones() {
                 )}
               </span>
               <span>
-                {track.next.progress.toLocaleString(locale())}/
-                {track.next.target.toLocaleString(locale())}
+                {achievementCounter(track.kind, track.next.progress, locale())}{' '}
+                /{achievementCounter(track.kind, track.next.target, locale())} ·
+                +{track.next.points} XP
               </span>
             </div>
             <progress
@@ -83,7 +130,8 @@ export default function Milestones() {
                   <li key={a.id}>
                     <span>
                       {a.done ? '★' : '☆'} {tr(a.title)} ·{' '}
-                      {a.target.toLocaleString(locale())}
+                      {achievementCounter(a.kind, a.target, locale())} · +
+                      {a.points} XP
                     </span>
                     <span>{tr(a.done ? 'Erreicht' : 'Noch offen')}</span>
                   </li>

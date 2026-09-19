@@ -29,8 +29,11 @@ assert.equal(preferences({ theme: 'auto' }).theme, 'dark');
 assert.equal(preferences(null).language, 'system');
 assert.equal(preferences(null).reminderEnabled, false);
 assert.equal(preferences(null).streakReminderEnabled, false);
-assert.equal(preferences({reminderTime:'25:00'}).reminderTime,'18:00');
-assert.equal(preferences({streakReminderTime:'21:45'}).streakReminderTime,'21:45');
+assert.equal(preferences({ reminderTime: '25:00' }).reminderTime, '18:00');
+assert.equal(
+  preferences({ streakReminderTime: '21:45' }).streakReminderTime,
+  '21:45',
+);
 assert.equal(preferences({ language: 'de' }).language, 'de');
 assert.equal(preferences({ language: 'en' }).language, 'en');
 assert.equal(resolveLanguage('system', ['de-AT']), 'de');
@@ -53,6 +56,12 @@ assert.equal(t('Mittel · Rätsel 05 / 30'), 'Medium · Puzzle 05 / 30');
 assert.equal(t('Rätsel 05'), 'Puzzle 05');
 assert.equal(t('Fortschritt zu Level 3'), 'Progress towards level 3');
 assert.equal(t('3 Tipps'), '3 hints');
+assert.equal(
+  t(
+    'Ein Tipp führt den nächsten Zug auf einem Lösungsweg aus. Noch 3 verfügbar.',
+  ),
+  'A hint makes the next move on a solution path. 3 remaining.',
+);
 assert.equal(t('1 Tipp'), '1 hint');
 assert.equal(t(3), 3);
 const el = { type: 'button', props: {} };

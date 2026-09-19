@@ -10,6 +10,9 @@ import {
 } from '@/lib/play-history.mjs';
 const names: any = {
   all: 'Alle Modi',
+  dual: 'Zwei Stromkreise',
+  path: 'Lichtweg',
+  linked: 'Gekoppelte Drehungen',
   turn: 'Drehen',
   slide: 'Nur Schieben',
   rotate: 'Schieben & Drehen',

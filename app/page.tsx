@@ -3,6 +3,7 @@ import { t as tr, locale } from '@/lib/i18n';
 import { useEffect, useState, useRef, useMemo } from 'react';
 import { useVictory } from '@/lib/use-victory';
 import SolveControls from '@/components/solve-controls';
+import VariantGames from '@/components/variant-games';
 import SlidingGame from '@/components/sliding-game';
 import TutorialGame from '@/components/tutorial-game';
 import Settings from '@/components/settings';
@@ -112,6 +113,7 @@ export default function Home() {
   }
   const helpBack = useRef<(() => boolean) | null>(null);
   const slideBack = useRef<(() => boolean) | null>(null);
+  const variantBack = useRef<(() => boolean) | null>(null);
   const dailyBack = useRef<(() => boolean) | null>(null);
   const backAction = useRef<() => void>(() => {});
   const [level, setLevel] = useState(0);
@@ -257,6 +259,7 @@ export default function Home() {
   backAction.current = () => {
     if (view === 'game' && helpBack.current?.()) return;
     if (view === 'sliding' && slideBack.current?.()) return;
+    if (view === 'variants' && variantBack.current?.()) return;
     if (view === 'daily' && dailyBack.current?.()) return;
     if (generating) {
       cancelGeneration();
@@ -302,6 +305,7 @@ export default function Home() {
           'rules',
           'random',
           'sliding',
+          'variants',
           'learn',
           'statistics',
           'daily',
@@ -472,6 +476,7 @@ export default function Home() {
   }
   useEffect(() => {
     if (
+      view === 'variants' ||
       view === 'sliding' ||
       view === 'learn' ||
       view === 'daily' ||
@@ -688,6 +693,9 @@ export default function Home() {
         ),
       )}
       {tr(view === 'statistics' && <PlayStatistics />)}
+      {view === 'variants' && (
+        <VariantGames back={variantBack} playSound={playElectric} />
+      )}
       {view === 'milestones' && <Milestones />}
       {tr(view === 'streak' && <StreakCalendar />)}
       {tr(
@@ -857,6 +865,13 @@ export default function Home() {
         view === 'catalog' && (
           <section className="catalog-screen">
             <h1>{tr('Drehpuzzles')}</h1>
+            <Button
+              className="variant-entry"
+              variant="outline"
+              onClick={() => navigate('variants')}
+            >
+              {tr('Neue Spielmodi ausprobieren')} →
+            </Button>
             {tr(
               target.resume && (
                 <Button
