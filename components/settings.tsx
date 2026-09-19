@@ -114,7 +114,7 @@ export default function Settings({
         </label>
         <label>
           <RadioGroupItem value="en" />
-          {tr('English')}
+          {tr('Englisch')}
         </label>
       </RadioGroup>
       <h2>{tr('Darstellung')}</h2>

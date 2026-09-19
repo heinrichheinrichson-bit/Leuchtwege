@@ -17,6 +17,8 @@ import PlayClock from '@/components/play-clock';
 import PlayStatistics from '@/components/play-statistics';
 import DailyHub from '@/components/daily-hub';
 import StreakCalendar from '@/components/streak-calendar';
+import HomeStreak from '@/components/home-streak';
+import { createGameAudio } from '@/lib/game-audio.mjs';
 import ExperienceCard, { PuzzleReward } from '@/components/experience';
 import Milestones from '@/components/milestones';
 import { usePlayClock } from '@/lib/use-play-clock';
@@ -101,24 +103,12 @@ export default function Home() {
     }
   }, [view]);
   const [restart, setRestart] = useState(false);
-  const successAudio = useRef<HTMLAudioElement | null>(null);
-  const electricAudio = useRef<Record<string, HTMLAudioElement>>({});
+  const gameAudio = useRef<ReturnType<typeof createGameAudio> | null>(null);
   function stopSounds() {
-    for (const audio of [
-      successAudio.current,
-      ...Object.values(electricAudio.current),
-    ]) {
-      if (audio) {
-        audio.pause();
-        audio.currentTime = 0;
-      }
-    }
+    gameAudio.current?.stop();
   }
   function playElectric(name: string) {
-    if (!sound) return;
-    stopSounds();
-    const audio = electricAudio.current[name];
-    if (audio) void audio.play().catch(() => {});
+    if (sound) void gameAudio.current?.play(name);
   }
   const helpBack = useRef<(() => boolean) | null>(null);
   const slideBack = useRef<(() => boolean) | null>(null);
@@ -150,10 +140,7 @@ export default function Home() {
   const [sound, setSound] = useState(false);
   const [helpPaused, setHelpPaused] = useState(false);
   const { victory, celebrating, setVictory } = useVictory(() => {
-    if (sound && successAudio.current) {
-      stopSounds();
-      void successAudio.current.play().catch(() => {});
-    }
+    playElectric('success');
   }, [view, level, isFree, free.puzzle?.id, restart].join(':'));
   const [lockMode, setLockMode] = useState(false);
   const [storageError, setStorageError] = useState(false);
@@ -339,19 +326,7 @@ export default function Home() {
           else nativeHandle = h;
         },
       );
-    const audio = new Audio('/sounds/success.wav');
-    audio.preload = 'auto';
-    audio.volume = 0.38;
-    successAudio.current = audio;
-    for (const [name, volume] of [
-      ['connect', 0.34],
-      ['disconnect', 0.27],
-    ] as const) {
-      const effect = new Audio('/sounds/' + name + '.wav');
-      effect.preload = 'auto';
-      effect.volume = volume;
-      electricAudio.current[name] = effect;
-    }
+    gameAudio.current = createGameAudio();
     const stop = () => {
       if (document.hidden) {
         stopSounds();
@@ -363,11 +338,21 @@ export default function Home() {
       void nativeHandle?.remove();
       window.removeEventListener('popstate', pop);
       document.removeEventListener('visibilitychange', stop);
-      stopSounds();
+      gameAudio.current?.dispose();
+      gameAudio.current = null;
     };
   }, []);
   useEffect(() => {
     if (!sound) stopSounds();
+    const unlock = () => {
+      if (sound) void gameAudio.current?.unlock();
+    };
+    document.addEventListener('pointerdown', unlock, { passive: true });
+    document.addEventListener('keydown', unlock);
+    return () => {
+      document.removeEventListener('pointerdown', unlock);
+      document.removeEventListener('keydown', unlock);
+    };
   }, [sound]);
   function start(i: number) {
     setLevel(i);
@@ -483,22 +468,7 @@ export default function Home() {
     if (session.locks[i]) return;
     haptic();
     if (dispatch({ type: 'turn', index: i })) return;
-    if (sound)
-      try {
-        const ctx = new AudioContext(),
-          o = ctx.createOscillator(),
-          g = ctx.createGain();
-        o.frequency.value = 520;
-        g.gain.setValueAtTime(0.035, ctx.currentTime);
-        g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
-        o.connect(g);
-        g.connect(ctx.destination);
-        o.start();
-        o.stop(ctx.currentTime + 0.09);
-        o.onended = () => {
-          void ctx.close();
-        };
-      } catch {}
+    playElectric('turn');
   }
   useEffect(() => {
     if (
@@ -693,14 +663,7 @@ export default function Home() {
             <h2 className="home-section-title">{tr('Dein Fortschritt')}</h2>
             <ExperienceCard onOpen={() => navigate('milestones')} />
             <div className="home-grid">
-              <Button
-                variant="outline"
-                className="home-option"
-                onClick={() => navigate('streak')}
-              >
-                <span>{tr('Streak-Kalender')}</span>
-                <span aria-hidden="true">{tr('✓')}</span>
-              </Button>
+              <HomeStreak onOpen={() => navigate('streak')} />
               <Button
                 variant="outline"
                 className="home-option"
@@ -732,13 +695,7 @@ export default function Home() {
           <DailyHub
             back={dailyBack}
             onLearn={() => navigate('learn')}
-            playSound={(name) => {
-              if (!sound) return;
-              if (name === 'success' && successAudio.current) {
-                stopSounds();
-                void successAudio.current.play().catch(() => {});
-              } else playElectric(name);
-            }}
+            playSound={playElectric}
           />
         ),
       )}
@@ -748,13 +705,7 @@ export default function Home() {
             initialMode={learnMode}
             onExit={() => backAction.current()}
             onPlay={(mode) => navigate(mode === 'turn' ? 'catalog' : 'sliding')}
-            playSound={(name) => {
-              if (!sound) return;
-              if (name === 'success' && successAudio.current) {
-                stopSounds();
-                void successAudio.current.play().catch(() => {});
-              } else playElectric(name);
-            }}
+            playSound={playElectric}
           />
         ),
       )}
@@ -766,13 +717,7 @@ export default function Home() {
               setLearnMode(mode || 'slide');
               navigate('learn');
             }}
-            playSound={(name) => {
-              if (!sound) return;
-              if (name === 'success' && successAudio.current) {
-                stopSounds();
-                void successAudio.current.play().catch(() => {});
-              } else playElectric(name);
-            }}
+            playSound={playElectric}
           />
         ),
       )}

@@ -1886,3 +1886,29 @@ html[data-theme='light'] {
 .play-screen .play-status {
   min-height: 42px;
 }
+
+/* Streak replaces the existing calendar tile: no extra home-screen section. */
+.home-grid .home-streak {
+  padding: 8px 10px !important;
+}
+.home-streak strong {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 1.125rem;
+  color: var(--lw-ffdc91);
+}
+.home-streak small {
+  margin-top: 2px;
+  font-size: 0.8125rem;
+}
+.home-streak.achieved {
+  border-color: var(--lw-ffdc91);
+}
+
+.home-streak strong {
+  line-height: 1.2;
+}
+.home-streak small {
+  line-height: 1.25;
+}

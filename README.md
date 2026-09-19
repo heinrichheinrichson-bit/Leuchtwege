@@ -192,3 +192,14 @@ Rückgängig, Sperren bzw. Regeln, Neustart und Glühbirne stehen gemeinsam in e
 Browserprüfung ohne Testhilfen: 6×6-Drehspiel bei 360×640, 360×740, 393×780, 412×820 und 480×800 ohne Scrollbedarf; beide Schiebemodi und Tages-Drehspiel ebenfalls geprüft, einschließlich englischem Schieben & Drehen bei 360×640. Verschieben per zwei Klicks, Rückgängig, Sperrmodus, Tippdialog und Tagesregeln geprüft. 320×568 und Querformat 640×360 behalten bei Platzmangel einen vertikalen Scroll-Fallback ohne horizontalen Überlauf. Dies sind Browser-Viewportprüfungen, keine vollständigen physischen Android-Gerätetests. Testbuild kann wegen der zusätzlichen Testbuttons weiterhin höher sein.
 
 Zusätzlich korrigiert: Eine noch unberührte Drehpartie behält ihre Ausgangssitzung bei Uhr- und Hilfeaktualisierungen. Dadurch wird ein laufender erster Testschritt nicht mehr irrtümlich als überholt abgewiesen; echte Brettänderungen bleiben geschützt.
+
+
+## Ruhigere Sounds, Sprache und Startseiten-Streak (1.28-test)
+
+Alle Modi verwenden einen gemeinsamen Web-Audio-Kontext mit zwischengespeicherten Samples. Schnelle Drehungen ersetzen Klänge über kurze Ein-/Ausblendungen statt abruptem Stoppen und Zurücksetzen. Sehr kurze Eingabebursts starten keine zusätzlichen Klänge. Auch der kurze Dreh-Ton verwendet denselben Kontext. Stummschalten und Verlassen der App verwerfen noch wartende Wiedergaben. Der synthetische Entladeton wurde geglättet, mit Fades versehen und leiser eingestellt; die frühere Datei enthielt einzelne übersteuerte Spitzen. Die übrigen Thinkheim-Klänge bleiben erhalten. Die tatsächliche Klangqualität muss auf dem S22 nachgehört werden.
+
+Die vorhandene Kalender-Kachel auf der Startseite zeigt die aktuelle Streak-Länge und „Heute offen“ bzw. „Heute geschafft“ mit Häkchen. Sie öffnet weiterhin den Streak-Kalender. Die Anzeige nutzt dessen unveränderte Regeln einschließlich Streak-Schutz und aktualisiert sich bei Rückkehr, Datenänderungen und Tageswechsel. Kein rückwirkendes Schließen alter Tage.
+
+Die Sprachauswahl zeigt Systemsprache, Deutsch und Englisch. Systemsprache ist weiterhin der Standard ohne gespeicherte Auswahl; bewusste Sprachentscheidungen bleiben erhalten. Ergänzte englische Tages- und Streak-Beschriftungen.
+
+Geprüft: Audio-Unterbrechungen mit Lautstärkerampen, begrenzte schnelle Auslösung, Wiederverwendung des Kontextes und der Samples, Stummschalten während des Ladens und Aufräumen; Sprachvorgaben/-wechsel; bestehende Tages-/Freeze-Regeln. Browser: reguläres Drehpuzzle ohne Testhilfe abgeschlossen, XP/Erfolg und Startseitenstatus kontrolliert. Physische Audioausgabe noch auf Android zu prüfen.
