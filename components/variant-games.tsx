@@ -27,13 +27,16 @@ import {
   variantNames,
   variantRules,
   variantCatalog,
-  variantPuzzle,
+  savedVariant,
   variantStatus,
   variantAct,
   variantKey,
   emptyVariants,
   restoreVariants,
 } from '@/lib/variants.mjs';
+import VariantWorker from '@/lib/random-variants.worker?worker';
+import { variantTiers } from '@/lib/variant-difficulty.mjs';
+import { variantSizes } from '@/lib/random-variants.mjs';
 import { fresh, boardOf } from '@/lib/session.mjs';
 import { neighbor } from '@/lib/game.mjs';
 import PlayScreen from './play-screen';
@@ -56,8 +59,27 @@ export default function VariantGames({
   const [data, setData] = useState<any>(emptyVariants),
     [ready, setReady] = useState(false);
   const [selected, setSelected] = useState<string | null>(null),
-    [size, setSize] = useState(3),
+    [size, setSize] = useState(0),
+    [tier, setTier] = useState('Leicht'),
+    [busy, setBusy] = useState(false),
+    [generationError, setGenerationError] = useState(false),
     [error, setError] = useState(false);
+  const worker = useRef<Worker | null>(null);
+  const generationTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  function cancelGeneration() {
+    worker.current?.terminate();
+    worker.current = null;
+    if (generationTimer.current) clearTimeout(generationTimer.current);
+    generationTimer.current = null;
+    setBusy(false);
+  }
+
+  const latest = useRef(data);
+  latest.current = data;
+  const sizes =
+    variantSizes[data.mode as keyof typeof variantSizes][
+      tier as 'Leicht' | 'Mittel' | 'Schwer'
+    ];
   const childBack = useRef<(() => boolean) | null>(null);
   useEffect(() => {
     try {
@@ -79,6 +101,10 @@ export default function VariantGames({
     }
   }
   back.current = () => {
+    if (worker.current) {
+      cancelGeneration();
+      return true;
+    }
     if (childBack.current?.()) return true;
     if (selected) {
       setSelected(null);
@@ -89,6 +115,9 @@ export default function VariantGames({
   useEffect(
     () => () => {
       back.current = null;
+      worker.current?.terminate();
+      worker.current = null;
+      if (generationTimer.current) clearTimeout(generationTimer.current);
     },
     [back],
   );
@@ -97,7 +126,7 @@ export default function VariantGames({
     const saved = data.free[data.mode];
     const l =
       selected === 'free' && saved
-        ? variantPuzzle(data.mode, saved.seed, saved.n)
+        ? savedVariant(data.mode, saved)
         : variantCatalog.find((l) => l.id === selected);
     if (!l) return null;
     return {
@@ -107,13 +136,68 @@ export default function VariantGames({
     };
   }, [selected, data]);
   function generate() {
-    const seed = crypto.getRandomValues(new Uint32Array(1))[0],
-      l = variantPuzzle(data.mode, seed, size);
-    save({
-      ...data,
-      free: { ...data.free, [data.mode]: { seed, n: size, session: fresh(l) } },
+    if (worker.current) return;
+    setBusy(true);
+    setGenerationError(false);
+    let task: Worker;
+    try {
+      task = new VariantWorker();
+    } catch {
+      setBusy(false);
+      setGenerationError(true);
+      return;
+    }
+    worker.current = task;
+    const mode = data.mode;
+    const end = () => {
+      if (generationTimer.current) clearTimeout(generationTimer.current);
+      generationTimer.current = null;
+      task.terminate();
+      if (worker.current === task) worker.current = null;
+      setBusy(false);
+    };
+    generationTimer.current = setTimeout(() => {
+      if (worker.current === task) {
+        end();
+        setGenerationError(true);
+      }
+    }, 6000);
+    task.onmessage = ({ data: result }) => {
+      if (worker.current !== task) return;
+      end();
+      const l = result.puzzle;
+      if (!l) {
+        setGenerationError(true);
+        return;
+      }
+      const current = latest.current;
+      save({
+        ...current,
+        free: {
+          ...current.free,
+          [mode]: {
+            seed: l.seed,
+            n: l.n,
+            generatorVersion: 2,
+            session: fresh(l),
+          },
+        },
+        recent: [...(current.recent || []), l.key].slice(-36),
+      });
+      setSelected('free');
+    };
+    task.onerror = () => {
+      if (worker.current !== task) return;
+      end();
+      setGenerationError(true);
+    };
+    task.postMessage({
+      mode,
+      tier,
+      size,
+      seed: crypto.getRandomValues(new Uint32Array(1))[0],
+      recent: data.recent || [],
     });
-    setSelected('free');
   }
   if (!ready) return <p>{tr('Wird geladen …')}</p>;
   if (entry)
@@ -128,6 +212,31 @@ export default function VariantGames({
           key={entry.puzzle.id}
           entry={entry}
           origin={selected === 'free' ? 'free' : 'catalog'}
+          number={
+            selected === 'free'
+              ? null
+              : variantCatalog
+                  .filter(
+                    (l) => l.mode === data.mode && l.tier === entry.puzzle.tier,
+                  )
+                  .findIndex((l) => l.id === selected) + 1
+          }
+          onNext={
+            selected !== 'free' &&
+            variantCatalog
+              .filter((l) => l.mode === data.mode)
+              .findIndex((l) => l.id === selected) <
+              variantCatalog.filter((l) => l.mode === data.mode).length - 1
+              ? () => {
+                  const list = variantCatalog.filter(
+                    (l) => l.mode === data.mode,
+                  );
+                  setSelected(
+                    list[list.findIndex((l) => l.id === selected) + 1].id,
+                  );
+                }
+              : undefined
+          }
           back={childBack}
           playSound={playSound}
           onExit={() => setSelected(null)}
@@ -154,9 +263,7 @@ export default function VariantGames({
     <section className="variant-hub">
       <h1>{tr('Neue Spielmodi')}</h1>
       <p className="section-intro">
-        {tr(
-          'Drei neue Ideen zum Ausprobieren. Die Schwierigkeit ist vorläufig.',
-        )}
+        {tr('90 Rätsel pro Modus – von leicht bis schwer.')}
       </p>
       {error && (
         <p role="alert">
@@ -169,7 +276,12 @@ export default function VariantGames({
             key={mode}
             variant={mode === data.mode ? 'default' : 'outline'}
             aria-pressed={mode === data.mode}
-            onClick={() => save({ ...data, mode })}
+            disabled={busy}
+            onClick={() => {
+              save({ ...data, mode });
+              setSize(0);
+              setGenerationError(false);
+            }}
           >
             {tr(variantNames[mode as keyof typeof variantNames])}
           </Button>
@@ -178,51 +290,131 @@ export default function VariantGames({
       <p className="variant-rule">
         {tr(variantRules[data.mode as keyof typeof variantRules])}
       </p>
-      <h2>{tr('Proberätsel')}</h2>
-      <div className="variant-levels">
-        {variantCatalog
-          .filter((l) => l.mode === data.mode)
-          .map((l, i) => {
-            const s = data.sessions[l.id],
-              solved = !!s && variantStatus(l, s).solved;
-            return (
-              <Button
-                key={l.id}
-                variant="outline"
-                onClick={() => setSelected(l.id)}
-              >
-                <span>
-                  {tr(`Rätsel ${String(i + 1).padStart(2, '0')}`)}
-                  <small>
-                    {l.n} × {l.n} · {tr(l.tier)}
-                  </small>
-                </span>
-                <span aria-label={tr(solved ? 'Gelöst' : 'Noch offen')}>
-                  {solved ? '✓' : '→'}
-                </span>
-              </Button>
-            );
-          })}
-      </div>
+      <p className="section-intro">
+        {tr('Katalog')} ·{' '}
+        {
+          variantCatalog.filter(
+            (l) =>
+              l.mode === data.mode &&
+              data.sessions[l.id] &&
+              variantStatus(l, data.sessions[l.id]).solved,
+          ).length
+        }{' '}
+        / 90 {tr('gelöst')}
+      </p>
+      {variantTiers.map((category) => (
+        <details className="slide-catalog-tier" key={category}>
+          <summary>
+            {tr(category)}
+            <span>
+              {
+                variantCatalog.filter(
+                  (l) =>
+                    l.mode === data.mode &&
+                    l.tier === category &&
+                    data.sessions[l.id] &&
+                    variantStatus(l, data.sessions[l.id]).solved,
+                ).length
+              }{' '}
+              / 30
+            </span>
+          </summary>
+          <div className="variant-levels">
+            {variantCatalog
+              .filter((l) => l.mode === data.mode && l.tier === category)
+              .map((l, i) => {
+                const state = data.sessions[l.id],
+                  solved = state && variantStatus(l, state).solved;
+                return (
+                  <Button
+                    key={l.id}
+                    variant="outline"
+                    disabled={busy}
+                    onClick={() => setSelected(l.id)}
+                  >
+                    <span>
+                      {tr(`Rätsel ${String(i + 1).padStart(2, '0')}`)}
+                      <small>
+                        {l.n} × {l.n}
+                      </small>
+                    </span>
+                    <span aria-label={tr(solved ? 'Gelöst' : 'Noch offen')}>
+                      {solved ? '✓' : '→'}
+                    </span>
+                  </Button>
+                );
+              })}
+          </div>
+        </details>
+      ))}
       <h2>{tr('Freies Spiel')}</h2>
-      <div className="variant-tabs">
-        {[3, 4].map((n) => (
+      <div className="variant-tabs" aria-label={tr('Schwierigkeit')}>
+        {variantTiers.map((category) => (
+          <Button
+            key={category}
+            disabled={busy}
+            variant={tier === category ? 'default' : 'outline'}
+            aria-pressed={tier === category}
+            onClick={() => {
+              setTier(category);
+              setSize(0);
+              setGenerationError(false);
+            }}
+          >
+            {tr(category)}
+          </Button>
+        ))}
+      </div>
+      <div className="variant-tabs" aria-label={tr('Rastergröße')}>
+        {[0, ...sizes].map((n) => (
           <Button
             key={n}
+            disabled={busy}
             variant={size === n ? 'default' : 'outline'}
             aria-pressed={size === n}
             onClick={() => setSize(n)}
           >
-            {n} × {n}
+            {n ? `${n} × ${n}` : tr('Automatisch')}
           </Button>
         ))}
-        <Button onClick={generate}>{tr('Neues Rätsel')}</Button>
+      </div>
+      <div className="variant-tabs">
+        <Button disabled={busy} onClick={generate}>
+          {tr(busy ? 'Rätsel wird erzeugt …' : 'Neues Rätsel')}
+        </Button>
+        {busy && (
+          <Button
+            variant="outline"
+            onClick={() => {
+              cancelGeneration();
+            }}
+          >
+            {tr('Abbrechen')}
+          </Button>
+        )}
         {data.free[data.mode] && (
-          <Button variant="outline" onClick={() => setSelected('free')}>
+          <Button
+            disabled={busy}
+            variant="outline"
+            onClick={() => setSelected('free')}
+          >
             {tr('Weiterspielen')}
           </Button>
         )}
       </div>
+      {generationError && (
+        <p role="alert">
+          {tr('Kein passendes Rätsel gefunden. Bitte erneut versuchen.')}
+        </p>
+      )}
+      <details className="variant-difficulty-info">
+        <summary>{tr('Wie wird die Schwierigkeit bestimmt?')}</summary>
+        <p>
+          {tr(
+            'Entscheidend sind Schlussfolgerungsketten, offene Möglichkeiten und gekoppelte Kacheln. Die Rastergröße allein bestimmt die Stufe nicht.',
+          )}
+        </p>
+      </details>
     </section>
   );
 }
@@ -230,6 +422,8 @@ export default function VariantGames({
 function VariantBoard({
   entry,
   origin,
+  number,
+  onNext,
   onChange,
   onExit,
   back,
@@ -237,6 +431,8 @@ function VariantBoard({
 }: {
   entry: any;
   origin: string;
+  number: number | null;
+  onNext?: () => void;
   onChange: (session: any) => void;
   onExit: () => void;
   back: Back;
@@ -305,8 +501,12 @@ function VariantBoard({
       <div className="play-heading">
         <div>
           <p className="level-label">
-            {tr(origin === 'free' ? 'Freies Spiel' : 'Proberätsel')} ·{' '}
-            {tr(l.tier)}
+            {tr(
+              origin === 'free'
+                ? 'Freies Spiel'
+                : `Rätsel ${String(number).padStart(2, '0')}`,
+            )}{' '}
+            · {tr(l.tier)}
           </p>
           <h1>{tr(l.name)}</h1>
         </div>
@@ -452,8 +652,8 @@ function VariantBoard({
         />
       </div>
       {status.solved && (
-        <Button className="next-inline" onClick={onExit}>
-          {tr('Zur Auswahl →')}
+        <Button className="next-inline" onClick={onNext || onExit}>
+          {tr(onNext ? 'Nächstes Rätsel →' : 'Zur Auswahl →')}
         </Button>
       )}
       <Dialog open={victory} onOpenChange={(open) => setVictory(open)}>
@@ -464,7 +664,9 @@ function VariantBoard({
             {s.moves}{' '}
             {tr('Drehungen. Das fertige Netz bleibt für dich gespeichert.')}
           </DialogDescription>
-          <Button onClick={onExit}>{tr('Zur Auswahl')}</Button>
+          <Button onClick={onNext || onExit}>
+            {tr(onNext ? 'Nächstes Rätsel →' : 'Zur Auswahl')}
+          </Button>
           <Button variant="outline" onClick={() => setVictory(false)}>
             {tr('Brett ansehen')}
           </Button>

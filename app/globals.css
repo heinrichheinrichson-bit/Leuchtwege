@@ -1977,3 +1977,17 @@ html[data-theme='light'] {
 .variant-board .wrong-network {
   box-shadow: inset 0 0 0 2px #e89787;
 }
+
+.variant-difficulty-info {
+  margin-top: 16px;
+  font-size: 0.9rem;
+}
+.variant-difficulty-info p {
+  margin: 10px 0;
+}
+.variant-hub .slide-catalog-tier {
+  margin: 12px 0;
+}
+.variant-hub .slide-catalog-tier .variant-levels {
+  margin-top: 12px;
+}

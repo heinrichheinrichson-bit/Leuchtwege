@@ -37,11 +37,22 @@ for (const l of puzzles) {
     variantStatus(goal, fresh(goal)).solved,
     'Constructed target is valid',
   );
-  assert.deepEqual(
-    variantPuzzle(l.mode, l.seed, l.n, l.id),
-    l,
-    'Generator is deterministic',
+  const reproduced = variantPuzzle(
+    l.mode,
+    l.seed,
+    l.n,
+    l.id,
+    l.generatorVersion || 1,
   );
+  for (const key of [
+    'initial',
+    'solution',
+    'groups',
+    'owners',
+    'sources',
+    'targets',
+  ])
+    assert.deepEqual(reproduced[key], l[key], 'Generator is deterministic');
   const plan = solutionPlan(l, s);
   assert(plan.length > 0);
   const almost = applyHelp(l, s, plan, 'almost');
@@ -65,7 +76,7 @@ for (const l of puzzles) {
   );
   if (l.mode === 'path')
     assert(
-      variantStatus(l, s).lit.size < l.n * l.n,
+      variantStatus(goal, fresh(goal)).lit.size < l.n * l.n,
       'Unused tiles may remain dark',
     );
   if (l.mode === 'dual') {
