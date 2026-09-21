@@ -4,9 +4,15 @@ import { App } from '@capacitor/app';
 import { Capacitor } from '@capacitor/core';
 import { readHistory, recordAttempt, changeHistory } from './history-store';
 import { currentAttempt } from './play-history.mjs';
+import { checkOptimal } from './optimal-check';
 import { activeTimer } from './active-timer.mjs';
 
-export function usePlayClock(meta: any, enabled: boolean, moves: number) {
+export function usePlayClock(
+  meta: any,
+  enabled: boolean,
+  moves: number,
+  puzzle?: any,
+) {
   const [entry, setEntry] = useState<any>(null),
     [visible, setVisible] = useState(true),
     [error, setError] = useState(false),
@@ -108,6 +114,7 @@ export function usePlayClock(meta: any, enabled: boolean, moves: number) {
     });
     refresh(r.data);
     setError(r.error);
+    if (solved) checkOptimal(puzzle, currentAttempt(r.data, meta.puzzleId));
   }
   function toggle() {
     const r = changeHistory((d) => ({ ...d, clockVisible: !d.clockVisible }));

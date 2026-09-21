@@ -4,6 +4,10 @@ import { useEffect, useRef, useState, type MutableRefObject } from 'react';
 import { Button } from '@/components/ui/button';
 import {
   DAILY_START,
+  DAILY_CHOICE_START,
+  choiceModes,
+  dailyFinish,
+  dailyCount,
   dayKey,
   dailyModes,
   modeNames,
@@ -11,6 +15,7 @@ import {
   monthDays,
   shiftDay,
   dailyCompleted,
+  regularCompletion,
 } from '@/lib/daily.mjs';
 import { restoreDaily } from '@/lib/daily-generator.mjs';
 import { readHistory } from '@/lib/history-store';
@@ -20,6 +25,7 @@ import { dailyXp, experienceSummary } from '@/lib/experience.mjs';
 import DailyWorker from '@/lib/daily.worker?worker';
 import SlidingGame from './sliding-game';
 import DailyRotation from './daily-rotation';
+import { VariantBoard } from './variant-games';
 export default function DailyHub({
   back,
   playSound,
@@ -32,6 +38,7 @@ export default function DailyHub({
   const [today, setToday] = useState(dayKey),
     [selected, setSelected] = useState(dayKey),
     [month, setMonth] = useState(() => dayKey().slice(0, 7));
+  const [choices, setChoices] = useState<Record<string, string>>({});
   const [entry, setEntry] = useState<any>(null),
     [history, setHistory] = useState<any>(emptyHistory),
     [busy, setBusy] = useState(false),
@@ -42,9 +49,35 @@ export default function DailyHub({
       worker: Worker;
       timer: ReturnType<typeof setTimeout>;
     } | null>(null);
-  const storageKey = (day: string, mode: string) =>
-    `leuchtwege-daily-v1:${day}:${mode}`;
+  const storageKey = (day: string, mode: string, slot?: number) =>
+    slot === undefined
+      ? `leuchtwege-daily-v1:${day}:${mode}`
+      : `leuchtwege-daily-v2:${day}:${mode}:${slot}`;
   const calendar = monthDays(month);
+  useEffect(() => {
+    const restored: Record<string, string> = {};
+    for (const slot of [0, 1, 2]) {
+      let latest = '';
+      for (const mode of choiceModes) {
+        try {
+          const raw = JSON.parse(
+            localStorage.getItem(storageKey(selected, mode, slot)) || 'null',
+          );
+          if (
+            raw &&
+            typeof raw.openedAt === 'string' &&
+            raw.openedAt > latest
+          ) {
+            latest = raw.openedAt;
+            restored[`${selected}:${slot}`] = mode;
+          }
+        } catch {
+          /* Leave other slots available if one save is unreadable. */
+        }
+      }
+    }
+    setChoices((previous) => ({ ...previous, ...restored }));
+  }, [selected]);
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, [entry?.puzzle.id]);
@@ -98,7 +131,7 @@ export default function DailyHub({
   function save(next: any) {
     try {
       localStorage.setItem(
-        storageKey(next.day, next.mode),
+        storageKey(next.day, next.mode, next.slot),
         JSON.stringify(next),
       );
       setSaveError(false);
@@ -106,18 +139,23 @@ export default function DailyHub({
       setSaveError(true);
     }
   }
-  function open(mode: string) {
+  function open(mode: string, slot?: number) {
     if (selected < DAILY_START || selected > dayKey()) return;
     cancel();
     setError('');
     try {
       const stored = restoreDaily(
-        JSON.parse(localStorage.getItem(storageKey(selected, mode)) || 'null'),
+        JSON.parse(
+          localStorage.getItem(storageKey(selected, mode, slot)) || 'null',
+        ),
         selected,
         mode,
+        slot,
       );
       if (stored) {
-        setEntry(stored);
+        const next = { ...stored, openedAt: new Date().toISOString() };
+        save(next);
+        setEntry(next);
         return;
       }
     } catch {
@@ -140,8 +178,9 @@ export default function DailyHub({
           setError(data.error);
           return;
         }
-        save(data.entry);
-        setEntry(data.entry);
+        const next = { ...data.entry, openedAt: new Date().toISOString() };
+        save(next);
+        setEntry(next);
       };
       worker.onerror = () => {
         if (job.current?.worker === worker) {
@@ -151,7 +190,7 @@ export default function DailyHub({
           );
         }
       };
-      worker.postMessage({ day: selected, mode });
+      worker.postMessage({ day: selected, mode, slot });
     } catch {
       cancel();
       setError('Die Erzeugung konnte nicht starten. Bitte erneut versuchen.');
@@ -167,7 +206,10 @@ export default function DailyHub({
       <>
         {tr(
           helpSolved(entry.puzzle, entry.session) &&
-            !dailyCompleted(history.attempts, entry.day, entry.mode) && (
+            !history.attempts.some(
+              (a: any) =>
+                a.puzzleId === entry.puzzle.id && regularCompletion(a),
+            ) && (
               <p role="status">
                 {tr(
                   'Dieses Brett ist gelöst, zählt aber noch nicht als regulärer Abschluss. Starte es neu und löse es ohne Testhilfe, damit es im Kalender zählt.',
@@ -176,7 +218,18 @@ export default function DailyHub({
             ),
         )}
         {tr(
-          entry.mode === 'turn' ? (
+          ['dual', 'path', 'linked'].includes(entry.mode) ? (
+            <VariantBoard
+              key={entry.puzzle.id}
+              entry={entry}
+              origin="daily"
+              number={null}
+              onChange={change}
+              onExit={() => setEntry(null)}
+              back={childBack}
+              playSound={playSound}
+            />
+          ) : entry.mode === 'turn' ? (
             <DailyRotation
               key={entry.puzzle.id}
               entry={entry}
@@ -214,7 +267,9 @@ export default function DailyHub({
       <p className="level-label">{tr('Jeden Tag ein Lichtblick')}</p>
       <h1>{tr('Tagesrätsel')}</h1>
       <p className="section-intro">
-        {tr('Drei Rätsel pro Tag. Löse sie und sammle XP.')}
+        {tr(
+          'Drei Rätsel. Deine Lieblingsmodi. Auch dreimal derselbe Modus ist möglich.',
+        )}
       </p>
       <details className="info-details daily-archive">
         <summary>{tr('Kalender & frühere Rätsel')}</summary>
@@ -261,9 +316,7 @@ export default function DailyHub({
           )}
           {tr(
             calendar.days.map((day) => {
-              const count = dailyModes.filter((m) =>
-                dailyCompleted(history.attempts, day, m),
-              ).length;
+              const count = dailyCount(history.attempts, day);
               return (
                 <button
                   key={day}
@@ -308,42 +361,71 @@ export default function DailyHub({
       </h2>
       <div className="puzzle-cards">
         {tr(
-          dailyModes.map((mode) => {
-            const spec = dailySpec(selected, mode),
-              done = dailyCompleted(history.attempts, selected, mode);
+          [0, 1, 2].map((slot) => {
+            const finish = dailyFinish(history.attempts, selected, slot);
+            const legacy =
+              selected < DAILY_CHOICE_START ||
+              finish?.puzzleId.startsWith('daily-v1-');
+            const mode =
+              finish?.mode ||
+              (legacy
+                ? dailyModes[slot]
+                : choices[`${selected}:${slot}`] || 'turn');
+            const spec = dailySpec(selected, mode, legacy ? undefined : slot),
+              done = !!finish;
             const award = experienceSummary(history.attempts).awards.find(
               (a) => a.id === spec.id,
             );
             return (
-              <button
-                className="puzzle-card"
-                key={mode}
-                disabled={busy}
-                onClick={() => open(mode)}
-              >
-                <span className="puzzle-number">{tr(done ? '✓' : '✳')}</span>
-                <span className="puzzle-copy">
-                  <strong>{tr((modeNames as any)[mode])}</strong>
-                  <small>
-                    {tr(
-                      award
-                        ? `${award.points} XP gesammelt`
-                        : `${dailyXp(spec.tier)} XP + 10 XP ohne Tipps`,
-                    )}
-                  </small>
-                  <small>
-                    {tr(spec.tier)}
-                    {tr(' · ')}
-                    {tr(spec.n)}
-                    {tr(' × ')}
-                    {tr(spec.n)}
-                    {tr(' ·')}
-                    {tr(' ')}
-                    {tr(done ? 'Gelöst – Brett öffnen' : 'Spielen')}
-                  </small>
-                </span>
-                <span>{tr('→')}</span>
-              </button>
+              <div key={slot}>
+                {!legacy && !done && (
+                  <label className="daily-mode-choice">
+                    {tr(`Rätsel ${slot + 1}`)} · {tr(spec.tier)}
+                    <select
+                      aria-label={tr(`Spielmodus für Rätsel ${slot + 1}`)}
+                      disabled={busy}
+                      value={mode}
+                      onChange={(e) =>
+                        setChoices({
+                          ...choices,
+                          [`${selected}:${slot}`]: e.target.value,
+                        })
+                      }
+                    >
+                      {choiceModes.map((m) => (
+                        <option key={m} value={m}>
+                          {tr((modeNames as any)[m])}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                )}
+                <button
+                  className="puzzle-card"
+                  disabled={busy}
+                  onClick={() => open(mode, legacy ? undefined : slot)}
+                >
+                  <span className="puzzle-number">{tr(done ? '✓' : '✳')}</span>
+                  <span className="puzzle-copy">
+                    <strong>{tr((modeNames as any)[mode])}</strong>
+                    <small>
+                      {tr(
+                        award
+                          ? `${award.points} XP gesammelt`
+                          : `${dailyXp(spec.tier)} XP + 10 XP ohne Tipps`,
+                      )}
+                    </small>
+                    <small>
+                      {tr(spec.tier)}
+                      {tr(' · ')}
+                      {spec.n > 0 ? `${spec.n} × ${spec.n} ·` : ''}
+                      {tr(' ')}
+                      {tr(done ? 'Gelöst – Brett öffnen' : 'Spielen')}
+                    </small>
+                  </span>
+                  <span>{tr('→')}</span>
+                </button>
+              </div>
             );
           }),
         )}

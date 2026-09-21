@@ -9,7 +9,19 @@ export function useExperience() {
   useEffect(() => {
     const update = () => {
       const history = readHistory();
-      setXp(experienceSummary(history.attempts, history.freeze));
+      setXp({
+        ...experienceSummary(history.attempts, history.freeze),
+        optimalAttempts: history.attempts
+          .filter(
+            (a: any) =>
+              a.optimalProof?.version === 1 &&
+              a.moves === a.optimalProof.minimumMoves &&
+              a.effortMoves === a.moves &&
+              a.assistance === 'none' &&
+              !a.partialTime,
+          )
+          .map((a: any) => a.id),
+      } as any);
     };
     update();
     window.addEventListener('leuchtwege-history', update);
@@ -98,6 +110,9 @@ export function PuzzleReward({
           : previous
             ? 'Für diesen Abschluss keine weiteren XP.'
             : 'Keine XP für diesen Abschluss.',
+      )}
+      {(xp as any).optimalAttempts?.includes(attemptId) && (
+        <p>★ {tr('Mit optimaler Zugzahl gelöst')}</p>
       )}
       {xp.bonuses
         .filter((b) => b.attemptId === attemptId)

@@ -178,7 +178,7 @@ export default function VariantGames({
           [mode]: {
             seed: l.seed,
             n: l.n,
-            generatorVersion: 2,
+            generatorVersion: l.generatorVersion,
             session: fresh(l),
           },
         },
@@ -263,7 +263,7 @@ export default function VariantGames({
     <section className="variant-hub">
       <h1>{tr('Neue Spielmodi')}</h1>
       <p className="section-intro">
-        {tr('90 Rätsel pro Modus – von leicht bis schwer.')}
+        {tr('Rätsel von leicht bis schwer. Wähle deinen Modus.')}
       </p>
       {error && (
         <p role="alert">
@@ -300,7 +300,8 @@ export default function VariantGames({
               variantStatus(l, data.sessions[l.id]).solved,
           ).length
         }{' '}
-        / 90 {tr('gelöst')}
+        / {variantCatalog.filter((l) => l.mode === data.mode).length}{' '}
+        {tr('gelöst')}
       </p>
       {variantTiers.map((category) => (
         <details className="slide-catalog-tier" key={category}>
@@ -316,7 +317,12 @@ export default function VariantGames({
                     variantStatus(l, data.sessions[l.id]).solved,
                 ).length
               }{' '}
-              / 30
+              /{' '}
+              {
+                variantCatalog.filter(
+                  (l) => l.mode === data.mode && l.tier === category,
+                ).length
+              }
             </span>
           </summary>
           <div className="variant-levels">
@@ -411,7 +417,7 @@ export default function VariantGames({
         <summary>{tr('Wie wird die Schwierigkeit bestimmt?')}</summary>
         <p>
           {tr(
-            'Entscheidend sind Schlussfolgerungsketten, offene Möglichkeiten und gekoppelte Kacheln. Die Rastergröße allein bestimmt die Stufe nicht.',
+            'Wir prüfen Schlussfolgerungsketten und falsche Abzweigungen: Wie lange bleibt ein Irrweg plausibel? Die Einstufung ist eine Schätzung; dein Spielerlebnis hilft beim Nachjustieren.',
           )}
         </p>
       </details>
@@ -419,7 +425,7 @@ export default function VariantGames({
   );
 }
 
-function VariantBoard({
+export function VariantBoard({
   entry,
   origin,
   number,
@@ -456,11 +462,13 @@ function VariantBoard({
       name: l.name,
       mode: l.mode,
       origin,
+      dailyDay: entry.day,
       tier: l.tier,
       n: l.n,
     },
     !status.solved && !restart && !rules && !paused,
     s.moves,
+    l,
   );
   back.current = () => {
     if (help.current?.()) return true;
@@ -502,9 +510,11 @@ function VariantBoard({
         <div>
           <p className="level-label">
             {tr(
-              origin === 'free'
-                ? 'Freies Spiel'
-                : `Rätsel ${String(number).padStart(2, '0')}`,
+              origin === 'daily'
+                ? 'Tagesrätsel'
+                : origin === 'free'
+                  ? 'Freies Spiel'
+                  : `Rätsel ${String(number).padStart(2, '0')}`,
             )}{' '}
             · {tr(l.tier)}
           </p>
@@ -537,7 +547,9 @@ function VariantBoard({
                 ? 'B'
                 : 'A'
               : l.mode === 'linked'
-                ? String(group)
+                ? l.groups[group - 1].length > 1
+                  ? String(group)
+                  : ''
                 : l.targets.includes(i)
                   ? '★'
                   : '';

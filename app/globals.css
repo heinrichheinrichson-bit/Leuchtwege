@@ -1991,3 +1991,24 @@ html[data-theme='light'] {
 .variant-hub .slide-catalog-tier .variant-levels {
   margin-top: 12px;
 }
+
+.daily-mode-choice {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin: 0.6rem 0;
+  font-size: 0.9rem;
+}
+.daily-mode-choice select {
+  flex: 1;
+  min-width: 10rem;
+  padding: 0.55rem;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  background: var(--background);
+  color: inherit;
+}
+.daily-screen .puzzle-card {
+  width: 100%;
+}

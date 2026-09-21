@@ -64,6 +64,7 @@ export default function DailyRotation({
     },
     !status.solved && !restart && !rules && !paused,
     s.moves,
+    l,
   );
   back.current = () => {
     if (help.current?.()) return true;

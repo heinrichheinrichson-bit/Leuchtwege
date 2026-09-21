@@ -166,6 +166,7 @@ export default function Home() {
     },
     ready && view === 'game' && !status.solved && !restart && !helpPaused,
     session.moves,
+    l,
   );
   useEffect(() => {
     try {

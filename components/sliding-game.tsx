@@ -134,6 +134,7 @@ export default function SlidingGame({
       !helpPaused &&
       !generating,
     s.slides + s.rotations,
+    l,
   );
   useEffect(() => {
     try {

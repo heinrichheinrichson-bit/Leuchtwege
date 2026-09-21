@@ -7,7 +7,7 @@
   },
   "scripts": {
     "dev": "vinext dev",
-    "test": "node test-variant-catalog.mjs && node test-variants.mjs && node test-game.mjs && node test-design.mjs && node test-random.mjs && node test-sound.mjs && node test-sliding.mjs && node test-solve-help.mjs && node test-victory.mjs && node test-random-sliding.mjs && node test-tutorial.mjs && node test-play-history.mjs && node test-daily.mjs && node test-experience.mjs && node test-backup.mjs && node test-localization.mjs && node test-milestones.mjs && node test-freeze.mjs",
+    "test": "node test-progression-v3.mjs && node test-variant-catalog.mjs && node test-variants.mjs && node test-game.mjs && node test-design.mjs && node test-random.mjs && node test-sound.mjs && node test-sliding.mjs && node test-solve-help.mjs && node test-victory.mjs && node test-random-sliding.mjs && node test-tutorial.mjs && node test-play-history.mjs && node test-daily.mjs && node test-experience.mjs && node test-backup.mjs && node test-localization.mjs && node test-milestones.mjs && node test-freeze.mjs",
     "levels:review": "node curate-levels.mjs",
     "android:sync": "npm run build && cap sync android",
     "build": "vinext build",
