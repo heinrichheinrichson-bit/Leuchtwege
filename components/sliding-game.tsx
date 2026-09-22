@@ -47,10 +47,12 @@ export default function SlidingGame({
   daily,
   onDailyChange,
   onDailyExit,
+  initialMode,
 }: {
   back: MutableRefObject<(() => boolean) | null>;
   playSound: (name: string) => void;
   onLearn: (mode?: string) => void;
+  initialMode?: string;
   daily?: any;
   onDailyChange?: (session: any) => void;
   onDailyExit?: () => void;
@@ -64,7 +66,7 @@ export default function SlidingGame({
   const [ready, setReady] = useState(false);
   const [storageError, setStorageError] = useState(false);
   const [playing, setPlaying] = useState(!!daily);
-  const [catalogMode, setCatalogMode] = useState('slide');
+  const [catalogMode, setCatalogMode] = useState(initialMode || 'slide');
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
   }, [playing, catalogMode]);
@@ -388,7 +390,15 @@ export default function SlidingGame({
       {tr(
         !playing ? (
           <section className="catalog-screen">
-            <h1>{tr('Schiebepuzzles')}</h1>
+            <h1>
+              {tr(
+                initialMode
+                  ? initialMode === 'slide'
+                    ? 'Nur Schieben'
+                    : 'Schieben & Drehen'
+                  : 'Schiebepuzzles',
+              )}
+            </h1>
             <p className="section-intro">
               {tr(puzzles.filter((p) => p.mode === catalogMode).length)}
               {tr(' Rätsel je Modus. Oder starte ein freies Spiel.')}
@@ -397,7 +407,7 @@ export default function SlidingGame({
               {tr('Schieben lernen →')}
             </Button>
             <div
-              className="stats-filters"
+              className={initialMode ? 'mode-hidden' : 'stats-filters'}
               aria-label={tr('Schiebemodus auswählen')}
             >
               {tr(
@@ -419,7 +429,7 @@ export default function SlidingGame({
             {tr(
               [catalogMode].map((mode) => (
                 <section className="catalog-group" key={mode}>
-                  <h2>
+                  <h2 className={initialMode ? 'mode-hidden' : undefined}>
                     {tr(
                       mode === 'slide' ? 'Nur Schieben' : 'Schieben & Drehen',
                     )}
@@ -431,53 +441,58 @@ export default function SlidingGame({
                         : 'Kacheln verschieben und zusätzlich drehen.',
                     )}
                   </p>
-                  <div className="sliding-free-options">
-                    <label htmlFor={'slide-tier-' + mode}>
-                      {tr('Freies Spiel · 3 × 3')}
-                    </label>
-                    <select
-                      id={'slide-tier-' + mode}
-                      value={free.tiers[mode]}
-                      disabled={generating || !ready}
-                      onChange={(e) =>
-                        setFree((v: any) => ({
-                          ...v,
-                          tiers: { ...v.tiers, [mode]: e.target.value },
-                        }))
-                      }
-                    >
+                  <details className="mode-random">
+                    <summary>{tr('Freies Spiel')}</summary>
+                    <div className="sliding-free-options">
+                      <label htmlFor={'slide-tier-' + mode}>
+                        {tr('Freies Spiel · 3 × 3')}
+                      </label>
+                      <select
+                        id={'slide-tier-' + mode}
+                        value={free.tiers[mode]}
+                        disabled={generating || !ready}
+                        onChange={(e) =>
+                          setFree((v: any) => ({
+                            ...v,
+                            tiers: { ...v.tiers, [mode]: e.target.value },
+                          }))
+                        }
+                      >
+                        {tr(
+                          slidingTiers.map((t) => (
+                            <option key={t}>{tr(t)}</option>
+                          )),
+                        )}
+                      </select>
+                      <Button
+                        disabled={!ready || generating}
+                        onClick={() => requestGeneration(mode)}
+                      >
+                        {tr('Neues Rätsel')}
+                      </Button>
                       {tr(
-                        slidingTiers.map((t) => (
-                          <option key={t}>{tr(t)}</option>
-                        )),
+                        free[mode] && (
+                          <Button
+                            variant="outline"
+                            disabled={generating || !ready}
+                            onClick={() => openFree(mode)}
+                          >
+                            {tr(
+                              slidingStatus(
+                                free[mode].puzzle,
+                                free[mode].session,
+                              ).solved
+                                ? 'Letztes Brett ansehen'
+                                : 'Freie Partie fortsetzen',
+                            )}
+                            {tr(' ')}
+                            {tr('· ')}
+                            {tr(free[mode].puzzle.tier)}
+                          </Button>
+                        ),
                       )}
-                    </select>
-                    <Button
-                      disabled={!ready || generating}
-                      onClick={() => requestGeneration(mode)}
-                    >
-                      {tr('Neues Rätsel')}
-                    </Button>
-                    {tr(
-                      free[mode] && (
-                        <Button
-                          variant="outline"
-                          disabled={generating || !ready}
-                          onClick={() => openFree(mode)}
-                        >
-                          {tr(
-                            slidingStatus(free[mode].puzzle, free[mode].session)
-                              .solved
-                              ? 'Letztes Brett ansehen'
-                              : 'Freie Partie fortsetzen',
-                          )}
-                          {tr(' ')}
-                          {tr('· ')}
-                          {tr(free[mode].puzzle.tier)}
-                        </Button>
-                      ),
-                    )}
-                  </div>
+                    </div>
+                  </details>
                   {tr(
                     slidingTiers.map((tier) => (
                       <details className="slide-catalog-tier" key={tier}>

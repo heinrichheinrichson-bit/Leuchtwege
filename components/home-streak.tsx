@@ -6,7 +6,13 @@ import { readHistory } from '@/lib/history-store';
 import { dayKey, streakSummary } from '@/lib/daily.mjs';
 import { t as tr } from '@/lib/i18n';
 
-export default function HomeStreak({ onOpen }: { onOpen: () => void }) {
+export default function HomeStreak({
+  onOpen,
+  compact = false,
+}: {
+  onOpen: () => void;
+  compact?: boolean;
+}) {
   const [streak, setStreak] = useState<any>(null);
   useEffect(() => {
     const update = () => {
@@ -38,7 +44,11 @@ export default function HomeStreak({ onOpen }: { onOpen: () => void }) {
   return (
     <Button
       variant="outline"
-      className={'home-option home-streak' + (streak?.today ? ' achieved' : '')}
+      className={
+        'home-option home-streak' +
+        (streak?.today ? ' achieved' : '') +
+        (compact ? ' compact-streak' : '')
+      }
       onClick={onOpen}
       aria-label={tr('Streak-Kalender') + ': ' + days + '. ' + today}
     >

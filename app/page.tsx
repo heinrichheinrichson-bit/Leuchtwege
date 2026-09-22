@@ -1,4 +1,6 @@
 'use client';
+import HomeDaily from '@/components/home-daily';
+import ModeGallery from '@/components/mode-gallery';
 import { t as tr, locale } from '@/lib/i18n';
 import { useEffect, useState, useRef, useMemo } from 'react';
 import { useVictory } from '@/lib/use-victory';
@@ -259,8 +261,13 @@ export default function Home() {
   }
   backAction.current = () => {
     if (view === 'game' && helpBack.current?.()) return;
-    if (view === 'sliding' && slideBack.current?.()) return;
-    if (view === 'variants' && variantBack.current?.()) return;
+    if (['sliding', 'slide', 'rotate'].includes(view) && slideBack.current?.())
+      return;
+    if (
+      ['variants', 'dual', 'path', 'linked'].includes(view) &&
+      variantBack.current?.()
+    )
+      return;
     if (view === 'daily' && dailyBack.current?.()) return;
     if (generating) {
       cancelGeneration();
@@ -313,6 +320,12 @@ export default function Home() {
           'streak',
           'settings',
           'milestones',
+          'progress',
+          'slide',
+          'rotate',
+          'dual',
+          'path',
+          'linked',
         ].includes(v)
           ? v
           : 'home',
@@ -477,8 +490,8 @@ export default function Home() {
   }
   useEffect(() => {
     if (
-      view === 'variants' ||
-      view === 'sliding' ||
+      ['variants', 'dual', 'path', 'linked'].includes(view) ||
+      ['sliding', 'slide', 'rotate'].includes(view) ||
       view === 'learn' ||
       view === 'daily' ||
       view === 'streak'
@@ -531,7 +544,16 @@ export default function Home() {
       </main>
     );
   return (
-    <main className={'app-shell ' + (view === 'game' ? 'playing' : '')}>
+    <main
+      className={
+        'app-shell ' +
+        (view === 'game'
+          ? 'playing'
+          : ['home', 'progress', 'settings'].includes(view)
+            ? 'hub-shell'
+            : '')
+      }
+    >
       <header className="app-header">
         {tr(
           view === 'home' ? (
@@ -550,6 +572,9 @@ export default function Home() {
           ),
         )}
         <div className="header-actions">
+          {view === 'home' && (
+            <HomeStreak compact onOpen={() => navigate('streak')} />
+          )}
           {tr(
             view === 'game' && (
               <Button
@@ -590,7 +615,7 @@ export default function Home() {
       {tr(
         view === 'home' && (
           <section className="home-screen">
-            <h1>{tr('Dein nächster Lichtblick')}</h1>
+            <h1>{tr('Welcher Weg wird deiner?')}</h1>
             <Button
               className={
                 learned ? 'home-learn-compact' : 'continue-button home-learn'
@@ -613,72 +638,8 @@ export default function Home() {
               </span>
               <span aria-hidden="true">{tr('→')}</span>
             </Button>
-            <h2 className="home-section-title">{tr('Spielen')}</h2>
-            <div className="home-grid">
-              <Button
-                variant="outline"
-                className="home-option"
-                disabled={!ready}
-                onClick={() => navigate('catalog')}
-              >
-                <span>
-                  {tr('Drehpuzzles')}
-                  <small>
-                    {tr(levels.length)}
-                    {tr(' Rätsel')}
-                  </small>
-                </span>
-                <span aria-hidden="true">{tr('↻')}</span>
-              </Button>
-              <Button
-                variant="outline"
-                className="home-option"
-                disabled={!ready}
-                onClick={() => navigate('sliding')}
-              >
-                <span>
-                  {tr('Schiebepuzzles')}
-                  <small>{tr('Zwei Spielmodi')}</small>
-                </span>
-                <span aria-hidden="true">{tr('↔')}</span>
-              </Button>
-              <Button
-                variant="outline"
-                className="home-option"
-                disabled={!ready}
-                onClick={() => navigate('random')}
-              >
-                <span>
-                  {tr('Freies Spiel')}
-                  <small>{tr('Neue Drehpuzzles')}</small>
-                </span>
-                <span aria-hidden="true">{tr('✳')}</span>
-              </Button>
-              <Button
-                variant="outline"
-                className="home-option"
-                onClick={() => navigate('daily')}
-              >
-                <span>
-                  {tr('Tagesrätsel')}
-                  <small>{tr('Drei neue pro Tag')}</small>
-                </span>
-                <span aria-hidden="true">{tr('☀')}</span>
-              </Button>
-            </div>
-            <h2 className="home-section-title">{tr('Dein Fortschritt')}</h2>
-            <ExperienceCard onOpen={() => navigate('milestones')} />
-            <div className="home-grid">
-              <HomeStreak onOpen={() => navigate('streak')} />
-              <Button
-                variant="outline"
-                className="home-option"
-                onClick={() => navigate('statistics')}
-              >
-                <span>{tr('Statistik')}</span>
-                <span aria-hidden="true">{tr('↗')}</span>
-              </Button>
-            </div>
+            <ModeGallery disabled={!ready} onOpen={(mode) => navigate(mode)} />
+            <HomeDaily onOpen={() => navigate('daily')} />
           </section>
         ),
       )}
@@ -693,9 +654,31 @@ export default function Home() {
           />
         ),
       )}
+      {view === 'progress' && (
+        <section className="progress-hub">
+          <h1>{tr('Dein Fortschritt')}</h1>
+          <ExperienceCard onOpen={() => navigate('milestones')} />
+          <div className="progress-links">
+            <HomeStreak onOpen={() => navigate('streak')} />
+
+            <Button
+              variant="outline"
+              className="home-option"
+              onClick={() => navigate('statistics')}
+            >
+              {tr('Statistik')} <span aria-hidden="true">→</span>
+            </Button>
+          </div>
+        </section>
+      )}
       {tr(view === 'statistics' && <PlayStatistics />)}
-      {view === 'variants' && (
-        <VariantGames back={variantBack} playSound={playElectric} />
+      {['variants', 'dual', 'path', 'linked'].includes(view) && (
+        <VariantGames
+          key={view}
+          initialMode={view === 'variants' ? undefined : view}
+          back={variantBack}
+          playSound={playElectric}
+        />
       )}
       {view === 'milestones' && <Milestones />}
       {tr(view === 'streak' && <StreakCalendar />)}
@@ -713,14 +696,16 @@ export default function Home() {
           <TutorialGame
             initialMode={learnMode}
             onExit={() => backAction.current()}
-            onPlay={(mode) => navigate(mode === 'turn' ? 'catalog' : 'sliding')}
+            onPlay={(mode) => navigate(mode === 'turn' ? 'catalog' : mode)}
             playSound={playElectric}
           />
         ),
       )}
       {tr(
-        view === 'sliding' && (
+        ['sliding', 'slide', 'rotate'].includes(view) && (
           <SlidingGame
+            key={view}
+            initialMode={view === 'sliding' ? undefined : view}
             back={slideBack}
             onLearn={(mode) => {
               setLearnMode(mode || 'slide');
@@ -869,9 +854,9 @@ export default function Home() {
             <Button
               className="variant-entry"
               variant="outline"
-              onClick={() => navigate('variants')}
+              onClick={() => navigate('random')}
             >
-              {tr('Neue Spielmodi ausprobieren')} →
+              {tr('Freies Spiel')} →
             </Button>
             {tr(
               target.resume && (
@@ -1346,6 +1331,25 @@ export default function Home() {
           </AlertDialogAction>
         </AlertDialogContent>
       </AlertDialog>
+      {['home', 'progress', 'settings'].includes(view) && (
+        <nav className="hub-nav" aria-label={tr('Hauptnavigation')}>
+          {[
+            ['home', 'Spielen', '✳'],
+            ['progress', 'Fortschritt', '↗'],
+            ['settings', 'Einstellungen', '⚙'],
+          ].map(([id, label, icon]) => (
+            <button
+              type="button"
+              key={id}
+              aria-current={view === id ? 'page' : undefined}
+              onClick={() => navigate(id)}
+            >
+              <span aria-hidden="true">{icon}</span>
+              {tr(label)}
+            </button>
+          ))}
+        </nav>
+      )}
     </main>
   );
 }

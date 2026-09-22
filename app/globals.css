@@ -2012,3 +2012,262 @@ html[data-theme='light'] {
 .daily-screen .puzzle-card {
   width: 100%;
 }
+/* Main hubs: games first, with persistent access to progress and preferences. */
+.app-shell.hub-shell {
+  padding-bottom: calc(82px + env(safe-area-inset-bottom, 0px));
+}
+.home-screen h1 {
+  font-size: clamp(1.3rem, 4.8vw, 2rem);
+  margin: 0 0 12px;
+}
+.home-screen .home-learn,
+.home-screen .home-learn-compact {
+  margin: 0 0 14px;
+  min-height: 44px;
+  padding: 10px 14px;
+}
+.mode-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.mode-card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 126px;
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  text-align: left;
+  background: var(--popover);
+  color: var(--foreground);
+  cursor: pointer;
+  transition:
+    border-color 0.15s,
+    background 0.15s;
+}
+.mode-card:hover,
+.mode-card:focus-visible {
+  border-color: var(--mode-color);
+}
+.mode-card:disabled {
+  opacity: 0.5;
+  cursor: wait;
+}
+.mode-card strong {
+  display: block;
+  font-size: 1rem;
+  line-height: 1.2;
+}
+.mode-card small {
+  display: block;
+  margin-top: 6px;
+  color: var(--muted-foreground);
+  font-size: 0.78rem;
+  line-height: 1.3;
+}
+.mode-preview {
+  width: 92px;
+  min-width: 60px;
+  flex-shrink: 0;
+  color: var(--mode-color);
+  overflow: visible;
+}
+.mode-arrow {
+  position: absolute;
+  right: 12px;
+  top: 10px;
+  color: var(--muted-foreground);
+}
+.home-daily {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  height: auto;
+  min-height: 64px;
+  margin-top: 14px;
+  padding: 12px 16px;
+  text-align: left;
+  border-radius: 18px;
+}
+.home-daily > span:nth-child(2) {
+  flex: 1;
+  margin: 0 12px;
+}
+.home-daily strong,
+.home-daily small {
+  display: block;
+}
+.home-daily small {
+  color: var(--muted-foreground);
+  font-size: 0.8rem;
+  font-weight: 400;
+  margin-top: 3px;
+}
+.header-actions .compact-streak {
+  min-height: 44px;
+  height: auto;
+  padding: 3px 9px;
+  border: 0;
+  background: transparent;
+  width: auto;
+}
+.header-actions .compact-streak strong {
+  font-size: 0.85rem;
+  gap: 5px;
+}
+.header-actions .compact-streak small {
+  font-size: 0.65rem;
+  margin-top: 1px;
+}
+.header-actions .compact-streak > span:last-child {
+  display: none;
+}
+.hub-nav {
+  position: fixed;
+  z-index: 30;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(100%, 760px);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 6px 12px calc(6px + env(safe-area-inset-bottom, 0px));
+  background: var(--background);
+  border-top: 1px solid var(--border);
+}
+.hub-nav button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  min-height: 52px;
+  justify-content: center;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  color: var(--muted-foreground);
+  cursor: pointer;
+}
+.hub-nav button > span {
+  font-size: 1.3rem;
+  line-height: 1.3;
+}
+.hub-nav button[aria-current='page'] {
+  color: var(--primary);
+  background: var(--muted);
+}
+.progress-links {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+.progress-links .home-option {
+  width: 100%;
+}
+.mode-hidden {
+  display: none;
+}
+.mode-random {
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  margin: 16px 0;
+}
+.mode-random summary {
+  cursor: pointer;
+  color: var(--primary);
+  font-weight: 600;
+  min-height: 26px;
+}
+.mode-random h2 {
+  display: none;
+}
+@media (max-width: 600px) {
+  .hub-shell .app-header {
+    margin-bottom: 18px;
+  }
+  .hub-shell .brand {
+    font-size: 1.25rem;
+    gap: 5px;
+  }
+  .hub-shell .header-actions {
+    gap: 2px;
+  }
+  .mode-gallery {
+    gap: 10px;
+  }
+  .mode-card {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    gap: 7px;
+    min-height: 126px;
+    padding: 10px 12px;
+    border-radius: 16px;
+  }
+  .mode-preview {
+    width: 76px;
+    height: 46px;
+  }
+  .mode-card strong {
+    font-size: 0.88rem;
+  }
+  .mode-card small {
+    display: none;
+  }
+  .home-screen .home-learn small {
+    display: none;
+  }
+}
+@media (max-width: 600px) and (max-height: 740px) {
+  .hub-shell .app-header {
+    margin-bottom: 10px;
+  }
+  .home-screen h1 {
+    margin-bottom: 8px;
+  }
+  .home-screen .home-learn,
+  .home-screen .home-learn-compact {
+    margin-bottom: 10px;
+  }
+  .mode-card {
+    min-height: 103px;
+    gap: 3px;
+  }
+  .mode-preview {
+    height: 35px;
+    width: 63px;
+  }
+  .home-daily {
+    min-height: 56px;
+    margin-top: 10px;
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+}
+.hub-shell .home-screen {
+  margin-top: 8px;
+  margin-bottom: 8px;
+}
+.home-screen .home-learn {
+  min-height: 48px !important;
+}
+.header-actions .home-option.compact-streak {
+  min-height: 44px !important;
+}
+.progress-hub {
+  width: min(calc(100% - 32px), 560px);
+  margin: 12px auto 24px;
+}
+.progress-hub h1 {
+  font-size: 1.75rem;
+  margin: 0 0 20px;
+}
+.app-shell.hub-shell {
+  padding-bottom: calc(66px + env(safe-area-inset-bottom, 0px));
+}
+.hub-shell .home-screen {
+  margin-bottom: 0;
+}

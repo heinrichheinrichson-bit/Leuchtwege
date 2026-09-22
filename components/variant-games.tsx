@@ -52,11 +52,16 @@ type Back = MutableRefObject<(() => boolean) | null>;
 export default function VariantGames({
   back,
   playSound,
+  initialMode,
 }: {
+  initialMode?: string;
   back: Back;
   playSound: (name: string) => void;
 }) {
-  const [data, setData] = useState<any>(emptyVariants),
+  const [data, setData] = useState<any>(() => ({
+      ...emptyVariants(),
+      ...(initialMode ? { mode: initialMode } : {}),
+    })),
     [ready, setReady] = useState(false);
   const [selected, setSelected] = useState<string | null>(null),
     [size, setSize] = useState(0),
@@ -83,9 +88,12 @@ export default function VariantGames({
   const childBack = useRef<(() => boolean) | null>(null);
   useEffect(() => {
     try {
-      setData(
-        restoreVariants(JSON.parse(localStorage.getItem(variantKey) || 'null')),
-      );
+      setData({
+        ...restoreVariants(
+          JSON.parse(localStorage.getItem(variantKey) || 'null'),
+        ),
+        ...(initialMode ? { mode: initialMode } : {}),
+      });
     } catch {
       setError(true);
     }
@@ -261,16 +269,29 @@ export default function VariantGames({
     );
   return (
     <section className="variant-hub">
-      <h1>{tr('Neue Spielmodi')}</h1>
+      <h1>
+        {tr(
+          initialMode
+            ? variantNames[initialMode as keyof typeof variantNames]
+            : 'Neue Spielmodi',
+        )}
+      </h1>
       <p className="section-intro">
-        {tr('Rätsel von leicht bis schwer. Wähle deinen Modus.')}
+        {tr(
+          initialMode
+            ? 'Wähle ein Rätsel oder starte ein freies Spiel.'
+            : 'Rätsel von leicht bis schwer. Wähle deinen Modus.',
+        )}
       </p>
       {error && (
         <p role="alert">
           {tr('Dein Spielstand konnte nicht gespeichert werden.')}
         </p>
       )}
-      <div className="variant-tabs" aria-label={tr('Spielmodus')}>
+      <div
+        className={initialMode ? 'mode-hidden' : 'variant-tabs'}
+        aria-label={tr('Spielmodus')}
+      >
         {variantModes.map((mode) => (
           <Button
             key={mode}
@@ -290,6 +311,69 @@ export default function VariantGames({
       <p className="variant-rule">
         {tr(variantRules[data.mode as keyof typeof variantRules])}
       </p>
+      <details className="mode-random">
+        <summary>{tr('Freies Spiel')}</summary>
+        <h2>{tr('Freies Spiel')}</h2>
+        <div className="variant-tabs" aria-label={tr('Schwierigkeit')}>
+          {variantTiers.map((category) => (
+            <Button
+              key={category}
+              disabled={busy}
+              variant={tier === category ? 'default' : 'outline'}
+              aria-pressed={tier === category}
+              onClick={() => {
+                setTier(category);
+                setSize(0);
+                setGenerationError(false);
+              }}
+            >
+              {tr(category)}
+            </Button>
+          ))}
+        </div>
+        <div className="variant-tabs" aria-label={tr('Rastergröße')}>
+          {[0, ...sizes].map((n) => (
+            <Button
+              key={n}
+              disabled={busy}
+              variant={size === n ? 'default' : 'outline'}
+              aria-pressed={size === n}
+              onClick={() => setSize(n)}
+            >
+              {n ? `${n} × ${n}` : tr('Automatisch')}
+            </Button>
+          ))}
+        </div>
+        <div className="variant-tabs">
+          <Button disabled={busy} onClick={generate}>
+            {tr(busy ? 'Rätsel wird erzeugt …' : 'Neues Rätsel')}
+          </Button>
+          {busy && (
+            <Button
+              variant="outline"
+              onClick={() => {
+                cancelGeneration();
+              }}
+            >
+              {tr('Abbrechen')}
+            </Button>
+          )}
+          {data.free[data.mode] && (
+            <Button
+              disabled={busy}
+              variant="outline"
+              onClick={() => setSelected('free')}
+            >
+              {tr('Weiterspielen')}
+            </Button>
+          )}
+        </div>
+        {generationError && (
+          <p role="alert">
+            {tr('Kein passendes Rätsel gefunden. Bitte erneut versuchen.')}
+          </p>
+        )}
+      </details>
       <p className="section-intro">
         {tr('Katalog')} ·{' '}
         {
@@ -353,66 +437,6 @@ export default function VariantGames({
           </div>
         </details>
       ))}
-      <h2>{tr('Freies Spiel')}</h2>
-      <div className="variant-tabs" aria-label={tr('Schwierigkeit')}>
-        {variantTiers.map((category) => (
-          <Button
-            key={category}
-            disabled={busy}
-            variant={tier === category ? 'default' : 'outline'}
-            aria-pressed={tier === category}
-            onClick={() => {
-              setTier(category);
-              setSize(0);
-              setGenerationError(false);
-            }}
-          >
-            {tr(category)}
-          </Button>
-        ))}
-      </div>
-      <div className="variant-tabs" aria-label={tr('Rastergröße')}>
-        {[0, ...sizes].map((n) => (
-          <Button
-            key={n}
-            disabled={busy}
-            variant={size === n ? 'default' : 'outline'}
-            aria-pressed={size === n}
-            onClick={() => setSize(n)}
-          >
-            {n ? `${n} × ${n}` : tr('Automatisch')}
-          </Button>
-        ))}
-      </div>
-      <div className="variant-tabs">
-        <Button disabled={busy} onClick={generate}>
-          {tr(busy ? 'Rätsel wird erzeugt …' : 'Neues Rätsel')}
-        </Button>
-        {busy && (
-          <Button
-            variant="outline"
-            onClick={() => {
-              cancelGeneration();
-            }}
-          >
-            {tr('Abbrechen')}
-          </Button>
-        )}
-        {data.free[data.mode] && (
-          <Button
-            disabled={busy}
-            variant="outline"
-            onClick={() => setSelected('free')}
-          >
-            {tr('Weiterspielen')}
-          </Button>
-        )}
-      </div>
-      {generationError && (
-        <p role="alert">
-          {tr('Kein passendes Rätsel gefunden. Bitte erneut versuchen.')}
-        </p>
-      )}
       <details className="variant-difficulty-info">
         <summary>{tr('Wie wird die Schwierigkeit bestimmt?')}</summary>
         <p>
