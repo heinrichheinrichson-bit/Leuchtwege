@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Leuchtwege</string>
-    <string name="title_activity_main">Leuchtwege</string>
+    <string name="app_name">Tvispy</string>
+    <string name="title_activity_main">Tvispy</string>
     <string name="package_name">com.heinrichheinrichson.leuchtwege</string>
     <string name="custom_url_scheme">com.heinrichheinrichson.leuchtwege</string>
 </resources>

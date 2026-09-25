@@ -18,7 +18,7 @@
 
     <style name="AppTheme.NoActionBarLaunch" parent="Theme.SplashScreen">
         <item name="windowSplashScreenBackground">#0c1523</item>
-        <item name="windowSplashScreenAnimatedIcon">@drawable/leuchtwege</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/tvispy</item>
         <item name="postSplashScreenTheme">@style/AppTheme.NoActionBar</item>
     </style>
 </resources>

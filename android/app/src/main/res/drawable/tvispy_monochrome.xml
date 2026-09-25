@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Native one-colour companion: broad negative spaces remain readable when launcher-tinted. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp" android:height="108dp"
+    android:viewportWidth="108" android:viewportHeight="108">
+    <group android:pivotX="54" android:pivotY="54" android:scaleX="0.94" android:scaleY="0.94">
+    <path android:fillColor="#00000000" android:strokeColor="#FFFFFFFF"
+        android:strokeWidth="2.7" android:strokeLineJoin="round" android:strokeLineCap="round"
+        android:pathData="M38,40 L28,40 Q24,40 24,44 L24,51 Q24,55 28,55 L46,55 L46,75 Q46,79 50,79 L61,79 Q65,79 65,75 L65,55 L80,55 Q84,55 84,51 L84,44 Q84,40 80,40 L77,40 M33,47 L38,47 M51,57 L54,62 L51,66 L51,71 M60,58 L58,62 L61,66 L61,71" />
+    <path android:fillColor="#FFFFFFFF" android:fillType="evenOdd"
+        android:pathData="M45,64 C34,58 34,44 42,35 C49,27 60,26 68,31 C73,34 73,40 78,43 C81,45 81,49 77,52 C69,57 57,52 52,46 C46,48 44,54 45,64 Z M66,39 A3,4 0,1 0,60,39 A3,4 0,1 0,66,39 Z M57,45 Q65,52 76,47 L76,49 Q65,55 56,47 Z M75,44 A1.1,1.1 0,1 0,72.8,44 A1.1,1.1 0,1 0,75,44 Z M33,47 A3,3 0,1 0,27,47 A3,3 0,1 0,33,47 Z M31.3,47 A1.3,1.3 0,1 0,28.7,47 A1.3,1.3 0,1 0,31.3,47 Z M54,73 A3,3 0,1 0,48,73 A3,3 0,1 0,54,73 Z M52.3,73 A1.3,1.3 0,1 0,49.7,73 A1.3,1.3 0,1 0,52.3,73 Z M64,73 A3,3 0,1 0,58,73 A3,3 0,1 0,64,73 Z M62.3,73 A1.3,1.3 0,1 0,59.7,73 A1.3,1.3 0,1 0,62.3,73 Z" />
+    </group>
+</vector>
