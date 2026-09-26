@@ -506,7 +506,7 @@ export default function Home() {
           {
             name: 'read_puzzle',
             description:
-              'Read current Leuchtwege puzzle. Bits 1,2,4,8 mean north,east,south,west.',
+              'Read current Tvispy puzzle. Bits 1,2,4,8 mean north,east,south,west.',
             inputSchema: {
               type: 'object',
               properties: {},
@@ -558,8 +558,14 @@ export default function Home() {
         {tr(
           view === 'home' ? (
             <span className="brand">
-              {tr('✳ ')}
-              <span>{tr('Leuchtwege')}</span>
+              <img
+                className="brand-logo"
+                src="/tvispy-icon.png"
+                width="40"
+                height="40"
+                alt=""
+              />
+              <span>Tvispy</span>
             </span>
           ) : (
             <Button

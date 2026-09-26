@@ -9,7 +9,7 @@ const files = registerPlugin<{
 export const nativeBackupFiles = () => Capacitor.getPlatform() === 'android';
 export const MAX_BACKUP_BYTES = 32000000;
 export async function saveBackupFile(text: string) {
-  const name = `Leuchtwege-${new Date().toISOString().replace(/[:.]/g, '-')}.json`;
+  const name = `Tvispy-${new Date().toISOString().replace(/[:.]/g, '-')}.json`;
   if (nativeBackupFiles()) {
     try {
       return !(await files.save({ text, name })).cancelled;

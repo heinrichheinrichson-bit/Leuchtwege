@@ -16,7 +16,7 @@ public class BackupFilesPlugin extends Plugin {
         String text=call.getString("text","");
         if(text.isEmpty()||text.getBytes(StandardCharsets.UTF_8).length>LIMIT){call.reject("Invalid backup size");return;}
         Intent intent=new Intent(Intent.ACTION_CREATE_DOCUMENT).addCategory(Intent.CATEGORY_OPENABLE).setType("application/json");
-        String name=call.getString("name","Leuchtwege.json").replaceAll("[^A-Za-z0-9._-]","_");
+        String name=call.getString("name","Tvispy.json").replaceAll("[^A-Za-z0-9._-]","_");
         intent.putExtra(Intent.EXTRA_TITLE,name);
         startActivityForResult(call,intent,"saved");
     }

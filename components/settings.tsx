@@ -351,7 +351,7 @@ export default function Settings({
               setText(e.target.value);
               setExported(false);
             }}
-            placeholder={tr('Leuchtwege-Sicherung hier einfügen')}
+            placeholder={tr('Tvispy-Sicherung hier einfügen')}
           />
           {tr(
             exported && (
@@ -387,6 +387,16 @@ export default function Settings({
           {tr('Letzten Import rückgängig machen')}
         </Button>
       </div>
+      <details className="settings-about">
+        <summary>{tr('Über Tvispy')}</summary>
+        <div className="settings-about-brand">
+          <img src="/tvispy-icon.png" width="64" height="64" alt="" />
+          <div>
+            <strong>Tvispy</strong>
+            <p>{tr('Leuchtende Logikrätsel')}</p>
+          </div>
+        </div>
+      </details>
       {nativeFiles && (
         <p className="settings-note">
           {tr(
