@@ -237,9 +237,11 @@ assert(xp.achievementAwards.some((a) => a.id === 'clear-200'));
 assert(xp.achievementAwards.some((a) => a.id === 'independent-200'));
 for (const l of variantCatalog.filter((l) => l.tier === 'Schwer'))
   assert(
-    l.difficulty.maxDeadEndDepth >= 3 || l.difficulty.waves >= 8,
+    l.mode === 'linked'
+      ? l.difficulty.coupledGroups >= 6 && l.difficulty.waves >= 6
+      : l.difficulty.maxDeadEndDepth >= 2 && l.difficulty.uncertain >= 6,
     'Hard requires delayed contradictions or a long deduction chain',
   );
 console.log(
-  'PASS: 680 exact catalogue certificates, independent optimum oracles in all rule families, unknown budget safety, effort/undo exclusions, 18 daily choices with backup, same-mode trio, single-slot XP, real-day streak, 200 no-help awards and genuine delayed contradictions.',
+  'PASS: exact catalogue certificates, independent optimum oracles in all rule families, unknown budget safety, effort/undo exclusions, 18 daily choices with backup, same-mode trio, single-slot XP, real-day streak, 200 no-help awards and genuine delayed contradictions.',
 );

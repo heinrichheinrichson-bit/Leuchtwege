@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { connectionSound } from './lib/connection-sound.mjs';
+import { connectionSound, moveSound } from './lib/connection-sound.mjs';
 const state = (cells, solved = false) => ({ lit: new Set(cells), solved });
 assert.equal(connectionSound(state([0]), state([0, 1, 2])), 'connect');
 assert.equal(connectionSound(state([0, 1, 2]), state([0])), 'disconnect');
@@ -9,6 +9,11 @@ assert.equal(connectionSound(state([0]), state([0, 1], true)), null);
 console.log(
   'PASS: gained light, lost light, exchanged branches, unchanged light, victory priority.',
 );
+
+assert.equal(moveSound(state([0]), state([0])), 'turn');
+assert.equal(moveSound(state([0]), state([0, 1])), 'connect');
+assert.equal(moveSound(state([0, 1]), state([0])), 'disconnect');
+assert.equal(moveSound(state([0]), state([0, 1], true)), null);
 
 // Rapid re-triggers must fade rather than seek or stop at a non-zero sample.
 const { createGameAudio } = await import('./lib/game-audio.mjs');

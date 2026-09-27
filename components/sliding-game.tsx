@@ -1,4 +1,5 @@
 'use client';
+import BrandMark from '@/components/brand-mark';
 import { t as tr, locale } from '@/lib/i18n';
 import { useEffect, useRef, useState, type MutableRefObject } from 'react';
 import { useVictory } from '@/lib/use-victory';
@@ -32,7 +33,7 @@ import {
   swipeSliding,
 } from '@/lib/sliding.mjs';
 import { neighbor } from '@/lib/game.mjs';
-import { connectionSound } from '@/lib/connection-sound.mjs';
+import { moveSound } from '@/lib/connection-sound.mjs';
 import { restoreFreeSliding, slidingTiers } from '@/lib/random-sliding.mjs';
 import RandomSlidingWorker from '@/lib/random-sliding.worker?worker';
 import { slidingOrder } from '@/lib/sliding-catalog.mjs';
@@ -362,7 +363,7 @@ export default function SlidingGame({
       setSelected(null);
     } else {
       // Compare identities: the source and its illuminated tiles can move together.
-      const effect = connectionSound(
+      const effect = moveSound(
         { lit: status.litIds },
         { lit: after.litIds, solved: false },
       );
@@ -931,9 +932,7 @@ export default function SlidingGame({
           className="game-dialog success-dialog"
           showCloseButton={false}
         >
-          <div className="success-symbol" aria-hidden="true">
-            {tr('✳')}
-          </div>
+          <BrandMark celebration />
           <DialogTitle className="dialog-heading">
             {tr('Dein Netz leuchtet!')}
           </DialogTitle>

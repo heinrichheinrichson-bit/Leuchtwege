@@ -13,7 +13,11 @@ const modes = [
 
 function Preview({ mode }: { mode: string }) {
   const path =
-    mode === 'path' ? 'M12 44H32V12H64V28H80' : 'M12 44V12H46V44H80V12';
+    mode === 'dual'
+      ? 'M12 44V12H40V25'
+      : mode === 'path'
+        ? 'M12 44H32V12H64V28H80'
+        : 'M12 44V12H46V44H80V12';
   return (
     <svg viewBox="0 0 92 56" aria-hidden="true" className="mode-preview">
       <defs>
@@ -67,13 +71,18 @@ function Preview({ mode }: { mode: string }) {
       />
       <circle cx="12" cy="44" r="4" fill="currentColor" />
       {mode === 'dual' && (
-        <path
-          d="M12 28H29V44"
-          fill="none"
-          stroke="#e5b3ff"
-          strokeWidth="3"
-          strokeLinecap="round"
-        />
+        <g fill="none" strokeLinecap="round" strokeLinejoin="round">
+          <path
+            d="M80 12V44H52V31"
+            stroke="#e5b3ff"
+            strokeWidth="7"
+            filter="url(#glow-dual)"
+            opacity=".65"
+          />
+          <path d="M80 12V44H52V31" stroke="#e5b3ff" strokeWidth="4" />
+          <path d="M80 12V44H52V31" stroke="#fff8ff" strokeWidth="1.4" />
+          <circle cx="80" cy="12" r="4" fill="#e5b3ff" />
+        </g>
       )}
       {mode === 'path' && (
         <text x="74" y="33" fill="#fff8e9" fontSize="17">

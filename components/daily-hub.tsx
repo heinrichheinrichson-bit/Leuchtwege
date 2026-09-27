@@ -405,7 +405,7 @@ export default function DailyHub({
                   disabled={busy}
                   onClick={() => open(mode, legacy ? undefined : slot)}
                 >
-                  <span className="puzzle-number">{tr(done ? '✓' : '✳')}</span>
+                  <span className="puzzle-number">{tr(done ? '✓' : '→')}</span>
                   <span className="puzzle-copy">
                     <strong>{tr((modeNames as any)[mode])}</strong>
                     <small>

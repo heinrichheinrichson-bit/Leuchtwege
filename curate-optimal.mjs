@@ -6,8 +6,26 @@ const all = [
     ...JSON.parse(fs.readFileSync('lib/sliding-levels.json')),
     ...variantCatalog,
   ],
-  out = {};
+  out = {},
+  previous = JSON.parse(fs.readFileSync('lib/optimal-catalog.json'));
 for (const [i, l] of all.entries()) {
+  const signature = JSON.stringify([
+    l.n,
+    l.initial,
+    l.source,
+    l.sourceId,
+    l.pieces,
+    l.mode,
+    l.variant,
+    l.groups,
+    l.owners,
+    l.targets,
+    l.sources,
+  ]);
+  if (previous[l.id]?.signature === signature) {
+    out[l.id] = previous[l.id];
+    continue;
+  }
   const r = proveOptimal(l, 10000, { budgetMs: 30000, maxNodes: 2000000 });
   if (r.proven)
     out[l.id] = {

@@ -1,4 +1,5 @@
 'use client';
+import BrandMark from '@/components/brand-mark';
 import HomeDaily from '@/components/home-daily';
 import ModeGallery from '@/components/mode-gallery';
 import { t as tr, locale } from '@/lib/i18n';
@@ -818,7 +819,7 @@ export default function Home() {
             >
               {tr(generating ? 'Rätsel wird geprüft …' : 'Neues Rätsel')}
               {tr(' ')}
-              <span>{tr('✳')}</span>
+              <span aria-hidden="true">↻</span>
             </Button>
             {tr(
               generating && (
@@ -1258,9 +1259,7 @@ export default function Home() {
           className="game-dialog success-dialog"
           showCloseButton={false}
         >
-          <div className="success-symbol" aria-hidden="true">
-            {tr('✳')}
-          </div>
+          <BrandMark celebration />
           <DialogTitle className="dialog-heading">
             {tr(
               !isFree && done.length === levels.length
@@ -1340,7 +1339,7 @@ export default function Home() {
       {['home', 'progress', 'settings'].includes(view) && (
         <nav className="hub-nav" aria-label={tr('Hauptnavigation')}>
           {[
-            ['home', 'Spielen', '✳'],
+            ['home', 'Spielen', 'play'],
             ['progress', 'Fortschritt', '↗'],
             ['settings', 'Einstellungen', '⚙'],
           ].map(([id, label, icon]) => (
@@ -1350,7 +1349,9 @@ export default function Home() {
               aria-current={view === id ? 'page' : undefined}
               onClick={() => navigate(id)}
             >
-              <span aria-hidden="true">{icon}</span>
+              <span aria-hidden="true">
+                {icon === 'play' ? <BrandMark /> : icon}
+              </span>
               {tr(label)}
             </button>
           ))}

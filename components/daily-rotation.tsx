@@ -1,4 +1,5 @@
 'use client';
+import BrandMark from './brand-mark';
 import { t as tr, locale } from '@/lib/i18n';
 import { useEffect, useRef, useState, type MutableRefObject } from 'react';
 import { Button } from '@/components/ui/button';
@@ -24,7 +25,7 @@ import { useVictory } from '@/lib/use-victory';
 import { PuzzleReward } from './experience';
 import { act, boardOf } from '@/lib/session.mjs';
 import { evaluate, neighbor } from '@/lib/game.mjs';
-import { connectionSound } from '@/lib/connection-sound.mjs';
+import { moveSound } from '@/lib/connection-sound.mjs';
 import { haptic } from '@/lib/haptics';
 export default function DailyRotation({
   entry,
@@ -95,8 +96,8 @@ export default function DailyRotation({
     clock.record(after.solved, next.moves, assistance, reset);
     onChange(next);
     setVictory(after.solved, !quiet);
-    if (!after.solved && !reset) {
-      const sound = connectionSound(status, after);
+    if (!after.solved && !reset && next.moves > s.moves) {
+      const sound = moveSound(status, after);
       if (sound) playSound(sound);
     }
   }
@@ -276,6 +277,7 @@ export default function DailyRotation({
       )}
       <Dialog open={victory} onOpenChange={(open) => setVictory(open)}>
         <DialogContent className="game-dialog success-dialog">
+          <BrandMark celebration />
           <DialogTitle>{tr('Dein Tageslicht leuchtet!')}</DialogTitle>
           <PuzzleReward
             puzzleId={entry.puzzle.id}

@@ -1,4 +1,5 @@
 'use client';
+import BrandMark from './brand-mark';
 import {
   useEffect,
   useMemo,
@@ -45,7 +46,7 @@ import SolveControls from './solve-controls';
 import { PuzzleReward } from './experience';
 import { usePlayClock } from '@/lib/use-play-clock';
 import { useVictory } from '@/lib/use-victory';
-import { connectionSound } from '@/lib/connection-sound.mjs';
+import { moveSound } from '@/lib/connection-sound.mjs';
 import { haptic } from '@/lib/haptics';
 
 type Back = MutableRefObject<(() => boolean) | null>;
@@ -523,8 +524,8 @@ export function VariantBoard({
     clock.record(after.solved, next.moves, assistance, reset);
     onChange(next);
     setVictory(after.solved, !quiet);
-    if (!after.solved && !reset) {
-      const sound = connectionSound(status, after);
+    if (!after.solved && !reset && next.moves > s.moves) {
+      const sound = moveSound(status, after);
       if (sound) playSound(sound);
     }
   }
@@ -654,7 +655,9 @@ export function VariantBoard({
               : l.mode === 'linked'
                 ? 'Gleiche Zahlen drehen gemeinsam.'
                 : l.mode === 'path'
-                  ? 'Verbinde alle Sterne. Übrige Kacheln dürfen dunkel bleiben.'
+                  ? status.reached === l.targets.length && status.open > 0
+                    ? `Alle Sterne verbunden. Noch ${status.open} offene Anschlüsse im Lichtnetz.`
+                    : 'Verbinde alle Sterne und schließe die leuchtenden Anschlüsse.'
                   : 'A zu A, B zu B. Halte die Netze getrennt.',
         )}
       </p>
@@ -694,6 +697,7 @@ export function VariantBoard({
       )}
       <Dialog open={victory} onOpenChange={(open) => setVictory(open)}>
         <DialogContent className="game-dialog success-dialog">
+          <BrandMark celebration />
           <DialogTitle>{tr('Schön gelöst!')}</DialogTitle>
           <PuzzleReward puzzleId={l.id} attemptId={clock.entry?.id} />
           <DialogDescription>
