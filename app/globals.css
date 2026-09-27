@@ -2319,3 +2319,14 @@ html[data-theme='light'] {
   color: var(--muted-foreground);
   margin: 4px 0 0;
 }
+
+/* Outline and number treatment identify coupled tiles without altering their light. */
+.variant-linked .tile.linked-highlight {
+  outline: 2px solid var(--lw-ffdc91);
+  outline-offset: -3px;
+  z-index: 1;
+}
+.variant-linked .linked-highlight .variant-marker {
+  background: var(--lw-ffdc91);
+  color: #142235;
+}

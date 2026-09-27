@@ -1,5 +1,6 @@
 'use client';
-import BrandMark from './brand-mark';
+import SuccessContent from '@/components/success-content';
+
 import { t as tr, locale } from '@/lib/i18n';
 import { useEffect, useRef, useState, type MutableRefObject } from 'react';
 import { Button } from '@/components/ui/button';
@@ -22,7 +23,7 @@ import PlayScreen from '@/components/play-screen';
 import PlayClock from './play-clock';
 import { usePlayClock } from '@/lib/use-play-clock';
 import { useVictory } from '@/lib/use-victory';
-import { PuzzleReward } from './experience';
+
 import { act, boardOf } from '@/lib/session.mjs';
 import { evaluate, neighbor } from '@/lib/game.mjs';
 import { moveSound } from '@/lib/connection-sound.mjs';
@@ -276,22 +277,19 @@ export default function DailyRotation({
         ),
       )}
       <Dialog open={victory} onOpenChange={(open) => setVictory(open)}>
-        <DialogContent className="game-dialog success-dialog">
-          <BrandMark celebration />
-          <DialogTitle>{tr('Dein Tageslicht leuchtet!')}</DialogTitle>
-          <PuzzleReward
-            puzzleId={entry.puzzle.id}
-            attemptId={clock.entry?.id}
-          />
-          <DialogDescription>
-            {tr(s.moves)}
-            {tr(' Drehungen. Das fertige Netz bleibt für dich gespeichert.')}
-          </DialogDescription>
-          <Button onClick={onExit}>{tr('Zum Kalender')}</Button>
-          <Button variant="outline" onClick={() => setVictory(false)}>
-            {tr('Brett ansehen')}
-          </Button>
-        </DialogContent>
+        <SuccessContent
+          title="Dein Tageslicht leuchtet!"
+          description={
+            <>
+              {s.moves} {tr('Drehungen')}
+            </>
+          }
+          puzzleId={entry.puzzle.id}
+          attemptId={clock.entry?.id}
+          continueLabel="Zum Kalender"
+          onContinue={onExit}
+          onBoard={() => setVictory(false)}
+        />
       </Dialog>
       <Dialog open={rules} onOpenChange={setRules}>
         <DialogContent className="game-dialog">

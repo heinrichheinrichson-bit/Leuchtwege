@@ -1,10 +1,11 @@
 'use client';
-import BrandMark from '@/components/brand-mark';
+import SuccessContent from '@/components/success-content';
+
 import { t as tr, locale } from '@/lib/i18n';
 import { useEffect, useRef, useState, type MutableRefObject } from 'react';
 import { useVictory } from '@/lib/use-victory';
 import { haptic } from '@/lib/haptics';
-import { PuzzleReward } from './experience';
+
 import SolveControls from '@/components/solve-controls';
 import { Button } from '@/components/ui/button';
 import {
@@ -928,39 +929,31 @@ export default function SlidingGame({
         ),
       )}
       <Dialog open={victory} onOpenChange={(open) => setVictory(open)}>
-        <DialogContent
-          className="game-dialog success-dialog"
-          showCloseButton={false}
-        >
-          <BrandMark celebration />
-          <DialogTitle className="dialog-heading">
-            {tr('Dein Netz leuchtet!')}
-          </DialogTitle>
-          <DialogDescription>
-            {tr(s.slides)}
-            {tr(' Schübe')}
-            {tr(l.mode === 'rotate' ? ' · ' + s.rotations + ' Drehungen' : '')}
-            {tr('. Alle acht Kacheln sind verbunden.')}
-          </DialogDescription>
-          <PuzzleReward puzzleId={l.id} attemptId={clock.entry?.id} />
-          <Button
-            onClick={() => {
-              setVictory(false);
-              nextGame();
-            }}
-          >
-            {tr(
-              daily
-                ? 'Zum Kalender'
-                : freeMode || nextIndex >= 0
-                  ? 'Nächstes Rätsel →'
-                  : 'Zur Modusauswahl',
-            )}
-          </Button>
-          <Button variant="outline" onClick={() => setVictory(false)}>
-            {tr('Brett ansehen')}
-          </Button>
-        </DialogContent>
+        <SuccessContent
+          title="Dein Netz leuchtet!"
+          description={
+            <>
+              {s.slides} {tr('Schübe')}
+              {l.mode === 'rotate'
+                ? ` · ${s.rotations} ${tr('Drehungen')}`
+                : ''}
+            </>
+          }
+          puzzleId={l.id}
+          attemptId={clock.entry?.id}
+          continueLabel={
+            daily
+              ? 'Zum Kalender'
+              : freeMode || nextIndex >= 0
+                ? 'Nächstes Rätsel →'
+                : 'Zur Modusauswahl'
+          }
+          onContinue={() => {
+            setVictory(false);
+            nextGame();
+          }}
+          onBoard={() => setVictory(false)}
+        />
       </Dialog>
       <AlertDialog
         open={replaceMode !== null}

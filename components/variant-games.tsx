@@ -1,5 +1,6 @@
 'use client';
-import BrandMark from './brand-mark';
+import SuccessContent from '@/components/success-content';
+
 import {
   useEffect,
   useMemo,
@@ -43,7 +44,7 @@ import { neighbor } from '@/lib/game.mjs';
 import PlayScreen from './play-screen';
 import PlayClock from './play-clock';
 import SolveControls from './solve-controls';
-import { PuzzleReward } from './experience';
+
 import { usePlayClock } from '@/lib/use-play-clock';
 import { useVictory } from '@/lib/use-victory';
 import { moveSound } from '@/lib/connection-sound.mjs';
@@ -427,6 +428,9 @@ export default function VariantGames({
                       {tr(`Rätsel ${String(i + 1).padStart(2, '0')}`)}
                       <small>
                         {l.n} × {l.n}
+                        {!solved &&
+                          state?.moves > 0 &&
+                          ` · ${tr('Weiterspielen')}`}
                       </small>
                     </span>
                     <span aria-label={tr(solved ? 'Gelöst' : 'Noch offen')}>
@@ -476,6 +480,22 @@ export function VariantBoard({
   const [restart, setRestart] = useState(false),
     [rules, setRules] = useState(false),
     [paused, setPaused] = useState(false);
+  const [highlighted, setHighlighted] = useState<number[]>([]);
+  const [focusedGroup, setFocusedGroup] = useState<number[]>([]);
+  const previousTurns = useRef(s.turns);
+  useEffect(() => {
+    const changed = l.groups
+      .filter(
+        (group: number[]) =>
+          group.length > 1 &&
+          group.some((i: number) => previousTurns.current[i] !== s.turns[i]),
+      )
+      .flat();
+    previousTurns.current = s.turns;
+    setHighlighted(l.mode === 'linked' ? changed : []);
+    const timeout = setTimeout(() => setHighlighted([]), 800);
+    return () => clearTimeout(timeout);
+  }, [s.turns, l.id]);
   const help = useRef<(() => boolean) | null>(null);
   const { victory, celebrating, setVictory } = useVictory(
     () => playSound('success'),
@@ -583,9 +603,26 @@ export function VariantBoard({
           return (
             <button
               key={i}
-              className={`tile ${status.lit.has(i) ? 'lit' : ''} ${l.mode === 'dual' && l.owners[i] ? 'circuit-b' : ''} ${status.wrong?.has(i) ? 'wrong-network' : ''}`}
+              className={`tile ${status.lit.has(i) ? 'lit' : ''} ${l.mode === 'dual' && l.owners[i] ? 'circuit-b' : ''} ${status.wrong?.has(i) ? 'wrong-network' : ''} ${highlighted.includes(i) || focusedGroup.includes(i) ? 'linked-highlight' : ''}`}
+              onPointerEnter={(event) => {
+                if (l.mode === 'linked' && event.pointerType === 'mouse')
+                  setFocusedGroup(
+                    l.groups[group - 1].length > 1 ? l.groups[group - 1] : [],
+                  );
+              }}
+              onPointerLeave={() => setFocusedGroup([])}
+              onFocus={(event) => {
+                if (
+                  l.mode === 'linked' &&
+                  event.currentTarget.matches(':focus-visible')
+                )
+                  setFocusedGroup(
+                    l.groups[group - 1].length > 1 ? l.groups[group - 1] : [],
+                  );
+              }}
+              onBlur={() => setFocusedGroup([])}
               disabled={status.solved}
-              aria-label={`${tr('Zeile')} ${Math.floor(i / l.n) + 1}, ${tr('Spalte')} ${(i % l.n) + 1}${marker ? `, ${marker}` : ''}`}
+              aria-label={`${tr('Zeile')} ${Math.floor(i / l.n) + 1}, ${tr('Spalte')} ${(i % l.n) + 1}${marker ? `, ${l.mode === 'linked' ? tr('Gruppe') + ' ' : ''}${marker}` : ''}`}
               onClick={() =>
                 apply(variantAct(l, s, { type: 'turn', index: i }))
               }
@@ -696,21 +733,26 @@ export function VariantBoard({
         </Button>
       )}
       <Dialog open={victory} onOpenChange={(open) => setVictory(open)}>
-        <DialogContent className="game-dialog success-dialog">
-          <BrandMark celebration />
-          <DialogTitle>{tr('Schön gelöst!')}</DialogTitle>
-          <PuzzleReward puzzleId={l.id} attemptId={clock.entry?.id} />
-          <DialogDescription>
-            {s.moves}{' '}
-            {tr('Drehungen. Das fertige Netz bleibt für dich gespeichert.')}
-          </DialogDescription>
-          <Button onClick={onNext || onExit}>
-            {tr(onNext ? 'Nächstes Rätsel →' : 'Zur Auswahl')}
-          </Button>
-          <Button variant="outline" onClick={() => setVictory(false)}>
-            {tr('Brett ansehen')}
-          </Button>
-        </DialogContent>
+        <SuccessContent
+          title="Dein Netz leuchtet!"
+          description={
+            <>
+              {s.moves} {tr('Drehungen')}
+            </>
+          }
+          puzzleId={l.id}
+          attemptId={clock.entry?.id}
+          continueLabel={
+            onNext
+              ? 'Nächstes Rätsel →'
+              : origin === 'daily'
+                ? 'Zum Kalender'
+                : 'Zur Auswahl'
+          }
+          onContinue={onNext || onExit}
+          onBoard={() => setVictory(false)}
+          onChoose={onNext ? onExit : undefined}
+        />
       </Dialog>
       <Dialog open={rules} onOpenChange={setRules}>
         <DialogContent className="game-dialog">

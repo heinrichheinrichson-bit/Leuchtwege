@@ -69,6 +69,10 @@ export function usePlayClock(
       blur = () => {
         focused = false;
         sync();
+      },
+      restore = () => {
+        focused = document.hasFocus();
+        sync();
       };
     sync();
     flush.current = sync;
@@ -77,6 +81,7 @@ export function usePlayClock(
     window.addEventListener('focus', focus);
     window.addEventListener('blur', blur);
     window.addEventListener('pagehide', blur);
+    window.addEventListener('pageshow', restore);
     let handle: { remove: () => Promise<void> } | undefined;
     if (Capacitor.isNativePlatform())
       void App.addListener('appStateChange', ({ isActive }) => {
@@ -96,6 +101,7 @@ export function usePlayClock(
       window.removeEventListener('focus', focus);
       window.removeEventListener('blur', blur);
       window.removeEventListener('pagehide', blur);
+      window.removeEventListener('pageshow', restore);
       void handle?.remove();
     };
   }, [meta.puzzleId, enabled]);

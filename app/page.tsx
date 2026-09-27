@@ -1,4 +1,5 @@
 'use client';
+import SuccessContent from '@/components/success-content';
 import BrandMark from '@/components/brand-mark';
 import HomeDaily from '@/components/home-daily';
 import ModeGallery from '@/components/mode-gallery';
@@ -23,16 +24,11 @@ import DailyHub from '@/components/daily-hub';
 import StreakCalendar from '@/components/streak-calendar';
 import HomeStreak from '@/components/home-streak';
 import { createGameAudio } from '@/lib/game-audio.mjs';
-import ExperienceCard, { PuzzleReward } from '@/components/experience';
+import ExperienceCard from '@/components/experience';
 import Milestones from '@/components/milestones';
 import { usePlayClock } from '@/lib/use-play-clock';
 import { Button } from '@/components/ui/button';
-import {
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  DialogDescription,
-} from '@/components/ui/dialog';
+import { Dialog } from '@/components/ui/dialog';
 import {
   AlertDialog,
   AlertDialogContent,
@@ -338,6 +334,7 @@ export default function Home() {
     window.addEventListener('popstate', pop);
     let disposed = false;
     let nativeHandle: { remove: () => Promise<void> } | undefined;
+    let audioHandle: { remove: () => Promise<void> } | undefined;
     if (Capacitor.isNativePlatform())
       void App.addListener('backButton', () => backAction.current()).then(
         (h) => {
@@ -352,11 +349,21 @@ export default function Home() {
       }
     };
     document.addEventListener('visibilitychange', stop);
+    window.addEventListener('pagehide', stopSounds);
+    if (Capacitor.isNativePlatform())
+      void App.addListener('appStateChange', ({ isActive }) => {
+        if (!isActive) stopSounds();
+      }).then((h) => {
+        if (disposed) void h.remove();
+        else audioHandle = h;
+      });
     return () => {
       disposed = true;
       void nativeHandle?.remove();
+      void audioHandle?.remove();
       window.removeEventListener('popstate', pop);
       document.removeEventListener('visibilitychange', stop);
+      window.removeEventListener('pagehide', stopSounds);
       gameAudio.current?.dispose();
       gameAudio.current = null;
     };
@@ -1255,48 +1262,32 @@ export default function Home() {
         open={victory && view === 'game'}
         onOpenChange={(open) => setVictory(open)}
       >
-        <DialogContent
-          className="game-dialog success-dialog"
-          showCloseButton={false}
-        >
-          <BrandMark celebration />
-          <DialogTitle className="dialog-heading">
-            {tr(
-              !isFree && done.length === levels.length
-                ? 'Alle Wege leuchten!'
-                : 'Dein Netz leuchtet!',
-            )}
-          </DialogTitle>
-          <DialogDescription>
-            {tr(l.name)}
-            {tr(' gelöst · ')}
-            {tr(moves)}
-            {tr(' Drehungen')}
-          </DialogDescription>
-          <PuzzleReward puzzleId={l.id} attemptId={clock.entry?.id} />
-          <p className="success-copy">
-            {tr(
-              !isFree && done.length === levels.length
-                ? 'Du hast alle ' + levels.length + ' Rätsel gelöst.'
-                : 'Ein Lichtblick mehr. Bereit für den nächsten?',
-            )}
-          </p>
-          <Button onClick={nextGame}>
-            {tr(
-              isFree
-                ? 'Neues freies Rätsel →'
-                : next !== null
-                  ? 'Nächstes Rätsel →'
-                  : 'Rätsel auswählen',
-            )}
-          </Button>
-          <Button variant="outline" onClick={() => setVictory(false)}>
-            {tr('Brett ansehen')}
-          </Button>
-          <Button variant="ghost" onClick={() => navigate('catalog')}>
-            {tr('Zur Rätselauswahl')}
-          </Button>
-        </DialogContent>
+        <SuccessContent
+          title={
+            !isFree && done.length === levels.length
+              ? 'Alle Wege leuchten!'
+              : 'Dein Netz leuchtet!'
+          }
+          description={
+            <>
+              {tr(l.name)} · {moves} {tr('Drehungen')}
+            </>
+          }
+          puzzleId={l.id}
+          attemptId={clock.entry?.id}
+          continueLabel={
+            isFree
+              ? 'Neues freies Rätsel →'
+              : next !== null
+                ? 'Nächstes Rätsel →'
+                : 'Rätsel auswählen'
+          }
+          onContinue={nextGame}
+          onBoard={() => setVictory(false)}
+          onChoose={
+            isFree || next !== null ? () => navigate('catalog') : undefined
+          }
+        />
       </Dialog>
       <AlertDialog open={replaceFree} onOpenChange={setReplaceFree}>
         <AlertDialogContent className="game-dialog">
