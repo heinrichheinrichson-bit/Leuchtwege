@@ -19,7 +19,7 @@ import {
 } from '@/lib/daily.mjs';
 import { restoreDaily } from '@/lib/daily-generator.mjs';
 import { readHistory } from '@/lib/history-store';
-import { emptyHistory } from '@/lib/play-history.mjs';
+import { emptyHistory, currentAttempt } from '@/lib/play-history.mjs';
 import { helpSolved } from '@/lib/solve-help.mjs';
 import { dailyXp, experienceSummary } from '@/lib/experience.mjs';
 import DailyWorker from '@/lib/daily.worker?worker';
@@ -420,7 +420,14 @@ export default function DailyHub({
                       {tr(' · ')}
                       {spec.n > 0 ? `${spec.n} × ${spec.n} ·` : ''}
                       {tr(' ')}
-                      {tr(done ? 'Gelöst – Brett öffnen' : 'Spielen')}
+                      {tr(
+                        done
+                          ? 'Gelöst – Brett öffnen'
+                          : currentAttempt(history, spec.id)?.moves > 0 &&
+                              !currentAttempt(history, spec.id)?.completedAt
+                            ? 'Weiterspielen'
+                            : 'Spielen',
+                      )}
                     </small>
                   </span>
                   <span>{tr('→')}</span>

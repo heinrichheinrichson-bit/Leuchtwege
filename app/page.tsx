@@ -1,4 +1,5 @@
 'use client';
+import ResumeGames from '@/components/resume-games';
 import SuccessContent from '@/components/success-content';
 import BrandMark from '@/components/brand-mark';
 import HomeDaily from '@/components/home-daily';
@@ -537,6 +538,126 @@ export default function Home() {
     return () => ac.abort();
   }, [level, board, l.n, l.source, status.solved, isFree, view]);
 
+  const randomOptions = (
+    <>
+      <p className="section-intro">
+        {tr('Ein neues Netz, jedes Mal. Wähle, wie du knobeln möchtest.')}
+      </p>
+      {tr(
+        free.puzzle && (
+          <Button
+            className="home-option"
+            disabled={generating}
+            onClick={() => navigate('game', level, true)}
+          >
+            {tr(
+              evaluate(
+                boardOf(free.puzzle, free.session),
+                free.puzzle.n,
+                free.puzzle.source,
+              ).solved
+                ? 'Letztes Netz ansehen'
+                : 'Freie Partie fortsetzen',
+            )}
+            {tr(' ')}
+            <span>{tr('→')}</span>
+          </Button>
+        ),
+      )}
+      {tr(
+        free.puzzle && (
+          <p className="continue-detail">
+            {tr(free.puzzle.difficulty.tier)}
+            {tr(' · ')}
+            {tr(free.puzzle.n)}
+            {tr(' × ')}
+            {tr(free.puzzle.n)}
+            {tr(' ')}
+            {tr('· ')}
+            {tr(free.session.moves)}
+            {tr(' Drehungen')}
+          </p>
+        ),
+      )}
+      <fieldset disabled={generating}>
+        <legend>{tr('Schwierigkeit')}</legend>
+        <RadioGroup
+          value={free.tier}
+          onValueChange={(value) =>
+            setFree((f: any) => ({
+              ...f,
+              tier: value,
+              size: sizes[value as keyof typeof sizes].includes(f.size)
+                ? f.size
+                : 0,
+            }))
+          }
+          className="random-choices"
+        >
+          {tr(
+            ['Leicht', 'Mittel', 'Schwer'].map((t) => (
+              <label key={t}>
+                <RadioGroupItem value={t} />
+                {tr(t)}
+              </label>
+            )),
+          )}
+        </RadioGroup>
+      </fieldset>
+      <fieldset disabled={generating}>
+        <legend>{tr('Rastergröße')}</legend>
+        <RadioGroup
+          value={String(free.size)}
+          onValueChange={(value) =>
+            setFree((f: any) => ({ ...f, size: Number(value) }))
+          }
+          className="random-choices"
+        >
+          {tr(
+            [0, ...sizes[free.tier as keyof typeof sizes]].map((n) => (
+              <label key={n}>
+                <RadioGroupItem value={String(n)} />
+                {tr(n ? n + ' × ' + n : 'Automatisch')}
+              </label>
+            )),
+          )}
+        </RadioGroup>
+      </fieldset>
+      <p className="section-intro">{tr('Größeres Raster, längere Partie.')}</p>
+      <Button
+        className="continue-button"
+        disabled={generating || !ready}
+        onClick={requestRandom}
+      >
+        {tr(generating ? 'Rätsel wird geprüft …' : 'Neues Rätsel')}
+        {tr(' ')}
+        <span aria-hidden="true">↻</span>
+      </Button>
+      {tr(
+        generating && (
+          <>
+            <p role="status" className="mode-help">
+              {tr('Einen Moment. Dein neues Netz entsteht.')}
+            </p>
+            <Button
+              variant="outline"
+              className="home-option"
+              onClick={cancelGeneration}
+            >
+              {tr('Abbrechen')}
+            </Button>
+          </>
+        ),
+      )}
+      {tr(
+        generationError && (
+          <p role="alert" className="mode-help">
+            {tr(generationError)}
+          </p>
+        ),
+      )}
+    </>
+  );
   if (recoveryError)
     return (
       <main className="settings-screen">
@@ -733,131 +854,7 @@ export default function Home() {
         view === 'random' && (
           <section className="random-screen">
             <h1>{tr('Freies Spiel')}</h1>
-            <p className="section-intro">
-              {tr('Ein neues Netz, jedes Mal. Wähle, wie du knobeln möchtest.')}
-            </p>
-            {tr(
-              free.puzzle && (
-                <Button
-                  className="home-option"
-                  disabled={generating}
-                  onClick={() => navigate('game', level, true)}
-                >
-                  {tr(
-                    evaluate(
-                      boardOf(free.puzzle, free.session),
-                      free.puzzle.n,
-                      free.puzzle.source,
-                    ).solved
-                      ? 'Letztes Netz ansehen'
-                      : 'Freie Partie fortsetzen',
-                  )}
-                  {tr(' ')}
-                  <span>{tr('→')}</span>
-                </Button>
-              ),
-            )}
-            {tr(
-              free.puzzle && (
-                <p className="continue-detail">
-                  {tr(free.puzzle.difficulty.tier)}
-                  {tr(' · ')}
-                  {tr(free.puzzle.n)}
-                  {tr(' × ')}
-                  {tr(free.puzzle.n)}
-                  {tr(' ')}
-                  {tr('· ')}
-                  {tr(free.session.moves)}
-                  {tr(' Drehungen')}
-                </p>
-              ),
-            )}
-            <fieldset disabled={generating}>
-              <legend>{tr('Schwierigkeit')}</legend>
-              <RadioGroup
-                value={free.tier}
-                onValueChange={(value) =>
-                  setFree((f: any) => ({
-                    ...f,
-                    tier: value,
-                    size: sizes[value as keyof typeof sizes].includes(f.size)
-                      ? f.size
-                      : 0,
-                  }))
-                }
-                className="random-choices"
-              >
-                {tr(
-                  ['Leicht', 'Mittel', 'Schwer'].map((t) => (
-                    <label key={t}>
-                      <RadioGroupItem value={t} />
-                      {tr(t)}
-                    </label>
-                  )),
-                )}
-              </RadioGroup>
-            </fieldset>
-            <fieldset disabled={generating}>
-              <legend>{tr('Rastergröße')}</legend>
-              <RadioGroup
-                value={String(free.size)}
-                onValueChange={(value) =>
-                  setFree((f: any) => ({ ...f, size: Number(value) }))
-                }
-                className="random-choices"
-              >
-                {tr(
-                  [0, ...sizes[free.tier as keyof typeof sizes]].map((n) => (
-                    <label key={n}>
-                      <RadioGroupItem value={String(n)} />
-                      {tr(n ? n + ' × ' + n : 'Automatisch')}
-                    </label>
-                  )),
-                )}
-              </RadioGroup>
-            </fieldset>
-            <p className="section-intro">
-              {tr('Größeres Raster, längere Partie.')}
-            </p>
-            <Button
-              className="continue-button"
-              disabled={generating || !ready}
-              onClick={requestRandom}
-            >
-              {tr(generating ? 'Rätsel wird geprüft …' : 'Neues Rätsel')}
-              {tr(' ')}
-              <span aria-hidden="true">↻</span>
-            </Button>
-            {tr(
-              generating && (
-                <>
-                  <p role="status" className="mode-help">
-                    {tr('Einen Moment. Dein neues Netz entsteht.')}
-                  </p>
-                  <Button
-                    variant="outline"
-                    className="home-option"
-                    onClick={cancelGeneration}
-                  >
-                    {tr('Abbrechen')}
-                  </Button>
-                </>
-              ),
-            )}
-            {tr(
-              generationError && (
-                <p role="alert" className="mode-help">
-                  {tr(generationError)}
-                </p>
-              ),
-            )}
-            <p className="home-foot">
-              {tr('Deine Kampagne bleibt bei ')}
-              {tr(done.length)}
-              {tr(' von ')}
-              {tr(levels.length)}
-              {tr(' gelösten Rätseln.')}
-            </p>
+            {randomOptions}
           </section>
         ),
       )}
@@ -865,27 +862,47 @@ export default function Home() {
         view === 'catalog' && (
           <section className="catalog-screen">
             <h1>{tr('Drehpuzzles')}</h1>
-            <Button
-              className="variant-entry"
-              variant="outline"
-              onClick={() => navigate('random')}
-            >
-              {tr('Freies Spiel')} →
-            </Button>
-            {tr(
-              target.resume && (
-                <Button
-                  className="continue-button"
-                  onClick={() => start(target.index)}
-                >
-                  <span>
-                    {tr('Weiterspielen')}
-                    <small>{tr(levels[target.index].name)}</small>
-                  </span>
-                  <span aria-hidden="true">{tr('→')}</span>
-                </Button>
-              ),
-            )}
+            <ResumeGames
+              games={[
+                ...(free.puzzle &&
+                free.session.moves > 0 &&
+                !evaluate(
+                  boardOf(free.puzzle, free.session),
+                  free.puzzle.n,
+                  free.puzzle.source,
+                ).solved
+                  ? [
+                      {
+                        id: free.puzzle.id,
+                        title: 'Freies Spiel',
+                        detail: `${tr(free.puzzle.difficulty.tier)} · ${free.puzzle.n} × ${free.puzzle.n}`,
+                        open: () => navigate('game', level, true),
+                      },
+                    ]
+                  : []),
+                ...[...new Set([target.index, ...recommendedOrder(levels)])]
+                  .filter(
+                    (i) =>
+                      sessions[i]?.moves > 0 &&
+                      !evaluate(
+                        boardOf(levels[i], sessions[i]),
+                        levels[i].n,
+                        levels[i].source,
+                      ).solved,
+                  )
+                  .map((i) => ({
+                    id: levels[i].id,
+                    title: levels[i].name,
+                    detail: `${tr(levels[i].difficulty.tier)} · ${tr('Katalog')}`,
+                    open: () => start(i),
+                  })),
+              ]}
+              disabled={generating}
+            />
+            <details className="mode-random">
+              <summary>{tr('Freies Spiel')}</summary>
+              {randomOptions}
+            </details>
             <p className="section-intro">
               {tr(done.length)}
               {tr(' von ')}

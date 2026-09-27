@@ -1,4 +1,5 @@
 'use client';
+import ResumeGames from './resume-games';
 import SuccessContent from '@/components/success-content';
 
 import {
@@ -313,6 +314,41 @@ export default function VariantGames({
       <p className="variant-rule">
         {tr(variantRules[data.mode as keyof typeof variantRules])}
       </p>
+      <ResumeGames
+        disabled={busy}
+        games={[
+          ...(data.free[data.mode] &&
+          data.free[data.mode].session.moves > 0 &&
+          (() => {
+            const p = savedVariant(data.mode, data.free[data.mode]);
+            return p && !variantStatus(p, data.free[data.mode].session).solved;
+          })()
+            ? [
+                {
+                  id: 'free',
+                  title: 'Freies Spiel',
+                  detail: tr(
+                    variantNames[data.mode as keyof typeof variantNames],
+                  ),
+                  open: () => setSelected('free'),
+                },
+              ]
+            : []),
+          ...variantCatalog
+            .filter(
+              (p) =>
+                p.mode === data.mode &&
+                data.sessions[p.id]?.moves > 0 &&
+                !variantStatus(p, data.sessions[p.id]).solved,
+            )
+            .map((p) => ({
+              id: p.id,
+              title: `Rätsel ${String(variantCatalog.filter((v) => v.mode === p.mode && v.tier === p.tier).findIndex((v) => v.id === p.id) + 1).padStart(2, '0')}`,
+              detail: `${tr(p.tier)} · ${p.n} × ${p.n}`,
+              open: () => setSelected(p.id),
+            })),
+        ]}
+      />
       <details className="mode-random">
         <summary>{tr('Freies Spiel')}</summary>
         <h2>{tr('Freies Spiel')}</h2>

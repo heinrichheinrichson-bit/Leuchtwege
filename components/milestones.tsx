@@ -18,6 +18,58 @@ export default function Milestones() {
   return (
     <section className="milestones-screen">
       <h1>{tr('Missionen & Erfolge')}</h1>
+      {nextGoals.length > 0 && (
+        <>
+          <h2>{tr('Deine nächsten Ziele')}</h2>
+          <div className="milestone-list">
+            {nextGoals.map((track) => (
+              <article className="milestone" key={track.kind}>
+                <div className="milestone-heading">
+                  <strong>{tr(track.title)}</strong>
+                  <span>+{track.next.points} XP</span>
+                </div>
+                <p>{tr(track.detail)}</p>
+                <strong className="goal-remaining">
+                  {tr('Noch')}{' '}
+                  {track.kind === 'time'
+                    ? `${Math.ceil((track.next.target - track.next.progress) / 60)} min`
+                    : achievementCounter(
+                        track.kind,
+                        Math.max(0, track.next.target - track.next.progress),
+                        locale(),
+                      )}{' '}
+                  {track.kind !== 'time' &&
+                    tr(
+                      track.kind === 'days' || track.kind === 'streak'
+                        ? 'Spieltage'
+                        : track.kind === 'modes'
+                          ? 'Spielmodi'
+                          : track.kind === 'finishes' ||
+                              track.kind === 'independent'
+                            ? 'Partien'
+                            : 'Rätsel',
+                    )}{' '}
+                  {tr('bis zum nächsten Erfolg')}
+                </strong>
+                <span>
+                  {achievementCounter(
+                    track.kind,
+                    track.next.progress,
+                    locale(),
+                  )}{' '}
+                  /{' '}
+                  {achievementCounter(track.kind, track.next.target, locale())}
+                </span>
+                <progress
+                  value={track.next.progress}
+                  max={track.next.target}
+                  aria-label={tr(track.title)}
+                />
+              </article>
+            ))}
+          </div>
+        </>
+      )}
       <h2>
         {tr('Heute')} ·{' '}
         {new Date().toLocaleDateString(locale(), {
@@ -47,36 +99,6 @@ export default function Milestones() {
           </article>
         ))}
       </div>
-      {nextGoals.length > 0 && (
-        <>
-          <h2>{tr('Deine nächsten Ziele')}</h2>
-          <div className="milestone-list">
-            {nextGoals.map((track) => (
-              <article className="milestone" key={track.kind}>
-                <div className="milestone-heading">
-                  <strong>{tr(track.title)}</strong>
-                  <span>+{track.next.points} XP</span>
-                </div>
-                <p>{tr(track.detail)}</p>
-                <span>
-                  {achievementCounter(
-                    track.kind,
-                    track.next.progress,
-                    locale(),
-                  )}{' '}
-                  /{' '}
-                  {achievementCounter(track.kind, track.next.target, locale())}
-                </span>
-                <progress
-                  value={track.next.progress}
-                  max={track.next.target}
-                  aria-label={tr(track.title)}
-                />
-              </article>
-            ))}
-          </div>
-        </>
-      )}
       <h2>
         {tr('Erfolge')} · {xp.achievements.filter((a) => a.done).length}/
         {xp.achievements.length}

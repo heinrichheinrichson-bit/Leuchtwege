@@ -1,4 +1,5 @@
 'use client';
+import ResumeGames from './resume-games';
 import SuccessContent from '@/components/success-content';
 
 import { t as tr, locale } from '@/lib/i18n';
@@ -443,6 +444,49 @@ export default function SlidingGame({
                         : 'Kacheln verschieben und zusätzlich drehen.',
                     )}
                   </p>
+                  <ResumeGames
+                    disabled={generating || !ready}
+                    games={[
+                      ...(free[mode] &&
+                      free[mode].session.slides + free[mode].session.rotations >
+                        0 &&
+                      !slidingStatus(free[mode].puzzle, free[mode].session)
+                        .solved
+                        ? [
+                            {
+                              id: free[mode].puzzle.id,
+                              title: 'Freies Spiel',
+                              detail: `${tr(free[mode].puzzle.tier)} · 3 × 3`,
+                              open: () => openFree(mode),
+                            },
+                          ]
+                        : []),
+                      ...[
+                        ...new Set([
+                          saved.current,
+                          ...slidingOrder(puzzles, mode),
+                        ]),
+                      ]
+                        .filter(
+                          (i) =>
+                            puzzles[i].mode === mode &&
+                            saved.sessions[puzzles[i].id] &&
+                            saved.sessions[puzzles[i].id].slides +
+                              saved.sessions[puzzles[i].id].rotations >
+                              0 &&
+                            !slidingStatus(
+                              puzzles[i],
+                              saved.sessions[puzzles[i].id],
+                            ).solved,
+                        )
+                        .map((i) => ({
+                          id: puzzles[i].id,
+                          title: puzzles[i].name,
+                          detail: `${tr(puzzles[i].tier)} · ${tr('Katalog')}`,
+                          open: () => open(i),
+                        })),
+                    ]}
+                  />
                   <details className="mode-random">
                     <summary>{tr('Freies Spiel')}</summary>
                     <div className="sliding-free-options">
