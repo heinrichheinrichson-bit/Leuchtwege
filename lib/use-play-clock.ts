@@ -5,6 +5,7 @@ import { Capacitor } from '@capacitor/core';
 import { readHistory, recordAttempt, changeHistory } from './history-store';
 import { currentAttempt } from './play-history.mjs';
 import { checkOptimal } from './optimal-check';
+import { rememberResumeGame } from './resume-list.mjs';
 import { activeTimer } from './active-timer.mjs';
 
 export function usePlayClock(
@@ -61,6 +62,8 @@ export function usePlayClock(
       if (elapsed > 0) apply(elapsed);
       if (!disposed) setRunning(mayRun);
     };
+    if (enabled && moves > 0 && meta.origin !== 'daily')
+      rememberResumeGame(meta.mode, meta.puzzleId);
     if (enabled && !currentAttempt(readHistory(), meta.puzzleId)) apply(0);
     const focus = () => {
         focused = true;
@@ -111,6 +114,8 @@ export function usePlayClock(
     assistance = 'none',
     restart = false,
   ) {
+    if (nextMoves > 0 && meta.origin !== 'daily')
+      rememberResumeGame(meta.mode, meta.puzzleId, true);
     flush.current();
     const r = recordAttempt(meta, {
       solved,

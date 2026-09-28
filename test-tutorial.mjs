@@ -60,8 +60,15 @@ for (const mode of Object.keys(tutorials)) {
 }
 assert.deepEqual(
   tutorialProgress({ turn: true, slide: 'true', rotate: false, other: true }),
-  { turn: true, slide: false, rotate: false },
+  {
+    turn: true,
+    slide: false,
+    rotate: false,
+    dual: false,
+    linked: false,
+    path: false,
+  },
 );
 console.log(
-  'PASS: all three guided lessons, lit-but-unsolved example, gesture equivalence, wrong-action protection, restart and progress validation.',
+  'PASS: all six guided lessons, lit-but-unsolved example, gesture equivalence, wrong-action protection, restart and progress validation.',
 );

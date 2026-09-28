@@ -101,7 +101,7 @@ export default function TutorialGame({
   }
   function tap(pos: number) {
     if (!step) return;
-    if (mode === 'turn') {
+    if (!l.pieces) {
       apply({ type: 'turn', index: pos });
       return;
     }
@@ -155,7 +155,7 @@ export default function TutorialGame({
       </div>
       <div
         className={
-          'board slide-board learn-board ' +
+          'board slide-board learn-board variant-board ' +
           (status.solved ? 'complete ' : '') +
           (celebrating ? 'celebrating' : '')
         }
@@ -182,12 +182,30 @@ export default function TutorialGame({
               const pos = l.pieces ? state.session.positions.indexOf(id) : id,
                 mask = board[pos];
               const base = l.pieces ? l.pieces[id] : l.initial[id];
-              const source = l.pieces ? id === l.sourceId : id === l.source;
+              const source = l.pieces
+                ? id === l.sourceId
+                : mode === 'dual'
+                  ? l.sources.includes(id)
+                  : id === l.source;
+              const group = l.groups?.findIndex((g: number[]) =>
+                g.includes(id),
+              );
+              const marker =
+                mode === 'dual'
+                  ? l.owners[id]
+                    ? 'B'
+                    : 'A'
+                  : mode === 'linked' && l.groups[group]?.length > 1
+                    ? String(group + 1)
+                    : mode === 'path' && l.targets.includes(id)
+                      ? '★'
+                      : '';
               return (
                 <button
                   key={mode + '-' + id}
                   className={
                     'tile slide-tile ' +
+                    (mode === 'dual' && l.owners[id] ? 'circuit-b ' : '') +
                     (status.lit.has(pos) ? 'lit ' : '') +
                     (target === id ? 'learn-target ' : '') +
                     (selected === id ? 'selected' : '')
@@ -207,7 +225,7 @@ export default function TutorialGame({
                   aria-pressed={selected === id}
                   onPointerDown={(e) => {
                     if (
-                      mode === 'turn' ||
+                      !l.pieces ||
                       !e.isPrimary ||
                       e.button !== 0 ||
                       gesture.current
@@ -263,6 +281,11 @@ export default function TutorialGame({
                     tap(pos);
                   }}
                 >
+                  {marker && (
+                    <span className="variant-marker" aria-hidden="true">
+                      {marker}
+                    </span>
+                  )}
                   <svg viewBox="0 0 100 100" aria-hidden="true">
                     <g
                       className="rotor"
@@ -342,20 +365,16 @@ export default function TutorialGame({
         {tr(
           status.solved && (
             <Button onClick={() => onPlay(mode)}>
-              {tr(
-                mode === 'turn'
-                  ? 'Zu den Drehrätseln'
-                  : 'Zu den Schieberätseln',
-              )}
+              {tr('Zu den Rätseln')}
               {tr(' →')}
             </Button>
           ),
         )}
         {tr(
-          status.solved && mode !== 'rotate' && (
+          status.solved && mode !== Object.keys(tutorials).at(-1) && (
             <Button
               variant="outline"
-              onClick={() => choose(mode === 'turn' ? 'slide' : 'rotate')}
+              onClick={() => choose(Object.keys(tutorials)[Object.keys(tutorials).indexOf(mode) + 1])}
             >
               {tr('Nächsten Modus kennenlernen →')}
             </Button>

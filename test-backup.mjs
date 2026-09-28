@@ -78,7 +78,14 @@ variants.sessions[variantCatalog[0].id] = variantAct(
 put(variantKey, variants);
 put('leuchtwege-free-v1', emptyFree());
 put('leuchtwege-sliding-free-v1', restoreFreeSliding(null));
-put('leuchtwege-learn-v1', { turn: true });
+put('leuchtwege-learn-v1', {
+  turn: true,
+  dual: true,
+  path: true,
+  linked: true,
+});
+put('tvispy-resume-slots-v1', { turn: 'lw-001', linked: 'linked-test' });
+put('tvispy-hidden-resume-v1', { 'lw-001': '[1]' });
 put('leuchtwege-preferences-v1', { version: 1, animations: false });
 put('leuchtwege-hints-v1:lw-001', { used: 2, rewards: [] });
 const history = updateAttempt(

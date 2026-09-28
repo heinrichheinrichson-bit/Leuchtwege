@@ -1,4 +1,6 @@
 'use client';
+import FreePlayOptions from '@/components/free-play-options';
+import { resumeRevision } from '@/lib/resume-list.mjs';
 import ResumeGames from './resume-games';
 import SuccessContent from '@/components/success-content';
 
@@ -402,12 +404,13 @@ export default function SlidingGame({
                   : 'Schiebepuzzles',
               )}
             </h1>
-            <p className="section-intro">
-              {tr(puzzles.filter((p) => p.mode === catalogMode).length)}
-              {tr(' Rätsel je Modus. Oder starte ein freies Spiel.')}
-            </p>
-            <Button variant="outline" onClick={() => onLearn(catalogMode)}>
-              {tr('Schieben lernen →')}
+            <Button
+              className="mode-learn"
+              variant="outline"
+              onClick={() => onLearn(catalogMode)}
+              disabled={generating}
+            >
+              {tr('Spiel kennenlernen')}
             </Button>
             <div
               className={initialMode ? 'mode-hidden' : 'stats-filters'}
@@ -431,20 +434,19 @@ export default function SlidingGame({
             </div>
             {tr(
               [catalogMode].map((mode) => (
-                <section className="catalog-group" key={mode}>
-                  <h2 className={initialMode ? 'mode-hidden' : undefined}>
-                    {tr(
-                      mode === 'slide' ? 'Nur Schieben' : 'Schieben & Drehen',
-                    )}
-                  </h2>
-                  <p className="section-intro">
-                    {tr(
-                      mode === 'slide'
-                        ? 'Kacheln verschieben. Die Ausrichtung bleibt fest.'
-                        : 'Kacheln verschieben und zusätzlich drehen.',
-                    )}
-                  </p>
+                <section
+                  className="catalog-group mode-catalog-group"
+                  key={mode}
+                >
+                  {!initialMode && (
+                    <h2>
+                      {tr(
+                        mode === 'slide' ? 'Nur Schieben' : 'Schieben & Drehen',
+                      )}
+                    </h2>
+                  )}
                   <ResumeGames
+                    mode={mode}
                     disabled={generating || !ready}
                     games={[
                       ...(free[mode] &&
@@ -455,6 +457,7 @@ export default function SlidingGame({
                         ? [
                             {
                               id: free[mode].puzzle.id,
+                              revision: resumeRevision(free[mode].session),
                               title: 'Freies Spiel',
                               detail: `${tr(free[mode].puzzle.tier)} · 3 × 3`,
                               open: () => openFree(mode),
@@ -481,6 +484,9 @@ export default function SlidingGame({
                         )
                         .map((i) => ({
                           id: puzzles[i].id,
+                          revision: resumeRevision(
+                            saved.sessions[puzzles[i].id],
+                          ),
                           title: puzzles[i].name,
                           detail: `${tr(puzzles[i].tier)} · ${tr('Katalog')}`,
                           open: () => open(i),
@@ -489,55 +495,28 @@ export default function SlidingGame({
                   />
                   <details className="mode-random">
                     <summary>{tr('Freies Spiel')}</summary>
-                    <div className="sliding-free-options">
-                      <label htmlFor={'slide-tier-' + mode}>
-                        {tr('Freies Spiel · 3 × 3')}
-                      </label>
-                      <select
-                        id={'slide-tier-' + mode}
-                        value={free.tiers[mode]}
-                        disabled={generating || !ready}
-                        onChange={(e) =>
-                          setFree((v: any) => ({
-                            ...v,
-                            tiers: { ...v.tiers, [mode]: e.target.value },
-                          }))
-                        }
-                      >
-                        {tr(
-                          slidingTiers.map((t) => (
-                            <option key={t}>{tr(t)}</option>
-                          )),
-                        )}
-                      </select>
-                      <Button
-                        disabled={!ready || generating}
-                        onClick={() => requestGeneration(mode)}
-                      >
-                        {tr('Neues Rätsel')}
-                      </Button>
-                      {tr(
-                        free[mode] && (
-                          <Button
-                            variant="outline"
-                            disabled={generating || !ready}
-                            onClick={() => openFree(mode)}
-                          >
-                            {tr(
-                              slidingStatus(
-                                free[mode].puzzle,
-                                free[mode].session,
-                              ).solved
-                                ? 'Letztes Brett ansehen'
-                                : 'Freie Partie fortsetzen',
-                            )}
-                            {tr(' ')}
-                            {tr('· ')}
-                            {tr(free[mode].puzzle.tier)}
-                          </Button>
-                        ),
-                      )}
-                    </div>
+                    <FreePlayOptions
+                      tier={free.tiers[mode]}
+                      size={3}
+                      sizes={[3]}
+                      onTier={(value) =>
+                        setFree((v: any) => ({
+                          ...v,
+                          tiers: { ...v.tiers, [mode]: value },
+                        }))
+                      }
+                      onSize={() => {}}
+                      onStart={() => requestGeneration(mode)}
+                      busy={generating}
+                      disabled={!ready}
+                      onCancel={cancelGeneration}
+                      onResume={free[mode] ? () => openFree(mode) : undefined}
+                      solved={
+                        !!free[mode] &&
+                        slidingStatus(free[mode].puzzle, free[mode].session)
+                          .solved
+                      }
+                    />
                   </details>
                   {tr(
                     slidingTiers.map((tier) => (

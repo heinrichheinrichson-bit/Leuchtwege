@@ -2405,3 +2405,63 @@ html[data-theme='light'] {
   background: var(--lw-ffdc91);
   border-radius: 4px;
 }
+
+.mode-learn {
+  width: 100%;
+  margin: 6px 0 16px;
+  min-height: 44px;
+}
+.free-play-options {
+  display: grid;
+  gap: 12px;
+  margin-top: 16px;
+}
+.free-play-options fieldset {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  min-width: 0;
+}
+.free-play-options legend {
+  margin-bottom: 8px;
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+}
+.free-play-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.free-play-choices button {
+  flex: 1 1 auto;
+  min-height: 44px;
+}
+.resume-row {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+.resume-row .resume-game {
+  min-width: 0;
+  flex: 1;
+}
+.resume-remove {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+}
+.resume-notice {
+  font-size: 0.875rem;
+  color: var(--muted-foreground);
+  margin: 0;
+}
+.resume-games details .resume-row {
+  margin-top: 8px;
+}
+
+.mode-catalog-group {
+  margin: 0;
+}
+.variant-hub .resume-games h2 {
+  margin: 0 0 4px;
+}
