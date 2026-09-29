@@ -1,10 +1,11 @@
 import fs from 'node:fs';
-import { variantCatalog } from './lib/variants.mjs';
+import { variantCatalog, variantTrials } from './lib/variants.mjs';
 import { proveOptimal } from './lib/optimal-moves.mjs';
 const all = [
     ...JSON.parse(fs.readFileSync('lib/levels.json')),
     ...JSON.parse(fs.readFileSync('lib/sliding-levels.json')),
     ...variantCatalog,
+    ...variantTrials,
   ],
   out = {},
   previous = JSON.parse(fs.readFileSync('lib/optimal-catalog.json'));

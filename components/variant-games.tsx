@@ -32,6 +32,7 @@ import {
   variantNames,
   variantRules,
   variantCatalog,
+  variantTrials,
   savedVariant,
   variantStatus,
   variantAct,
@@ -136,13 +137,15 @@ export default function VariantGames({
     },
     [back],
   );
+  const available = __LEUCHTWEGE_DEVTOOLS__ ? [...variantCatalog, ...variantTrials] : variantCatalog;
+  const sequence = selected?.startsWith('linked-trial-') ? variantTrials : variantCatalog;
   const entry = useMemo(() => {
     if (!selected) return null;
     const saved = data.free[data.mode];
     const l =
       selected === 'free' && saved
         ? savedVariant(data.mode, saved)
-        : variantCatalog.find((l) => l.id === selected);
+        : available.find((l) => l.id === selected);
     if (!l) return null;
     return {
       puzzle: l,
@@ -230,7 +233,7 @@ export default function VariantGames({
           number={
             selected === 'free'
               ? null
-              : variantCatalog
+              : sequence
                   .filter(
                     (l) => l.mode === data.mode && l.tier === entry.puzzle.tier,
                   )
@@ -238,12 +241,12 @@ export default function VariantGames({
           }
           onNext={
             selected !== 'free' &&
-            variantCatalog
+            sequence
               .filter((l) => l.mode === data.mode)
               .findIndex((l) => l.id === selected) <
-              variantCatalog.filter((l) => l.mode === data.mode).length - 1
+              sequence.filter((l) => l.mode === data.mode).length - 1
               ? () => {
-                  const list = variantCatalog.filter(
+                  const list = sequence.filter(
                     (l) => l.mode === data.mode,
                   );
                   setSelected(
@@ -338,7 +341,7 @@ export default function VariantGames({
                 },
               ]
             : []),
-          ...variantCatalog
+          ...available
             .filter(
               (p) =>
                 p.mode === data.mode &&
@@ -348,12 +351,26 @@ export default function VariantGames({
             .map((p) => ({
               id: p.id,
               revision: resumeRevision(data.sessions[p.id]),
-              title: `Rätsel ${String(variantCatalog.filter((v) => v.mode === p.mode && v.tier === p.tier).findIndex((v) => v.id === p.id) + 1).padStart(2, '0')}`,
-              detail: `${tr(p.tier)} · ${p.n} × ${p.n}`,
+              title: `Rätsel ${String((p.id.startsWith('linked-trial-') ? variantTrials : variantCatalog).filter((v) => v.mode === p.mode && v.tier === p.tier).findIndex((v) => v.id === p.id) + 1).padStart(2, '0')}`,
+              detail: `${tr(p.id.startsWith('linked-trial-') ? 'Testreihe' : p.tier)} · ${p.n} × ${p.n}`,
               open: () => setSelected(p.id),
             })),
         ]}
       />
+      {__LEUCHTWEGE_DEVTOOLS__ && data.mode === 'linked' && (
+        <details className="mode-random">
+          <summary>{tr('Testreihe: Mehr Tüftelei')}</summary>
+          <p>{tr('Sechs neue Rätsel mit den gewohnten Regeln. Die Schwierigkeit testen wir gemeinsam.')}</p>
+          <div className="variant-tabs">
+            {variantTrials.map((p, i) => (
+              <Button key={p.id} variant="outline" disabled={busy} onClick={() => setSelected(p.id)}>
+                {tr('Testreihe')} {String(i + 1).padStart(2, '0')}
+                {data.sessions[p.id] && variantStatus(p, data.sessions[p.id]).solved ? ' ✓' : ''}
+              </Button>
+            ))}
+          </div>
+        </details>
+      )}
       <details className="mode-random">
         <summary>{tr('Freies Spiel')}</summary>
         <FreePlayOptions
@@ -571,7 +588,7 @@ export function VariantBoard({
                   ? 'Freies Spiel'
                   : `Rätsel ${String(number).padStart(2, '0')}`,
             )}{' '}
-            · {tr(l.tier)}
+            · {tr(l.trial ? 'Testreihe' : l.tier)}
           </p>
           <h1>{tr(l.name)}</h1>
         </div>
