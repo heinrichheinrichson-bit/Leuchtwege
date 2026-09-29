@@ -53,7 +53,9 @@ assert.equal(status.lit.size, 4, 'Dark off-path branches are not required');
 for (const p of variantCatalog.filter((l) => l.tier === 'Schwer')) {
   if (p.mode === 'linked') {
     assert(p.groups.filter((g) => g.length > 1).length >= 6);
-    assert(p.difficulty.waves >= 6);
+    assert(p.difficulty.uncertain >= 6);
+    assert(p.difficulty.deadEnds >= 4);
+    assert(p.difficulty.maxDeadEndDepth >= 2);
   } else {
     assert(p.difficulty.deadEnds >= 2);
     assert(p.difficulty.uncertain >= 6);

@@ -1,0 +1,110 @@
+[
+  {
+    "day": "2026-09-27",
+    "mode": "dual",
+    "slot": 0,
+    "hash": "aad45446972994346d252da7eac3d4aceb8e1d48713ec736bbbd0914b3386785"
+  },
+  {
+    "day": "2026-09-27",
+    "mode": "dual",
+    "slot": 1,
+    "hash": "8d602be31052deaa7497a516ed9ff7e237aaed5ce62b4f784042f857af4f3748"
+  },
+  {
+    "day": "2026-09-27",
+    "mode": "dual",
+    "slot": 2,
+    "hash": "b294501de72ce8f937773dc2f7fa06688e8b6aa5481a470341b3240069abe096"
+  },
+  {
+    "day": "2026-09-27",
+    "mode": "path",
+    "slot": 0,
+    "hash": "f499ae28f16873ea8c6b4fcbabc8d7ae887b2d1f0be44b8089346ac51c4c4169"
+  },
+  {
+    "day": "2026-09-27",
+    "mode": "path",
+    "slot": 1,
+    "hash": "55c78adbf6aeec2aa2823db5aaa71ede0ac0f51ce8d594121648ca8519f9ad20"
+  },
+  {
+    "day": "2026-09-27",
+    "mode": "path",
+    "slot": 2,
+    "hash": "f2fe740834d99bf84c58ade91fb0ebda58b03a25eb1c87a7ed168e5cfdc88595"
+  },
+  {
+    "day": "2026-09-27",
+    "mode": "linked",
+    "slot": 0,
+    "hash": "e655da69550ef99d9d40edcdf2376557d2dec0e1a80f434b5b57dee2ba56c5d6"
+  },
+  {
+    "day": "2026-09-27",
+    "mode": "linked",
+    "slot": 1,
+    "hash": "6475b0c8f897f0d643b4294c0960ce43733f63d992ea0dd1f5f9a7197071e843"
+  },
+  {
+    "day": "2026-09-27",
+    "mode": "linked",
+    "slot": 2,
+    "hash": "7a7329e96c4b7c10e94f738d90e37d3fab097b8fe9a338b30a582ddd11d8fecf"
+  },
+  {
+    "day": "2026-09-28",
+    "mode": "dual",
+    "slot": 0,
+    "hash": "75ab91a3597ad196b65b763f8a81b7ce5c2e10cfa987a5859da95f3a6526da8c"
+  },
+  {
+    "day": "2026-09-28",
+    "mode": "dual",
+    "slot": 1,
+    "hash": "4198edaa5a8f9b28230b1ec65e9441693b33f294bda621186d6c6956d9b3444d"
+  },
+  {
+    "day": "2026-09-28",
+    "mode": "dual",
+    "slot": 2,
+    "hash": "5def8562581991a8ff3522da37677d5ec7b7704ddcf8e0f95dac9cd7bf010658"
+  },
+  {
+    "day": "2026-09-28",
+    "mode": "path",
+    "slot": 0,
+    "hash": "b5abec5fd97394d23cd4e9ee3897d0fc27bd178dee3a81bfe1b0ca9599519c1e"
+  },
+  {
+    "day": "2026-09-28",
+    "mode": "path",
+    "slot": 1,
+    "hash": "ea7fa0086d9fe1f023d609cd589d605e1496ff70305a8225365c4a8e8173e630"
+  },
+  {
+    "day": "2026-09-28",
+    "mode": "path",
+    "slot": 2,
+    "hash": "64018f7f5eddc9e9d842eccc323091cd35a113e76d6462165ca8fe7ec93dd2f6"
+  },
+  {
+    "day": "2026-09-28",
+    "mode": "linked",
+    "slot": 0,
+    "hash": "f45e20711dddc3dcb8f52282f9f7f7d8381370e97c4889505bf2f285a0ee60bc"
+  },
+  {
+    "day": "2026-09-28",
+    "mode": "linked",
+    "slot": 1,
+    "hash": "4d9131363e3426c9a69db1b08863a9cbadc57bc0d68fe0a8f02734b2abe57bed"
+  },
+  {
+    "day": "2026-09-28",
+    "mode": "linked",
+    "slot": 2,
+    "hash": "85683e4b41b10cb7700bec2fba266392cddda20e3ffe68b77dbc18566e0fb0ee"
+  }
+]
