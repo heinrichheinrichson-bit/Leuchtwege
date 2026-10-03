@@ -953,6 +953,7 @@ export default function SlidingGame({
       )}
       <Dialog open={victory} onOpenChange={(open) => setVictory(open)}>
         <SuccessContent
+          open={victory}
           title="Dein Netz leuchtet!"
           description={
             <>

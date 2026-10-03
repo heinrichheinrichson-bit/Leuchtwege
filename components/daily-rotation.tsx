@@ -278,6 +278,7 @@ export default function DailyRotation({
       )}
       <Dialog open={victory} onOpenChange={(open) => setVictory(open)}>
         <SuccessContent
+          open={victory}
           title="Dein Tageslicht leuchtet!"
           description={
             <>

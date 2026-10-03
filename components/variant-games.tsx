@@ -137,8 +137,12 @@ export default function VariantGames({
     },
     [back],
   );
-  const available = __LEUCHTWEGE_DEVTOOLS__ ? [...variantCatalog, ...variantTrials] : variantCatalog;
-  const sequence = selected?.startsWith('linked-trial-') ? variantTrials : variantCatalog;
+  const available = __LEUCHTWEGE_DEVTOOLS__
+    ? [...variantCatalog, ...variantTrials]
+    : variantCatalog;
+  const sequence = selected?.startsWith('linked-trial-')
+    ? variantTrials
+    : variantCatalog;
   const entry = useMemo(() => {
     if (!selected) return null;
     const saved = data.free[data.mode];
@@ -246,9 +250,7 @@ export default function VariantGames({
               .findIndex((l) => l.id === selected) <
               sequence.filter((l) => l.mode === data.mode).length - 1
               ? () => {
-                  const list = sequence.filter(
-                    (l) => l.mode === data.mode,
-                  );
+                  const list = sequence.filter((l) => l.mode === data.mode);
                   setSelected(
                     list[list.findIndex((l) => l.id === selected) + 1].id,
                   );
@@ -357,20 +359,6 @@ export default function VariantGames({
             })),
         ]}
       />
-      {__LEUCHTWEGE_DEVTOOLS__ && data.mode === 'linked' && (
-        <details className="mode-random">
-          <summary>{tr('Testreihe: Mehr Tüftelei')}</summary>
-          <p>{tr('Sechs neue Rätsel mit den gewohnten Regeln. Die Schwierigkeit testen wir gemeinsam.')}</p>
-          <div className="variant-tabs">
-            {variantTrials.map((p, i) => (
-              <Button key={p.id} variant="outline" disabled={busy} onClick={() => setSelected(p.id)}>
-                {tr('Testreihe')} {String(i + 1).padStart(2, '0')}
-                {data.sessions[p.id] && variantStatus(p, data.sessions[p.id]).solved ? ' ✓' : ''}
-              </Button>
-            ))}
-          </div>
-        </details>
-      )}
       <details className="mode-random">
         <summary>{tr('Freies Spiel')}</summary>
         <FreePlayOptions
@@ -473,7 +461,9 @@ export default function VariantGames({
         <summary>{tr('Wie wird die Schwierigkeit bestimmt?')}</summary>
         <p>
           {tr(
-            'Wir prüfen Schlussfolgerungsketten und falsche Abzweigungen: Wie lange bleibt ein Irrweg plausibel? Die Einstufung ist eine Schätzung; dein Spielerlebnis hilft beim Nachjustieren.',
+            data.mode === 'linked'
+              ? 'Auf Schwer bleiben mehrere Kachelpaare zunächst mehrdeutig. Du musst Möglichkeiten prüfen und über mehrere Schritte vorausdenken.'
+              : 'Wir prüfen Schlussfolgerungsketten und falsche Abzweigungen: Wie lange bleibt ein Irrweg plausibel? Die Einstufung ist eine Schätzung; dein Spielerlebnis hilft beim Nachjustieren.',
           )}
         </p>
       </details>
@@ -761,6 +751,7 @@ export function VariantBoard({
       )}
       <Dialog open={victory} onOpenChange={(open) => setVictory(open)}>
         <SuccessContent
+          open={victory}
           title="Dein Netz leuchtet!"
           description={
             <>

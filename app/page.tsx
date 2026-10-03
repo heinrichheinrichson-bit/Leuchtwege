@@ -1202,6 +1202,7 @@ export default function Home() {
         onOpenChange={(open) => setVictory(open)}
       >
         <SuccessContent
+          open={victory}
           title={
             !isFree && done.length === levels.length
               ? 'Alle Wege leuchten!'

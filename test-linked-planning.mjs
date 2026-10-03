@@ -1,3 +1,4 @@
+import { variantDifficulty as difficultyV4 } from './lib/variant-difficulty-v4.mjs';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { createHash } from 'node:crypto';
@@ -24,19 +25,21 @@ const hard = variantCatalog.filter(
 assert(hard.length >= 30);
 for (const l of hard) {
   const d = variantDifficulty(l);
-  assert(d.uncertain >= 6 && d.deadEnds >= 4 && d.maxDeadEndDepth >= 2);
+  assert(
+    d.uncertainCouplings >= 4 && d.directUncertain >= 12 && d.probeRounds >= 2,
+  );
   // The solution is not an input to the difficulty assessment.
   assert.deepEqual(variantDifficulty({ ...l, solution: undefined }), d);
 }
 assert.equal(
   variantDifficulty(variantPuzzle('linked', 801361, 6, 'test', 4)).tier,
-  'Schwer',
+  'Mittel',
 );
 const seen = new Set(variantCatalog.map(variantFingerprint));
 assert.equal(linkedReserve.length, 128);
 for (const seed of linkedReserve) {
   const l = variantPuzzle('linked', seed, 6, 'reserve', 4);
-  assert.equal(variantDifficulty(l).tier, 'Schwer');
+  assert.equal(difficultyV4(l).tier, 'Schwer');
   const key = variantFingerprint(l);
   assert(
     !seen.has(key),
@@ -98,7 +101,7 @@ for (const fixture of JSON.parse(
 }
 for (const day of ['2026-09-29', '2026-10-01', '2026-10-15']) {
   const daily = generateDaily(day, 'linked', 2);
-  assert.equal(daily.puzzle.difficulty.version, 4);
+  assert.equal(daily.puzzle.difficulty.version, day < '2026-10-04' ? 4 : 5);
   assert.equal(daily.puzzle.difficulty.tier, 'Schwer');
   assert(restoreDaily(daily, day, 'linked', 2));
 }

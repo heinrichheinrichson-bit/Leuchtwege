@@ -2465,3 +2465,5 @@ html[data-theme='light'] {
 .variant-hub .resume-games h2 {
   margin: 0 0 4px;
 }
+
+.success-message { display: block; margin-bottom: 0.55rem; color: var(--foreground); text-wrap: pretty; }
